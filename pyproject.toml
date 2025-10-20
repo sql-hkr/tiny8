@@ -1,0 +1,29 @@
+[project]
+name = "tiny8"
+version = "0.1.0"
+description = "Simulator for an 8-bit CPU with registers, memory, and a stack."
+readme = "README.md"
+authors = [
+    { name = "sql-hkr", email = "sql.hkr@gmail.com" }
+]
+requires-python = ">=3.11"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "matplotlib>=3.10.7",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.1",
+    "shibuya>=2025.10.20",
+    "sphinx>=8.2.3",
+]

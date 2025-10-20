@@ -1,0 +1,47 @@
+name: Deploy Sphinx Docs to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          pip install .
+          pip install sphinx shibuya
+
+      - name: Generate API docs with sphinx-apidoc
+        run: |
+          sphinx-apidoc -e -o docs/api/ src/
+
+      - name: Build Sphinx documentation
+        run: |
+          make -C docs html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

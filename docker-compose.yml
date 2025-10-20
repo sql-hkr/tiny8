@@ -1,0 +1,7 @@
+services:
+  app:
+    build: .
+    tty: true
+    working_dir: /app
+    volumes:
+      - .:/app
