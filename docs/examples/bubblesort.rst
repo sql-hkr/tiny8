@@ -55,9 +55,9 @@ This example demonstrates a simple bubble sort algorithm implemented in assembly
         ldi r23, 1
         add r22, r23
         ld r24, r22      ; r24 = B
-        ; compare A and B (we'll swap if A > B)
-        cp r24, r21      ; sets carry if r24 < r21 (unsigned)
-        brcs no_swap     ; branch if carry set => r24 < r21 => A > B? (keep original order)
+        ; compare A and B (we'll swap if A < B)
+        cp r21, r24      ; sets carry if r21 < r24
+        brcs no_swap
         ; swap A and B: store B into A's address, A into B's address
         st r20, r24
         st r22, r21
