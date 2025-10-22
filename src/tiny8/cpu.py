@@ -2,20 +2,8 @@
 
 This module provides a lightweight CPU model inspired by the ATmega family.
 The :class:`CPU` class is the primary export and implements a small, extensible instruction-dispatch model.
-
-Example:
-    from tiny8.cpu import CPU
-    from tiny8.memory import Memory
-
-    cpu = CPU(Memory())
-    # load a simple program (assumed assembled elsewhere)
-    cpu.load_program([("ldi", (0, 10)), ("ldi", (1, 20)), ("add", (0, 1))], {})
-    cpu.run()
-    print(cpu.regs[0])  # usually 30
-
 The implementation favors readability over cycle-accurate emulation. Add
-instruction handlers by defining methods named ``op_<mnemonic>`` on
-``CPU``.
+instruction handlers by defining methods named ``op_<mnemonic>`` on ``CPU``.
 """
 
 from typing import Dict, List, Optional, Tuple
@@ -23,17 +11,6 @@ from typing import Dict, List, Optional, Tuple
 from .memory import Memory
 
 # SREG flag bit positions and short descriptions.
-#
-# Canonical AVR SREG layout (bit indices):
-# 7: I  - Global Interrupt Enable
-# 6: T  - Bit copy storage
-# 5: H  - Half Carry (BC/ADC nibble carry)
-# 4: S  - Sign (N ^ V)
-# 3: V  - Two's complement overflow
-# 2: N  - Negative (MSB of result)
-# 1: Z  - Zero flag
-# 0: C  - Carry flag
-
 SREG_I = 7  # Global Interrupt Enable
 SREG_T = 6  # Bit copy storage (temporary)
 SREG_H = 5  # Half Carry
@@ -121,6 +98,140 @@ class CPU:
             True if the bit is set, False otherwise.
         """
         return bool((self.sreg >> bit) & 1)
+
+    # --- AVR-like flag helpers (Z, C, N, V, S, H) ---
+    def _set_flags_add(self, a: int, b: int, carry_in: int, result: int) -> None:
+        """Set flags for ADD/ADC (AVR semantics).
+
+        a, b are 0..255 values, carry_in is 0/1, result is integer sum.
+        """
+        r = result & 0xFF
+        # Carry (C): bit 8
+        c = (result >> 8) & 1
+        # Half carry (H): carry from bit3
+        h = (((a & 0x0F) + (b & 0x0F) + carry_in) >> 4) & 1
+        # Negative (N): bit7 of result
+        n = (r >> 7) & 1
+        # Two's complement overflow (V): when signs of a and b are same and sign of result differs
+        # Use 8-bit masking to avoid Python's infinite-bit ~ behavior.
+        v = 1 if (((~(a ^ b) & 0xFF) & (a ^ r) & 0x80) != 0) else 0
+        s = n ^ v
+        z = 1 if r == 0 else 0
+
+        self.set_flag(SREG_C, bool(c))
+        self.set_flag(SREG_H, bool(h))
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+
+    def _set_flags_sub(self, a: int, b: int, borrow_in: int, result: int) -> None:
+        """Set flags for SUB/CP/CPI (AVR semantics).
+
+        Borrow_in is 0/1; result is signed difference (a - b - borrow_in).
+        """
+        r = result & 0xFF
+        # Carry (C) indicates borrow in subtraction
+        c = 1 if (a - b - borrow_in) < 0 else 0
+        # Half-carry (H): borrow from bit4
+        h = 1 if ((a & 0x0F) - (b & 0x0F) - borrow_in) < 0 else 0
+        n = (r >> 7) & 1
+        # Two's complement overflow (V): if signs of a and b differ and sign of result differs from sign of a
+        v = 1 if ((((a ^ b) & (a ^ r)) & 0x80) != 0) else 0
+        s = n ^ v
+        z = 1 if r == 0 else 0
+
+        self.set_flag(SREG_C, bool(c))
+        self.set_flag(SREG_H, bool(h))
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+
+    def _set_flags_logical(self, result: int) -> None:
+        """Set flags for logical operations (AND, OR, EOR) per AVR semantics.
+
+        Logical ops clear C and V, set N and Z, S = N ^ V, and clear H.
+        """
+        r = result & 0xFF
+        n = (r >> 7) & 1
+        z = 1 if r == 0 else 0
+        v = 0
+        c = 0
+        s = n ^ v
+
+        self.set_flag(SREG_C, bool(c))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+        self.set_flag(SREG_H, False)
+
+    def _set_flags_inc(self, old: int, new: int) -> None:
+        """Set flags for INC (affects V, N, Z, S). Does not affect C or H."""
+        n = (new >> 7) & 1
+        v = 1 if old == 0x7F else 0
+        z = 1 if new == 0 else 0
+        s = n ^ v
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+
+    def _set_flags_add16(self, a: int, b: int, carry_in: int, result: int) -> None:
+        """Set flags for 16-bit add (ADIW semantics approximation).
+
+        a, b are 0..0xFFFF, carry_in is 0/1, result is full integer sum.
+        """
+        r = result & 0xFFFF
+        # Carry out of bit15
+        c = (result >> 16) & 1
+        # Negative (N) is bit15 of result
+        n = (r >> 15) & 1
+        # Two's complement overflow (V): when signs of a and b are same and sign of result differs
+        v = 1 if (((~(a ^ b) & 0xFFFF) & (a ^ r) & 0x8000) != 0) else 0
+        s = n ^ v
+        z = 1 if r == 0 else 0
+
+        self.set_flag(SREG_C, bool(c))
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+        # H is undefined for word ops on AVR; clear conservatively
+        self.set_flag(SREG_H, False)
+
+    def _set_flags_sub16(self, a: int, b: int, borrow_in: int, result: int) -> None:
+        """Set flags for 16-bit subtraction (SBIW semantics approximation).
+
+        Borrow_in is 0/1; result is integer difference a - b - borrow_in.
+        """
+        r = result & 0xFFFF
+        # Carry indicates borrow out of bit15
+        c = 1 if (a - b - borrow_in) < 0 else 0
+        n = (r >> 15) & 1
+        # Two's complement overflow (V) for subtraction
+        v = 1 if ((((a ^ b) & (a ^ r)) & 0x8000) != 0) else 0
+        s = n ^ v
+        z = 1 if r == 0 else 0
+
+        self.set_flag(SREG_C, bool(c))
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+        self.set_flag(SREG_H, False)
+
+    def _set_flags_dec(self, old: int, new: int) -> None:
+        """Set flags for DEC (affects V, N, Z, S). Does not affect C or H."""
+        n = (new >> 7) & 1
+        v = 1 if old == 0x80 else 0
+        z = 1 if new == 0 else 0
+        s = n ^ v
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(v))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
 
     # Register access
     def read_reg(self, r: int) -> int:
@@ -315,297 +426,385 @@ class CPU:
         self.write_reg(rd, self.read_reg(rr))
 
     def op_add(self, rd: int, rr: int):
-        """Add register ``rr`` to ``rd``, store low byte in ``rd``, and set
-        flags.
+        """Add register ``rr`` to ``rd`` (Rd := Rd + Rr) and update flags.
 
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-
-        Note:
-            Sets a simplified carry flag in bit 0 and the zero flag when the
-            result is zero.
+        Sets C, H, N, V, S, Z per AVR semantics.
         """
         a = self.read_reg(rd)
         b = self.read_reg(rr)
         res = a + b
-        self.write_reg(rd, res)
-        carry = (res & 0x100) != 0
-        res8 = res & 0xFF
-        self.set_flag(SREG_C, carry)  # C as bit0 simplification
-        # set Z flag if zero
-        self.set_flag(SREG_Z, res8 == 0)
+        self.write_reg(rd, res & 0xFF)
+        self._set_flags_add(a, b, 0, res)
 
     def op_and(self, rd: int, rr: int):
-        """Bitwise AND: ``rd`` <- ``rd`` & ``rr``.
-
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-        """
+        """Logical AND (Rd := Rd & Rr) — updates N, Z, V=0, C=0, H=0, S."""
         res = self.read_reg(rd) & self.read_reg(rr)
         self.write_reg(rd, res)
+        self._set_flags_logical(res)
 
     def op_or(self, rd: int, rr: int):
-        """Bitwise OR: ``rd`` <- ``rd`` | ``rr``.
-
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-        """
+        """Logical OR (Rd := Rd | Rr) — updates N, Z, V=0, C=0, H=0, S."""
         res = self.read_reg(rd) | self.read_reg(rr)
         self.write_reg(rd, res)
+        self._set_flags_logical(res)
 
     def op_eor(self, rd: int, rr: int):
-        """Bitwise XOR (EOR): ``rd`` <- ``rd`` ^ ``rr``.
-
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-        """
+        """Exclusive OR (Rd := Rd ^ Rr) — updates N, Z, V=0, C=0, H=0, S."""
         res = self.read_reg(rd) ^ self.read_reg(rr)
         self.write_reg(rd, res)
+        self._set_flags_logical(res)
 
     def op_sub(self, rd: int, rr: int):
-        """Subtract ``rr`` from ``rd``, store low byte in ``rd`` and set Z
-        flag.
-
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-        """
+        """Subtract (Rd := Rd - Rr) and set flags C,H,N,V,S,Z."""
         a = self.read_reg(rd)
         b = self.read_reg(rr)
-        res = (a - b) & 0x1FF
-        res8 = res & 0xFF
-        self.write_reg(rd, res8)
-        # set Z flag if result is zero
-        self.set_flag(SREG_Z, res8 == 0)
+        res_full = a - b
+        self.write_reg(rd, res_full & 0xFF)
+        self._set_flags_sub(a, b, 0, res_full)
 
     def op_inc(self, rd: int):
-        """Increment register ``rd`` by 1 (8-bit wrap-around).
-
-        Args:
-            rd: Register index to increment.
-        """
-        v = (self.read_reg(rd) + 1) & 0xFF
-        self.write_reg(rd, v)
+        """Increment (Rd := Rd + 1) — updates V,N,S,Z; does not change C/H."""
+        old = self.read_reg(rd)
+        new = (old + 1) & 0xFF
+        self.write_reg(rd, new)
+        self._set_flags_inc(old, new)
 
     def op_dec(self, rd: int):
-        """Decrement register ``rd`` by 1 (8-bit wrap-around).
-
-        Args:
-            rd: Register index to decrement.
-        """
-        v = (self.read_reg(rd) - 1) & 0xFF
-        self.write_reg(rd, v)
+        """Decrement (Rd := Rd - 1) — updates V,N,S,Z; does not change C/H."""
+        old = self.read_reg(rd)
+        new = (old - 1) & 0xFF
+        self.write_reg(rd, new)
+        self._set_flags_dec(old, new)
 
     def op_mul(self, rd: int, rr: int):
-        """Multiply ``rd`` by ``rr``; store low byte in ``rd`` and high
-        byte in ``rd+1``.
-
-        Args:
-            rd: Destination register index (multiplicand).
-            rr: Source register index (multiplier).
-
-        Note:
-            This simplified MUL writes the 16-bit product across two
-            registers when possible: low byte to ``rd`` and high byte to
-            ``rd+1``.
-        """
+        """Multiply 8x8 -> 16: store low in Rd, high in Rd+1. Update Z and C conservatively."""
         a = self.read_reg(rd)
         b = self.read_reg(rr)
         prod = a * b
-        # store lower 8 in rd, upper 8 in rd+1 if exists
-        self.write_reg(rd, prod & 0xFF)
+        low = prod & 0xFF
+        high = (prod >> 8) & 0xFF
+        self.write_reg(rd, low)
         if rd + 1 < 32:
-            self.write_reg(rd + 1, (prod >> 8) & 0xFF)
+            self.write_reg(rd + 1, high)
+        # Update flags: Z set if product == 0; C set if high != 0; H undefined -> clear
+        self.set_flag(SREG_Z, prod == 0)
+        self.set_flag(SREG_C, high != 0)
+        self.set_flag(SREG_H, False)
 
     def op_adc(self, rd: int, rr: int):
-        """Add register ``rr`` plus carry to ``rd`` (ADC).
-
-        Args:
-            rd: Destination register index.
-            rr: Source register index.
-
-        Note:
-            Carry input is read from the SREG carry bit.
-        """
+        """Add with carry (Rd := Rd + Rr + C) and update flags."""
         a = self.read_reg(rd)
         b = self.read_reg(rr)
         carry_in = 1 if self.get_flag(SREG_C) else 0
         res = a + b + carry_in
-        carry = (res & 0x100) != 0
-        res8 = res & 0xFF
-        self.write_reg(rd, res8)
-        self.set_flag(SREG_C, carry)
-        self.set_flag(SREG_Z, res8 == 0)
+        self.write_reg(rd, res & 0xFF)
+        self._set_flags_add(a, b, carry_in, res)
 
     def op_clr(self, rd: int):
-        """Clear register ``rd`` to zero.
-
-        Args:
-            rd: Register index to clear.
-        """
+        """Clear register (Rd := 0). Behaves like EOR Rd,Rd for flags."""
         self.write_reg(rd, 0)
+        self.set_flag(SREG_N, False)
+        self.set_flag(SREG_V, False)
+        self.set_flag(SREG_S, False)
+        self.set_flag(SREG_Z, True)
+        self.set_flag(SREG_C, False)
+        self.set_flag(SREG_H, False)
 
     def op_ser(self, rd: int):
-        """Set all bits in register ``rd`` (write 0xFF).
-
-        Args:
-            rd: Register index to set to 0xFF.
-        """
+        """Set register all ones (Rd := 0xFF). Update flags conservatively."""
         self.write_reg(rd, 0xFF)
+        self.set_flag(SREG_N, True)
+        self.set_flag(SREG_V, False)
+        self.set_flag(SREG_S, True)
+        self.set_flag(SREG_Z, False)
+        self.set_flag(SREG_C, False)
+        self.set_flag(SREG_H, False)
 
     def op_div(self, rd: int, rr: int):
-        """Divide ``rd`` by ``rr`` storing quotient in ``rd`` and remainder
-        in ``rd+1``.
-
-        Args:
-            rd: Dividend register (also destination for quotient).
-            rr: Divisor register.
-
-        Note:
-            If divisor is zero, ``rd`` is set to 0 and the carry flag is set.
-        """
+        """Unsigned divide convenience instruction: quotient -> Rd, remainder -> Rd+1."""
         a = self.read_reg(rd)
         b = self.read_reg(rr)
         if b == 0:
-            # set zero reg to 0 and set a flag
             self.write_reg(rd, 0)
+            # indicate error
             self.set_flag(SREG_C, True)
+            self.set_flag(SREG_Z, True)
             return
         q = a // b
         r = a % b
         self.write_reg(rd, q)
         if rd + 1 < 32:
             self.write_reg(rd + 1, r)
+        # update flags: Z if quotient zero; clear others conservatively
+        self.set_flag(SREG_Z, q == 0)
+        self.set_flag(SREG_C, False)
+        self.set_flag(SREG_H, False)
+        self.set_flag(SREG_V, False)
 
     def op_in(self, rd: int, port: int):
-        """Read from IO/memory-mapped ``port`` into register ``rd``.
-
-        Args:
-            rd: Destination register index.
-            port: IO/memory-mapped port (treated as RAM address here).
-
-        Note:
-            This implementation reads from RAM for simplicity.
-        """
         val = self.read_ram(port)
         self.write_reg(rd, val)
 
     def op_out(self, port: int, rr: int):
-        """Write register ``rr`` to IO/memory-mapped ``port`` (stored in
-        RAM).
-
-        Args:
-            port: IO/memory-mapped port (treated as RAM address here).
-            rr: Source register index to write.
-        """
         val = self.read_reg(rr)
         self.write_ram(port, val)
 
     def op_jmp(self, label: str):
-        """Jump to a label or numeric PC value.
-
-        Args:
-            label: Label string or numeric program counter value.
-
-        Note:
-            The assembler provides label -> index mappings in ``self.labels``.
-            The stored PC is decremented by one because :meth:`step` will
-            increment it after the instruction executes.
-        """
         if isinstance(label, str):
             if label not in self.labels:
                 raise KeyError(f"Label {label} not found")
-            self.pc = (
-                self.labels[label] - 1
-            )  # -1 because PC will be incremented after step
+            self.pc = self.labels[label] - 1
         else:
             self.pc = int(label) - 1
 
     def op_cpi(self, rd: int, imm: int):
-        """Compare register ``rd`` with immediate and set Z flag if equal.
-
-        Args:
-            rd: Register index to compare.
-            imm: Immediate value to compare with.
-        """
-        # compare with immediate: set Z flag if equal
-        v = self.read_reg(rd)
-        z = v == (imm & 0xFF)
-        self.set_flag(SREG_Z, z)
+        a = self.read_reg(rd)
+        b = imm & 0xFF
+        res = a - b
+        self._set_flags_sub(a, b, 0, res)
 
     def op_cp(self, rd: int, rr: int):
-        """Compare ``rd`` with ``rr`` and set Z and C flags.
-
-        Args:
-            rd: First operand register index.
-            rr: Second operand register index.
-
-        Note:
-            This is a simplified unsigned compare: C bit indicates ``rd`` >
-            ``rr``.
-        """
-        v = self.read_reg(rd)
-        w = self.read_reg(rr)
-        # set Z flag if equal
-        # set C flag (bit 0) if rd > rr for unsigned compare (we treat C as 'greater')
-        self.set_flag(SREG_Z, v == w)
-        self.set_flag(SREG_C, v > w)
+        a = self.read_reg(rd)
+        b = self.read_reg(rr)
+        res = a - b
+        self._set_flags_sub(a, b, 0, res)
 
     def op_lsl(self, rd: int):
-        """Logical shift left: shift bits left by one; MSB becomes carry.
-
-        Args:
-            rd: Register index to shift.
-        """
         v = self.read_reg(rd)
         carry = (v >> 7) & 1
         nv = (v << 1) & 0xFF
         self.write_reg(rd, nv)
+        # C from old MSB
         self.set_flag(SREG_C, bool(carry))
+        n = (nv >> 7) & 1
+        # V = N xor C per AVR for LSL
+        vflag = 1 if (n ^ carry) else 0
+        s = n ^ vflag
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(vflag))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, nv == 0)
+        self.set_flag(SREG_H, False)
 
     def op_lsr(self, rd: int):
-        """Logical shift right: LSB becomes carry, MSB filled with zero.
-
-        Args:
-            rd: Register index to shift.
-        """
         v = self.read_reg(rd)
         carry = v & 1
         nv = (v >> 1) & 0xFF
         self.write_reg(rd, nv)
         self.set_flag(SREG_C, bool(carry))
+        # N becomes 0 after logical shift right
+        self.set_flag(SREG_N, False)
+        # V = N xor C -> 0 xor C
+        self.set_flag(SREG_V, bool(carry))
+        self.set_flag(SREG_S, bool(False ^ carry))
+        self.set_flag(SREG_Z, nv == 0)
+        self.set_flag(SREG_H, False)
 
     def op_rol(self, rd: int):
-        """Rotate left through carry: MSB moves to carry, carry is shifted
-        in.
-
-        Args:
-            rd: Register index to rotate.
-        """
         v = self.read_reg(rd)
         carry_in = 1 if self.get_flag(SREG_C) else 0
         carry_out = (v >> 7) & 1
         nv = ((v << 1) & 0xFF) | carry_in
         self.write_reg(rd, nv)
         self.set_flag(SREG_C, bool(carry_out))
+        self.set_flag(SREG_N, bool((nv >> 7) & 1))
+        self.set_flag(SREG_Z, nv == 0)
+        self.set_flag(SREG_V, False)
+        self.set_flag(SREG_S, bool(((nv >> 7) & 1) ^ 0))
+        self.set_flag(SREG_H, False)
 
     def op_ror(self, rd: int):
-        """Rotate right through carry: LSB moves to carry, carry is
-        shifted in.
-
-        Args:
-            rd: Register index to rotate.
-        """
         v = self.read_reg(rd)
         carry_in = 1 if self.get_flag(SREG_C) else 0
         carry_out = v & 1
         nv = (v >> 1) | (carry_in << 7)
         self.write_reg(rd, nv)
         self.set_flag(SREG_C, bool(carry_out))
+        self.set_flag(SREG_N, bool((nv >> 7) & 1))
+        self.set_flag(SREG_Z, nv == 0)
+        self.set_flag(SREG_V, False)
+        self.set_flag(SREG_S, bool(((nv >> 7) & 1) ^ 0))
+        self.set_flag(SREG_H, False)
+
+    def op_com(self, rd: int):
+        """One's complement: Rd := ~Rd. Updates N,V,S,Z,C per AVR-ish semantics."""
+        v = self.read_reg(rd)
+        nv = (~v) & 0xFF
+        self.write_reg(rd, nv)
+        n = (nv >> 7) & 1
+        vflag = 0
+        s = n ^ vflag
+        z = 1 if nv == 0 else 0
+        # COM sets Carry in AVR
+        self.set_flag(SREG_N, bool(n))
+        self.set_flag(SREG_V, bool(vflag))
+        self.set_flag(SREG_S, bool(s))
+        self.set_flag(SREG_Z, bool(z))
+        self.set_flag(SREG_C, True)
+        self.set_flag(SREG_H, False)
+
+    def op_neg(self, rd: int):
+        """Two's complement (negate): Rd := 0 - Rd. Flags as subtraction from 0."""
+        a = self.read_reg(rd)
+        res_full = 0 - a
+        self.write_reg(rd, res_full & 0xFF)
+        # use subtraction helper (0 - a)
+        self._set_flags_sub(0, a, 0, res_full)
+
+    def op_swap(self, rd: int):
+        """Swap nibbles in register: Rd[7:4] <-> Rd[3:0]. Does not affect SREG."""
+        v = self.read_reg(rd)
+        nv = ((v & 0x0F) << 4) | ((v >> 4) & 0x0F)
+        self.write_reg(rd, nv)
+
+    def op_tst(self, rd: int):
+        """Test: perform AND Rd,Rd and update flags but do not store result."""
+        v = self.read_reg(rd)
+        res = v & v
+        # logical helper clears C/V/H and sets N/Z/S
+        self._set_flags_logical(res)
+
+    def op_andi(self, rd: int, imm: int):
+        res = self.read_reg(rd) & (imm & 0xFF)
+        self.write_reg(rd, res)
+        self._set_flags_logical(res)
+
+    def op_ori(self, rd: int, imm: int):
+        res = self.read_reg(rd) | (imm & 0xFF)
+        self.write_reg(rd, res)
+        self._set_flags_logical(res)
+
+    def op_eori(self, rd: int, imm: int):
+        res = self.read_reg(rd) ^ (imm & 0xFF)
+        self.write_reg(rd, res)
+        self._set_flags_logical(res)
+
+    def op_subi(self, rd: int, imm: int):
+        a = self.read_reg(rd)
+        b = imm & 0xFF
+        res_full = a - b
+        self.write_reg(rd, res_full & 0xFF)
+        self._set_flags_sub(a, b, 0, res_full)
+
+    def op_sbc(self, rd: int, rr: int):
+        a = self.read_reg(rd)
+        b = self.read_reg(rr)
+        borrow_in = 1 if self.get_flag(SREG_C) else 0
+        res_full = a - b - borrow_in
+        self.write_reg(rd, res_full & 0xFF)
+        self._set_flags_sub(a, b, borrow_in, res_full)
+
+    def op_sbci(self, rd: int, imm: int):
+        """Subtract immediate with carry: Rd := Rd - K - C"""
+        a = self.read_reg(rd)
+        b = imm & 0xFF
+        borrow_in = 1 if self.get_flag(SREG_C) else 0
+        res_full = a - b - borrow_in
+        self.write_reg(rd, res_full & 0xFF)
+        self._set_flags_sub(a, b, borrow_in, res_full)
+
+    def op_sei(self):
+        """Set Global Interrupt Enable (I bit)."""
+        self.set_flag(SREG_I, True)
+
+    def op_cli(self):
+        """Clear Global Interrupt Enable (I bit)."""
+        self.set_flag(SREG_I, False)
+
+    def op_cpse(self, rd: int, rr: int):
+        """Compare and Skip if Equal: compare Rd,Rr; if equal, skip next instruction."""
+        a = self.read_reg(rd)
+        b = self.read_reg(rr)
+        # set compare flags like CP
+        self._set_flags_sub(a, b, 0, a - b)
+        if a == b:
+            # skip next instruction by advancing PC by one (step() will add one more)
+            self.pc += 1
+
+    def op_sbrs(self, rd: int, bit: int):
+        """Skip next if bit in register is set."""
+        v = self.read_reg(rd)
+        if ((v >> (bit & 7)) & 1) == 1:
+            self.pc += 1
+
+    def op_sbrc(self, rd: int, bit: int):
+        """Skip next if bit in register is clear."""
+        v = self.read_reg(rd)
+        if ((v >> (bit & 7)) & 1) == 0:
+            self.pc += 1
+
+    def op_sbis(self, io_addr: int, bit: int):
+        """Skip if bit in IO/RAM-mapped address is set."""
+        v = self.read_ram(io_addr)
+        if ((v >> (bit & 7)) & 1) == 1:
+            self.pc += 1
+
+    def op_sbic(self, io_addr: int, bit: int):
+        """Skip if bit in IO/RAM-mapped address is clear."""
+        v = self.read_ram(io_addr)
+        if ((v >> (bit & 7)) & 1) == 0:
+            self.pc += 1
+
+    def op_sbiw(self, rd_word_low: int, imm_word: int):
+        """Subtract immediate from word register pair (Rd:Rd+1) — simplified.
+
+        rd_word_low is the low register of the pair (even register index).
+        imm_word is a 16-bit immediate to subtract.
+        """
+        lo = self.read_reg(rd_word_low)
+        hi = self.read_reg(rd_word_low + 1) if (rd_word_low + 1) < 32 else 0
+        word = (hi << 8) | lo
+        new = (word - (imm_word & 0xFFFF)) & 0xFFFF
+        new_lo = new & 0xFF
+        new_hi = (new >> 8) & 0xFF
+        self.write_reg(rd_word_low, new_lo)
+        if rd_word_low + 1 < 32:
+            self.write_reg(rd_word_low + 1, new_hi)
+        # precise flags for 16-bit subtraction
+        self._set_flags_sub16(word, imm_word & 0xFFFF, 0, word - (imm_word & 0xFFFF))
+
+    def op_adiw(self, rd_word_low: int, imm_word: int):
+        """Add immediate to word register pair (Rd:Rd+1) - simplified.
+
+        rd_word_low is the low register of the pair (even register index).
+        imm_word is a 16-bit immediate to add.
+        """
+        lo = self.read_reg(rd_word_low)
+        hi = self.read_reg(rd_word_low + 1) if (rd_word_low + 1) < 32 else 0
+        word = (hi << 8) | lo
+        new = (word + (imm_word & 0xFFFF)) & 0xFFFF
+        new_lo = new & 0xFF
+        new_hi = (new >> 8) & 0xFF
+        self.write_reg(rd_word_low, new_lo)
+        if rd_word_low + 1 < 32:
+            self.write_reg(rd_word_low + 1, new_hi)
+        # precise flags for 16-bit addition
+        self._set_flags_add16(word, imm_word & 0xFFFF, 0, word + (imm_word & 0xFFFF))
+
+    def op_rjmp(self, label: str):
+        """Relative jump — label may be an int or string label."""
+        # reuse op_jmp behavior (op_jmp sets PC to label-1).
+        # If label is a relative offset integer, set pc accordingly.
+        if isinstance(label, int):
+            self.pc = self.pc + int(label)
+        else:
+            self.op_jmp(label)
+
+    def op_rcall(self, label: str):
+        """Relative call — push return address and jump relatively or to label."""
+        ret = self.pc + 1
+        self.write_ram(self.sp, (ret >> 8) & 0xFF)
+        self.sp -= 1
+        self.write_ram(self.sp, ret & 0xFF)
+        self.sp -= 1
+        if isinstance(label, int):
+            # For numeric relative offsets, behave like op_jmp which sets
+            # pc = target - 1 (step() will increment after execution).
+            # Calculate absolute target and adjust similarly.
+            target = self.pc + int(label)
+            self.pc = int(target) - 1
+        else:
+            self.op_jmp(label)
 
     def op_sbi(self, io_addr: int, bit: int):
         """Set a bit in an I/O/memory-mapped address (use RAM area).
@@ -751,6 +950,17 @@ class CPU:
         self.sp += 1
         high = self.read_ram(self.sp)
         ret = (high << 8) | low
+        self.pc = ret - 1
+
+    def op_reti(self):
+        """Return from interrupt: pop return address and set I flag."""
+        # similar to ret, but also set Global Interrupt Enable
+        self.sp += 1
+        low = self.read_ram(self.sp)
+        self.sp += 1
+        high = self.read_ram(self.sp)
+        ret = (high << 8) | low
+        self.set_flag(SREG_I, True)
         self.pc = ret - 1
 
     # Interrupt handling (very simple)
