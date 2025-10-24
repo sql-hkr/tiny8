@@ -13,9 +13,8 @@ Tiny8 documentation
 .. image:: https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI
    :target: <https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI>
 
-Tiny8 is a minimal, easy-to-use library for working with compact data structures and simple in-memory storage patterns.
-It is designed for learning, experimentation, and small-scale projects where a lightweight dependency footprint is desirable.
-This documentation covers installation, examples, and the API to help you get started quickly.
+Tiny8 is a lightweight toolkit that allows you to explore how computers work at their core through small-scale memory models, handcrafted assembly, and lightweight in-memory data structures.
+Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecessary dependencies, a clean design, and intuitive visualization tools that make learning, debugging, and tinkering enjoyable.
 
 .. image:: _static/examples/bubblesort.gif
    :alt: Bubble sort
