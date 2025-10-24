@@ -5,9 +5,30 @@
 ![Python versions](https://img.shields.io/pypi/pyversions/tiny8)
 ![CI](https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI)
 
-Tiny8 is a minimal, easy-to-use library for working with compact data structures and simple in-memory storage patterns. It is designed for learning, experimentation, and small-scale projects where a lightweight dependency footprint is desirable. This documentation covers installation, examples, and the API to help you get started quickly.
-
 ![bubblesort](/docs/_static/examples/bubblesort.gif)
+
+Tiny8 is a lightweight toolkit that allows you to explore how computers work at their core through small-scale memory models, handcrafted assembly, and lightweight in-memory data structures.
+Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecessary dependencies, a clean design, and intuitive visualization tools that make learning, debugging, and tinkering enjoyable.
+
+Why Tiny8?
+
+- Lightweight: tiny install footprint and no heavy runtime dependencies.
+- Educational: clear primitives and examples that demonstrate CPU concepts, memory layout, and algorithms.
+- Fast feedback loop: assemble, run, and visualize within seconds to iterate on ideas.
+- Extensible: meant for experiments, teaching, demos, and small tools that benefit from a predictable, tiny VM.
+
+Who should use it?
+
+- Students learning low-level programming, assembly, or computer architecture who want hands-on examples.
+- Educators building demos and interactive lessons that visualize how registers and memory change.
+- Hobbyists and hackers experimenting with toy CPUs, compact data layouts, or custom instruction ideas.
+- Developers who want a tiny, readable simulator to prototype algorithms that manipulate memory directly.
+
+Get started
+
+- Follow the Installation section below to install from PyPI or set up a development environment.
+- See the Examples section (like the bubble sort demo) to run real programs and watch the visualizer in action.
+- Dive into the API Reference for details on the CPU, assembler, and visualization helpers.
 
 ## Installation
 
@@ -155,6 +176,56 @@ Example Output:
 ```bash
 [247, 243, 239, 238, 227, 211, 210, 195, 190, 187, 186, 171, 167, 159, 155, 150, 142, 139, 135, 130, 127, 106, 102, 94, 54, 50, 34, 26, 23, 15, 10, 6]
 ```
+
+## Instruction set summary
+
+Below is a concise, categorized summary of the Tiny8 instruction set (mnemonics are case-insensitive). This is a quick reference — for implementation details see `src/tiny8/cpu.py`.
+
+- Data transfer
+    - LDI Rd, K — load immediate into register
+    - MOV Rd, Rr — copy register
+    - LD Rd, Rr_addr — load from RAM at address in register
+    - ST Rr_addr, Rr — store register into RAM at address in register
+    - IN Rd, port — read byte from RAM/IO into register
+    - OUT port, Rr — write register to RAM/IO
+    - PUSH Rr / POP Rd — stack push/pop
+
+- Arithmetic
+    - ADD Rd, Rr — add registers
+    - ADC Rd, Rr — add with carry
+    - SUB Rd, Rr / SUBI Rd, K — subtraction
+    - SBC Rd, Rr / SBCI Rd, K — subtract with carry/borrow
+    - INC Rd / DEC Rd — increment / decrement
+    - MUL Rd, Rr — 8x8 -> 16 multiply (low/high in Rd/Rd+1)
+    - DIV Rd, Rr — unsigned divide (quotient->Rd, remainder->Rd+1)
+    - NEG Rd — two's complement negate
+    - CLR Rd / SER Rd — clear or set register to all ones
+
+- Logical and bit ops
+    - AND Rd, Rr / ANDI Rd, K — bitwise AND
+    - OR Rd, Rr / ORI Rd, K — bitwise OR
+    - EOR Rd, Rr / EORI Rd, K — exclusive OR
+    - COM Rd — one's complement
+    - SWAP Rd — swap nibbles
+    - TST Rd — test for zero or minus
+    - SBI/CBI / SBIS/SBIC / SBRS/SBRC — set/clear/test single bits and conditional skips
+
+- Shifts & rotates
+    - LSL Rd / LSR Rd — logical shift left/right
+    - ROL Rd / ROR Rd — rotate through carry
+
+- Word (16-bit) ops
+    - SBIW / ADIW — simplified word add/subtract helpers for register pairs
+
+- Control flow
+    - JMP label / RJMP offset — unconditional jump
+    - CALL label / RCALL offset — call subroutine (push return address)
+    - RET / RETI — return from subroutine / return from interrupt (sets I)
+    - BRNE / BREQ / BRCS / BRCC — conditional branches based on flags
+    - CP Rd, Rr / CPI Rd, K — compare (sets flags)
+    - CPSE Rd, Rr — compare and skip if equal
+
+Use the assembler in `src/tiny8/assembler.py` (or `parse_asm`) to write programs — register operands are specified as R0..R31 and immediates accept decimal, $hex, 0x, or 0b binary notation.
 
 ## API Reference
 
