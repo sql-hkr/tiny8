@@ -6,7 +6,7 @@ The implementation favors readability over cycle-accurate emulation. Add
 instruction handlers by defining methods named ``op_<mnemonic>`` on ``CPU``.
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Optional
 
 from .memory import Memory
 
@@ -29,18 +29,18 @@ class CPU:
     currently-loaded program.
 
     Attributes:
-        regs (List[int]): 32 8-bit general purpose registers (R0..R31).
+        regs (list[int]): 32 8-bit general purpose registers (R0..R31).
         pc (int): Program counter (index into ``program``).
         sp (int): Stack pointer (index into RAM in the associated
             :class:`tiny8.memory.Memory`).
         sreg (int): Status register bits stored in a single integer (I, T,
             H, S, V, N, Z, C).
         cycle (int): Instruction execution counter.
-        reg_trace (List[Tuple[int, int, int]]): Per-cycle register change
+        reg_trace (list[tuple[int, int, int]]): Per-cycle register change
             trace entries of the form ``(cycle, reg, new_value)``.
-        mem_trace (List[Tuple[int, int, int]]): Per-cycle memory change
+        mem_trace (list[tuple[int, int, int]]): Per-cycle memory change
             trace entries of the form ``(cycle, addr, new_value)``.
-        step_trace (List[dict]): Full per-step snapshots useful for
+        step_trace (list[dict]): Full per-step snapshots useful for
             visualization and debugging.
 
     Note:
@@ -52,7 +52,7 @@ class CPU:
     def __init__(self, memory: Optional[Memory] = None):
         self.mem = memory or Memory()
         # 32 general purpose 8-bit registers R0-R31
-        self.regs: List[int] = [0] * 32
+        self.regs: [int] = [0] * 32
         # Program Counter (word-addressable for AVR) - we use byte addressing for simplicity
         self.pc: int = 0
         # Stack Pointer - point into RAM
@@ -62,16 +62,16 @@ class CPU:
         # Cycle counter
         self.cycle: int = 0
         # Simple interrupt vector table (addr->enabled)
-        self.interrupts: Dict[int, bool] = {}
+        self.interrupts: dict[int, bool] = {}
         # Execution trace of register/memory changes per cycle
-        self.reg_trace: List[Tuple[int, int, int]] = []  # (cycle, reg, newval)
-        self.mem_trace: List[Tuple[int, int, int]] = []  # (cycle, addr, newval)
+        self.reg_trace: list[tuple[int, int, int]] = []  # (cycle, reg, newval)
+        self.mem_trace: list[tuple[int, int, int]] = []  # (cycle, addr, newval)
         # Full step trace: list of dicts with cycle, pc, instr_text, regs snapshot, optional mem snapshot
-        self.step_trace: List[dict] = []
+        self.step_trace: list[dict] = []
         # Program area - list of instructions as tuples: (mnemonic, *operands)
-        self.program: List[Tuple[str, Tuple]] = []
+        self.program: list[tuple[str, tuple]] = []
         # Labels -> pc
-        self.labels: Dict[str, int] = {}
+        self.labels: dict[str, int] = {}
         # Running state
         self.running = False
 
@@ -289,11 +289,11 @@ class CPU:
         self.mem_trace.append((self.cycle, addr, val & 0xFF))
 
     # Program loading
-    def load_program(self, program: List[Tuple[str, Tuple]], labels: Dict[str, int]):
+    def load_program(self, program: list[tuple[str, tuple]], labels: dict[str, int]):
         """Load an assembled program into the CPU.
 
         Args:
-            program: List of ``(mnemonic, operands)`` tuples returned by the
+            program: list of ``(mnemonic, operands)`` tuples returned by the
                 assembler.
             labels: Mapping of label strings to instruction indices.
 

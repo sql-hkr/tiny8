@@ -1,7 +1,5 @@
 """Memory model for tiny8 - simple RAM and ROM with change tracking."""
 
-from typing import List, Tuple
-
 
 class Memory:
     """
@@ -42,8 +40,8 @@ class Memory:
         self.ram = [0] * ram_size
         self.rom = [0] * rom_size
         # change logs: list of (addr, old, new, cycle)
-        self.ram_changes: List[Tuple[int, int, int, int]] = []
-        self.rom_changes: List[Tuple[int, int, int, int]] = []
+        self.ram_changes: list[tuple[int, int, int, int]] = []
+        self.rom_changes: list[tuple[int, int, int, int]] = []
 
     def read_ram(self, addr: int) -> int:
         """Read and return the value stored in RAM at the specified address.
@@ -87,7 +85,7 @@ class Memory:
         if old != self.ram[addr]:
             self.ram_changes.append((addr, old, self.ram[addr], cycle))
 
-    def load_rom(self, data: List[int]) -> None:
+    def load_rom(self, data: list[int]) -> None:
         """Load a ROM image into the emulator's ROM buffer.
 
         Args:
@@ -128,7 +126,7 @@ class Memory:
             raise IndexError("ROM address out of range")
         return self.rom[addr]
 
-    def snapshot_ram(self) -> List[int]:
+    def snapshot_ram(self) -> list[int]:
         """Return a snapshot copy of the emulator's RAM.
 
         Returns:
@@ -139,7 +137,7 @@ class Memory:
         """
         return list(self.ram)
 
-    def snapshot_rom(self) -> List[int]:
+    def snapshot_rom(self) -> list[int]:
         """Return a snapshot copy of the ROM contents.
 
         Returns:
