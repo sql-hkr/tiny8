@@ -221,7 +221,7 @@ Below is a concise, categorized summary of the Tiny8 instruction set (mnemonics 
     - JMP label / RJMP offset — unconditional jump
     - CALL label / RCALL offset — call subroutine (push return address)
     - RET / RETI — return from subroutine / return from interrupt (sets I)
-    - BRNE / BREQ / BRCS / BRCC — conditional branches based on flags
+    - BRNE / BREQ / BRCS / BRCC / BRGE / BRLT — conditional branches based on flags
     - CP Rd, Rr / CPI Rd, K — compare (sets flags)
     - CPSE Rd, Rr — compare and skip if equal
 

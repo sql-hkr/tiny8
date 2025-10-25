@@ -549,7 +549,19 @@ class CPU:
         val = self.read_reg(rr)
         self.write_ram(port, val)
 
-    def op_jmp(self, label: str):
+    def op_jmp(self, label: str | int):
+        """Jump to a given label or numeric address by updating the program counter.
+
+        This operation sets the CPU's program counter (self.pc) to the target address minus one.
+        The subtraction of one accounts for the fact that the instruction dispatcher will typically
+        increment the program counter after the current instruction completes.
+
+        Args:
+            label (str | int): The jump target. If a string, it is treated as a symbolic label
+                and looked up in self.labels to obtain its numeric address. If an int (or any
+                value convertible to int), it is used directly as the numeric address.
+        """
+
         if isinstance(label, str):
             if label not in self.labels:
                 raise KeyError(f"Label {label} not found")
@@ -891,6 +903,28 @@ class CPU:
         """
         c = self.get_flag(SREG_C)
         if not c:
+            self.op_jmp(label)
+
+    def op_brge(self, label: str | int):
+        """BRGE - Branch if Greater or Equal (Signed)
+
+        Args:
+            label: Destination label or address to jump to if the condition is met.
+        """
+
+        s = self.get_flag(SREG_S)
+        if not s:
+            self.op_jmp(label)
+
+    def op_brlt(self, label: str | int):
+        """BRLT - Branch if Less Than (Signed).
+
+        Args:
+            label: Destination label or address to jump to if the condition is met.
+        """
+
+        s = self.get_flag(SREG_S)
+        if s:
             self.op_jmp(label)
 
     def op_push(self, rr: int):

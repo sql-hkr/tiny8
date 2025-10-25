@@ -98,3 +98,39 @@ class TestControlFlow(unittest.TestCase):
         # If cpse skipped the next instruction, r6 should remain zero and r7 should be loaded
         self.assertEqual(cpu.read_reg(6), 0x00)
         self.assertEqual(cpu.read_reg(7), 0xBB)
+
+    def test_brlt(self):
+        # BRLT: branch when signed (Rd < Rr). Use -1 (0xFF) < 1 (0x01)
+        src = """
+            ldi r0, $FF    ; -1
+            ldi r1, $01    ; 1
+            cp r0, r1
+            brlt less
+            ldi r3, $01
+            jmp done
+        less:
+            ldi r3, $02
+        done:
+            nop
+        """
+        cpu = self.run_asm(src)
+        # -1 < 1 so branch taken -> r3 == 2
+        self.assertEqual(cpu.read_reg(3), 0x02)
+
+    def test_brge(self):
+        # BRGE: branch when signed (Rd >= Rr). Use 1 >= -1
+        src2 = """
+            ldi r0, $01    ; 1
+            ldi r1, $FF    ; -1
+            cp r0, r1
+            brge ge
+            ldi r3, $01
+            jmp done
+        ge:
+            ldi r3, $02
+        done:
+            nop
+        """
+        cpu2 = self.run_asm(src2)
+        # 1 >= -1 so branch taken -> r3 == 2
+        self.assertEqual(cpu2.read_reg(3), 0x02)
