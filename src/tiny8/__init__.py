@@ -10,4 +10,4 @@ from .visualizer import Visualizer
 
 __all__ = ["CPU", "assemble", "assemble_file", "Visualizer"]
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

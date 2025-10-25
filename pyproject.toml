@@ -1,6 +1,6 @@
 [project]
 name = "tiny8"
-version = "0.1.0"
+version = "0.1.1"
 description = "Simulator for an 8-bit CPU with registers, memory, and a stack."
 readme = "README.md"
 authors = [

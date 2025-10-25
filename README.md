@@ -1,14 +1,14 @@
-# Tiny8 documentation
+# Tiny8
 
 ![PyPI version](https://img.shields.io/pypi/v/tiny8)
 ![License](https://img.shields.io/github/license/sql-hkr/tiny8)
 ![Python versions](https://img.shields.io/pypi/pyversions/tiny8)
 ![CI](https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI)
 
-![bubblesort](/docs/_static/examples/bubblesort.gif)
-
 Tiny8 is a lightweight toolkit that allows you to explore how computers work at their core through small-scale memory models, handcrafted assembly, and lightweight in-memory data structures.
 Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecessary dependencies, a clean design, and intuitive visualization tools that make learning, debugging, and tinkering enjoyable.
+
+![bubblesort](/docs/_static/examples/bubblesort.gif)
 
 Why Tiny8?
 
