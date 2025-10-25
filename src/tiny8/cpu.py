@@ -52,7 +52,7 @@ class CPU:
     def __init__(self, memory: Optional[Memory] = None):
         self.mem = memory or Memory()
         # 32 general purpose 8-bit registers R0-R31
-        self.regs: [int] = [0] * 32
+        self.regs: list[int] = [0] * 32
         # Program Counter (word-addressable for AVR) - we use byte addressing for simplicity
         self.pc: int = 0
         # Stack Pointer - point into RAM
@@ -925,6 +925,30 @@ class CPU:
 
         s = self.get_flag(SREG_S)
         if s:
+            self.op_jmp(label)
+
+    def op_brmi(self, label: str | int):
+        """BRMI - Branch if Minus (Negative flag set).
+
+        Branches when the N flag is set (negative result).
+
+        Args:
+            label: Destination label or address to jump to if the condition is met.
+        """
+        n = self.get_flag(SREG_N)
+        if n:
+            self.op_jmp(label)
+
+    def op_brpl(self, label: str | int):
+        """BRPL - Branch if Plus (Negative flag clear).
+
+        Branches when the N flag is clear (non-negative result).
+
+        Args:
+            label: Destination label or address to jump to if the condition is met.
+        """
+        n = self.get_flag(SREG_N)
+        if not n:
             self.op_jmp(label)
 
     def op_push(self, rr: int):

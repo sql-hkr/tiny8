@@ -106,16 +106,16 @@ class TestControlFlow(unittest.TestCase):
             ldi r1, $01    ; 1
             cp r0, r1
             brlt less
-            ldi r3, $01
+            ldi r2, $01
             jmp done
         less:
-            ldi r3, $02
+            ldi r2, $02
         done:
             nop
         """
         cpu = self.run_asm(src)
-        # -1 < 1 so branch taken -> r3 == 2
-        self.assertEqual(cpu.read_reg(3), 0x02)
+        # -1 < 1 so branch taken -> r2 == 2
+        self.assertEqual(cpu.read_reg(2), 0x02)
 
     def test_brge(self):
         # BRGE: branch when signed (Rd >= Rr). Use 1 >= -1
@@ -124,13 +124,49 @@ class TestControlFlow(unittest.TestCase):
             ldi r1, $FF    ; -1
             cp r0, r1
             brge ge
-            ldi r3, $01
+            ldi r2, $01
             jmp done
         ge:
-            ldi r3, $02
+            ldi r2, $02
         done:
             nop
         """
         cpu2 = self.run_asm(src2)
-        # 1 >= -1 so branch taken -> r3 == 2
-        self.assertEqual(cpu2.read_reg(3), 0x02)
+        # 1 >= -1 so branch taken -> r2 == 2
+        self.assertEqual(cpu2.read_reg(2), 0x02)
+
+    def test_brmi(self):
+        # BRMI: branch when negative (N == 1)
+        src = """
+            ldi r0, $FF    ; -1
+            ldi r1, $00    ; 0
+            cp r0, r1
+            brmi neg
+            ldi r2, $01
+            jmp done
+        neg:
+            ldi r2, $02
+        done:
+            nop
+        """
+        cpu = self.run_asm(src)
+        # -1 < 0 so negative -> branch taken -> r2 == 2
+        self.assertEqual(cpu.read_reg(2), 0x02)
+
+    def test_brpl(self):
+        # BRPL: branch when plus (N == 0)
+        src2 = """
+            ldi r0, $02    ; 2
+            ldi r1, $FF    ; -1
+            cp r0, r1
+            brpl plus
+            ldi r2, $01
+            jmp done2
+        plus:
+            ldi r2, $02
+        done2:
+            nop
+        """
+        cpu2 = self.run_asm(src2)
+        # 2 >= -1 so non-negative -> branch taken -> r2 == 2
+        self.assertEqual(cpu2.read_reg(2), 0x02)
