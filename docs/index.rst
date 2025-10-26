@@ -19,6 +19,12 @@ Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecess
 .. image:: _static/examples/bubblesort.gif
    :alt: Bubble sort
 
+⭐️ NEW FEATURE!
+
+.. image:: https://github.com/user-attachments/assets/cd5a0ae0-8aff-41af-81e0-4ff9c426f617
+   :alt: CLI visualizer
+   :width: 600px
+
 Installation
 ------------
 
@@ -61,6 +67,63 @@ From PyPI (stable)
 
    uv add tiny8
 
+CLI Visualizer
+--------------
+
+Tiny8 includes a lightweight terminal-based visualizer that lets you step through a program's execution trace in your terminal. It shows the status register (SREG), the 32 general-purpose registers, and a compact view of a configurable memory range for each step.
+
+Key points
+~~~~~~~~~~
+
+- The CLI visualizer expects the CPU to have a populated ``step_trace`` (run the CPU first with ``cpu.run(...)``).
+- Controls are keyboard-driven (play/pause, step forward/back, jump, quit) and work in most POSIX terminals that support curses.
+- For higher-fidelity animations (GIFs) and interactive matplotlib views, use the ``Visualizer`` class which requires ``matplotlib``.
+
+Interactive controls
+~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: text
+
+   Space - toggle play/pause
+   l or > - next step
+   h or < - previous step
+   w - jump forward 10 steps
+   b - jump back 10 steps
+   0 - jump to first step
+   $ - jump to last step
+   q or ESC - quit
+
+Programmatic usage
+------------------
+
+You can invoke the terminal visualizer directly from Python after running the CPU:
+
+.. code-block:: python
+
+   from tiny8 import CPU, assemble_file
+   from tiny8 import run_cli
+
+   prog, labels = assemble_file("examples/bubblesort.asm")
+   cpu = CPU()
+   cpu.load_program(prog, labels)
+   cpu.run(max_cycles=15000)
+
+   # Run the curses-based CLI visualizer
+   run_cli(cpu, mem_addr_start=100, mem_addr_end=131)
+
+Tiny8 provides a ``tiny8`` console script (see ``pyproject.toml``). You can run the CLI or the animation mode directly:
+
+.. code-block:: bash
+
+   # Run the curses-based CLI visualizer for an assembly file
+   uv run tiny8 examples/bubblesort.asm # --mode cli --mem-start 100 --mem-end 131
+
+   # Produce an animated GIF using matplotlib (requires matplotlib)
+   uv run tiny8 examples/bubblesort.asm --mode ani -o bubblesort.gif --mem-start 100 --mem-end 131 --plot-every 100 --fps 60
+
+.. important::
+
+   Tiny8 uses Python's built-in curses module (Unix-like systems). On Windows, use an appropriate terminal that supports curses or run via WSL.
 
 Examples
 --------
