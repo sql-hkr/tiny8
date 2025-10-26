@@ -27,3 +27,6 @@ dev = [
     "shibuya>=2025.10.20",
     "sphinx>=8.2.3",
 ]
+
+[project.scripts]
+tiny8 = "tiny8.cli:main"
