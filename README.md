@@ -84,7 +84,8 @@ Key points:
 - For higher-fidelity animations (GIFs) and interactive matplotlib views, use the `Visualizer` class which requires `matplotlib`.
 
 Interactive controls:
-```
+
+```text
 Space - toggle play/pause
 l or > - next step
 h or < - previous step
@@ -101,7 +102,7 @@ You can invoke the terminal visualizer directly from Python after running the CP
 
 ```python
 from tiny8 import CPU, assemble_file
-from tiny8.cli_visualizer import run_cli
+from tiny8 import run_cli
 
 prog, labels = assemble_file("examples/bubblesort.asm")
 cpu = CPU()
@@ -116,10 +117,10 @@ Tiny8 provides a `tiny8` console script (see `pyproject.toml`). You can run the 
 
 ```bash
 # Run the curses-based CLI visualizer for an assembly file
-tiny8 examples/bubblesort.asm # --mode cli --mem-start 100 --mem-end 131
+uv run tiny8 examples/bubblesort.asm # --mode cli --mem-start 100 --mem-end 131
 
 # Produce an animated GIF using matplotlib (requires matplotlib)
-tiny8 examples/bubblesort.asm --mode ani -o bubblesort.gif --mem-start 100 --mem-end 131 --plot-every 100 --fps 60
+uv run tiny8 examples/bubblesort.asm --mode ani -o bubblesort.gif --mem-start 100 --mem-end 131 --plot-every 100 --fps 60
 ```
 
 > [!IMPORTANT]
@@ -238,48 +239,48 @@ Example Output:
 Below is a concise, categorized summary of the Tiny8 instruction set (mnemonics are case-insensitive). This is a quick reference — for implementation details see `src/tiny8/cpu.py`.
 
 - Data transfer
-    - LDI Rd, K — load immediate into register
-    - MOV Rd, Rr — copy register
-    - LD Rd, Rr_addr — load from RAM at address in register
-    - ST Rr_addr, Rr — store register into RAM at address in register
-    - IN Rd, port — read byte from RAM/IO into register
-    - OUT port, Rr — write register to RAM/IO
-    - PUSH Rr / POP Rd — stack push/pop
+  - LDI Rd, K — load immediate into register
+  - MOV Rd, Rr — copy register
+  - LD Rd, Rr_addr — load from RAM at address in register
+  - ST Rr_addr, Rr — store register into RAM at address in register
+  - IN Rd, port — read byte from RAM/IO into register
+  - OUT port, Rr — write register to RAM/IO
+  - PUSH Rr / POP Rd — stack push/pop
 
 - Arithmetic
-    - ADD Rd, Rr — add registers
-    - ADC Rd, Rr — add with carry
-    - SUB Rd, Rr / SUBI Rd, K — subtraction
-    - SBC Rd, Rr / SBCI Rd, K — subtract with carry/borrow
-    - INC Rd / DEC Rd — increment / decrement
-    - MUL Rd, Rr — 8x8 -> 16 multiply (low/high in Rd/Rd+1)
-    - DIV Rd, Rr — unsigned divide (quotient->Rd, remainder->Rd+1)
-    - NEG Rd — two's complement negate
-    - CLR Rd / SER Rd — clear or set register to all ones
+  - ADD Rd, Rr — add registers
+  - ADC Rd, Rr — add with carry
+  - SUB Rd, Rr / SUBI Rd, K — subtraction
+  - SBC Rd, Rr / SBCI Rd, K — subtract with carry/borrow
+  - INC Rd / DEC Rd — increment / decrement
+  - MUL Rd, Rr — 8x8 -> 16 multiply (low/high in Rd/Rd+1)
+  - DIV Rd, Rr — unsigned divide (quotient->Rd, remainder->Rd+1)
+  - NEG Rd — two's complement negate
+  - CLR Rd / SER Rd — clear or set register to all ones
 
 - Logical and bit ops
-    - AND Rd, Rr / ANDI Rd, K — bitwise AND
-    - OR Rd, Rr / ORI Rd, K — bitwise OR
-    - EOR Rd, Rr / EORI Rd, K — exclusive OR
-    - COM Rd — one's complement
-    - SWAP Rd — swap nibbles
-    - TST Rd — test for zero or minus
-    - SBI/CBI / SBIS/SBIC / SBRS/SBRC — set/clear/test single bits and conditional skips
+  - AND Rd, Rr / ANDI Rd, K — bitwise AND
+  - OR Rd, Rr / ORI Rd, K — bitwise OR
+  - EOR Rd, Rr / EORI Rd, K — exclusive OR
+  - COM Rd — one's complement
+  - SWAP Rd — swap nibbles
+  - TST Rd — test for zero or minus
+  - SBI/CBI / SBIS/SBIC / SBRS/SBRC — set/clear/test single bits and conditional skips
 
 - Shifts & rotates
-    - LSL Rd / LSR Rd — logical shift left/right
-    - ROL Rd / ROR Rd — rotate through carry
+  - LSL Rd / LSR Rd — logical shift left/right
+  - ROL Rd / ROR Rd — rotate through carry
 
 - Word (16-bit) ops
-    - SBIW / ADIW — simplified word add/subtract helpers for register pairs
+  - SBIW / ADIW — simplified word add/subtract helpers for register pairs
 
 - Control flow
-    - JMP label / RJMP offset — unconditional jump
-    - CALL label / RCALL offset — call subroutine (push return address)
-    - RET / RETI — return from subroutine / return from interrupt (sets I)
-    - BRNE / BREQ / BRCS / BRCC / BRGE / BRLT — conditional branches based on flags
-    - CP Rd, Rr / CPI Rd, K — compare (sets flags)
-    - CPSE Rd, Rr — compare and skip if equal
+  - JMP label / RJMP offset — unconditional jump
+  - CALL label / RCALL offset — call subroutine (push return address)
+  - RET / RETI — return from subroutine / return from interrupt (sets I)
+  - BRNE / BREQ / BRCS / BRCC / BRGE / BRLT — conditional branches based on flags
+  - CP Rd, Rr / CPI Rd, K — compare (sets flags)
+  - CPSE Rd, Rr — compare and skip if equal
 
 Use the assembler in `src/tiny8/assembler.py` (or `parse_asm`) to write programs — register operands are specified as R0..R31 and immediates accept decimal, $hex, 0x, or 0b binary notation.
 
