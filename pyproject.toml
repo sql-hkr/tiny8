@@ -1,7 +1,7 @@
 [project]
 name = "tiny8"
 version = "0.1.1"
-description = "Simulator for an 8-bit CPU with registers, memory, and a stack."
+description = "An educational 8-bit CPU simulator with interactive visualization and assembly programming tools"
 readme = "README.md"
 authors = [
     { name = "sql-hkr", email = "sql.hkr@gmail.com" }
@@ -23,6 +23,8 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=6.0.0",
     "ruff>=0.14.1",
     "shibuya>=2025.10.20",
     "sphinx>=8.2.3",

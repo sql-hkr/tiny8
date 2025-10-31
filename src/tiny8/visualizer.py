@@ -5,20 +5,19 @@ visualization of the CPU step trace showing SREG bits, registers and a
 memory range.
 """
 
-try:
-    import matplotlib.pyplot as plt
-except Exception:
-    plt = None
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import animation
 
 
 class Visualizer:
     def __init__(self, cpu):
         self.cpu = cpu
 
-    def animate_combined(
+    def animate_execution(
         self,
-        mem_addr_start: int = 0,
-        mem_addr_end: int = 31,
+        mem_addr_start: int = 0x60,
+        mem_addr_end: int = 0x7F,
         filename: str | None = None,
         interval: int = 200,
         fps: int = 30,
@@ -29,195 +28,318 @@ class Visualizer:
         """Animate SREG bits, registers (R0..R31), and a memory range as three stacked subplots.
 
         Args:
-            mem_addr_start: Start memory address for memory subplot (default 0).
-            mem_addr_end: End memory address for memory subplot (default 31).
-            filename: Optional output filename for saving an animation (GIF). If
-                not provided, show the plot interactively.
-            interval: Milliseconds between frames in the animation.
+            mem_addr_start: Start memory address for memory subplot.
+            mem_addr_end: End memory address for memory subplot.
+            filename: Optional output filename for saving animation.
+            interval: Milliseconds between frames.
             fps: Frames per second for saving output.
             fontsize: Font size for labels and ticks.
             cmap: Matplotlib colormap name for the heatmaps.
-            plot_every: Plot every N cycles (downsampling of frames).
-
-        Notes:
-            Requires numpy and matplotlib. If Matplotlib's animation or ffmpeg
-            is not available, the method will attempt to show a static figure.
+            plot_every: Plot every N steps (downsampling).
         """
-        try:
-            import numpy as np
-        except Exception:
-            print("numpy is required for animation")
-            return
-        if plt is None:
-            print("matplotlib not available - cannot animate")
-            return
+        num_steps = len(self.cpu.step_trace)
 
-        # Build time dimension from step_trace or reg_trace fallback
-        if plot_every <= 0:
-            plot_every = 1
-        if self.cpu.step_trace:
-            max_cycle = max(e["cycle"] for e in self.cpu.step_trace)
-            cols = max_cycle
-        else:
-            traces = self.cpu.reg_trace
-            if not traces:
-                print("No activity to animate")
-                return
-            cols = max((c for (c, _, _) in traces), default=0) + 1
-
-        # SREG matrix: 8 flags x cols
         flag_names = ["I", "T", "H", "S", "V", "N", "Z", "C"]
-        sreg_mat = np.zeros((8, cols), dtype=float)
-        # registers matrix
-        rows = 32
-        reg_mat = np.zeros((rows, cols), dtype=float)
-        # memory matrix
+        sreg_mat = np.zeros((8, num_steps))
+        reg_mat = np.zeros((32, num_steps))
         mem_rows = mem_addr_end - mem_addr_start + 1
-        mem_mat = np.zeros((mem_rows, cols), dtype=float)
+        mem_mat = np.zeros((mem_rows, num_steps))
 
-        # initialize with NaN for proper forward-fill
-        sreg_mat[:] = np.nan
-        reg_mat[:] = np.nan
-        mem_mat[:] = np.nan
-
-        # populate from step_trace entries
-        for e in self.cpu.step_trace:
-            cidx = max(0, e["cycle"] - 1)
-            # sreg bits
-            s = e.get("sreg", 0)
+        for idx, entry in enumerate(self.cpu.step_trace):
+            s = entry.get("sreg", 0)
             for b in range(8):
-                sreg_mat[7 - b, cidx] = 1.0 if ((s >> b) & 1) else 0.0
-            # regs snapshot (post-exec uses pre-exec regs snapshot stored as 'regs')
-            regs = e.get("regs", [])
-            for r in range(min(rows, len(regs))):
-                reg_mat[r, cidx] = regs[r]
-            # mem snapshot: only filled where present
-            memsnap = e.get("mem", {})
+                sreg_mat[7 - b, idx] = 1.0 if ((s >> b) & 1) else 0.0
+
+            regs = entry.get("regs", [])
+            for r in range(min(32, len(regs))):
+                reg_mat[r, idx] = regs[r]
+
+            memsnap = entry.get("mem", {})
             for a, v in memsnap.items():
                 if mem_addr_start <= a <= mem_addr_end:
-                    mem_mat[a - mem_addr_start, cidx] = v
-
-        # forward-fill along time axis
-        for c in range(1, cols):
-            for arr in (sreg_mat, reg_mat, mem_mat):
-                mask = np.isnan(arr[:, c])
-                arr[mask, c] = arr[mask, c - 1]
-        sreg_mat = np.nan_to_num(sreg_mat, nan=0.0)
-        reg_mat = np.nan_to_num(reg_mat, nan=0.0)
-        mem_mat = np.nan_to_num(mem_mat, nan=0.0)
+                    mem_mat[a - mem_addr_start, idx] = v
 
         plt.style.use("dark_background")
-
-        # create subplots with tight spacing
         fig, axes = plt.subplots(
             3, 1, figsize=(15, 10), gridspec_kw={"height_ratios": [1, 4, 4]}
         )
 
         im_sreg = axes[0].imshow(
-            sreg_mat, aspect="auto", cmap=cmap, interpolation="nearest", vmin=0, vmax=1
+            sreg_mat[:, :1],
+            aspect="auto",
+            cmap=cmap,
+            interpolation="nearest",
+            vmin=0,
+            vmax=1,
         )
         axes[0].set_yticks(range(8))
         axes[0].set_yticklabels(flag_names, fontsize=fontsize)
         axes[0].set_ylabel("SREG", fontsize=fontsize)
 
         im_regs = axes[1].imshow(
-            reg_mat, aspect="auto", cmap=cmap, interpolation="nearest", vmin=0, vmax=255
+            reg_mat[:, :1],
+            aspect="auto",
+            cmap=cmap,
+            interpolation="nearest",
+            vmin=0,
+            vmax=255,
         )
-        axes[1].set_yticks(range(rows))
-        axes[1].set_yticklabels([f"R{i}" for i in range(rows)], fontsize=fontsize)
+        axes[1].set_yticks(range(32))
+        axes[1].set_yticklabels([f"R{i}" for i in range(32)], fontsize=fontsize)
         axes[1].set_ylabel("Registers", fontsize=fontsize)
 
         im_mem = axes[2].imshow(
-            mem_mat, aspect="auto", cmap=cmap, interpolation="nearest", vmin=0, vmax=255
+            mem_mat[:, :1],
+            aspect="auto",
+            cmap=cmap,
+            interpolation="nearest",
+            vmin=0,
+            vmax=255,
         )
         axes[2].set_yticks(range(mem_rows))
         axes[2].set_yticklabels(
             [hex(a) for a in range(mem_addr_start, mem_addr_end + 1)], fontsize=fontsize
         )
         axes[2].set_ylabel("Memory", fontsize=fontsize)
-        axes[2].set_xlabel("cycle", fontsize=fontsize)
+        axes[2].set_xlabel("Step", fontsize=fontsize)
 
-        # Reduce tick padding and label sizes to minimize margins
         for ax in axes:
-            ax.tick_params(axis="x", which="both", pad=2, labelsize=fontsize)
-            ax.tick_params(axis="y", which="both", pad=2)
+            ax.tick_params(axis="x", labelsize=fontsize)
+            ax.tick_params(axis="y", labelsize=fontsize)
 
-        # smaller colorbars to avoid expanding figure margins
-        fig.colorbar(
-            im_sreg, ax=axes[0], orientation="vertical", fraction=0.015, pad=0.01
-        )
-        fig.colorbar(
-            im_regs, ax=axes[1], orientation="vertical", fraction=0.015, pad=0.01
-        )
-        fig.colorbar(
-            im_mem, ax=axes[2], orientation="vertical", fraction=0.015, pad=0.01
-        )
+        fig.colorbar(im_sreg, ax=axes[0], fraction=0.015, pad=0.01)
+        fig.colorbar(im_regs, ax=axes[1], fraction=0.015, pad=0.01)
+        fig.colorbar(im_mem, ax=axes[2], fraction=0.015, pad=0.01)
 
-        # Apply tight layout and then manually nudge subplot bounds to minimize margins
-        try:
-            plt.tight_layout(pad=0.2)
-        except Exception:
-            pass
-        # shrink margins as much as reasonable
-        fig.subplots_adjust(top=0.96, bottom=0.035, hspace=0.02)
-
-        try:
-            from matplotlib import animation
-        except Exception:
-            animation = None
+        plt.tight_layout(pad=0.2)
+        fig.subplots_adjust(top=0.96, bottom=0.05, hspace=0.02)
 
         def update(frame):
-            # frame will be the actual column index (cycle index) when frames is an iterable
-            fidx = frame
+            im_sreg.set_data(sreg_mat[:, : frame + 1])
+            im_regs.set_data(reg_mat[:, : frame + 1])
+            im_mem.set_data(mem_mat[:, : frame + 1])
 
-            # update images to show up to fidx (inclusive)
-            def mask_after(arr):
-                disp = arr.copy()
-                if fidx + 1 < disp.shape[1]:
-                    disp[:, fidx + 1 :] = 0
-                return disp
+            im_sreg.set_extent([0, frame + 1, 8, 0])
+            im_regs.set_extent([0, frame + 1, 32, 0])
+            im_mem.set_extent([0, frame + 1, mem_rows, 0])
 
-            im_sreg.set_data(mask_after(sreg_mat))
-            im_regs.set_data(mask_after(reg_mat))
-            im_mem.set_data(mask_after(mem_mat))
+            entry = self.cpu.step_trace[frame]
+            instr = entry.get("instr", "")
+            pc = entry.get("pc", 0)
+            sp = entry.get("sp", 0)
 
-            # instruction text
-            instr_text = ""
-            pc_val = getattr(self.cpu, "pc", None)
-            sp_val = getattr(self.cpu, "sp", None)
-            try:
-                entry = next(
-                    (e for e in self.cpu.step_trace if e["cycle"] - 1 == fidx), None
-                )
-                if entry:
-                    instr_text = entry.get("instr", "")
-                    pc_val = entry.get("pc", pc_val)
-                    sp_val = entry.get("sp", sp_val)
-            except Exception:
-                instr_text = ""
-
-            left = (
-                f"Cycle: {fidx:5d}, PC: 0x{pc_val:04x}, SP: 0x{sp_val:04x}, Run: {instr_text}"
-                if instr_text
-                else f"Cycle {fidx}"
+            fig.suptitle(
+                f"Step: {frame}, PC: 0x{pc:04x}, SP: 0x{sp:04x}, {instr}",
+                x=0.01,
+                ha="left",
+                fontsize=fontsize,
             )
-            fig.suptitle(left, x=0, ha="left")
-            return (im_sreg, im_regs, im_mem)
+            return im_sreg, im_regs, im_mem
 
-        if animation is None:
-            print("matplotlib.animation not available; showing static figure")
-            plt.show()
-            return
-
-        frame_iter = range(0, cols, plot_every)
+        frames = range(0, num_steps, plot_every)
         anim = animation.FuncAnimation(
-            fig, update, frames=frame_iter, interval=interval, blit=False
+            fig, update, frames=frames, interval=interval, blit=False
         )
+
         if filename:
-            try:
-                anim.save(filename, fps=fps)
-            except Exception as e:
-                print("Failed to save animation:", e)
-                plt.show()
+            anim.save(filename, fps=fps)
         else:
             plt.show()
+
+    def show_register_history(self, registers: list[int] = None, figsize=(14, 8)):
+        """Plot timeline of register value changes over execution.
+
+        Args:
+            registers: List of register indices to plot (default: R0-R7).
+            figsize: Figure size as (width, height).
+        """
+        if registers is None:
+            registers = list(range(8))
+
+        num_steps = len(self.cpu.step_trace)
+        reg_data = {r: np.zeros(num_steps) for r in registers}
+
+        for idx, entry in enumerate(self.cpu.step_trace):
+            regs = entry.get("regs", [])
+            for r in registers:
+                if r < len(regs):
+                    reg_data[r][idx] = regs[r]
+
+        plt.style.use("dark_background")
+        fig, ax = plt.subplots(figsize=figsize)
+
+        for r in registers:
+            ax.plot(reg_data[r], label=f"R{r}", linewidth=1.5, marker="o", markersize=3)
+
+        ax.set_xlabel("Step", fontsize=12)
+        ax.set_ylabel("Register Value", fontsize=12)
+        ax.set_title("Register Values Over Time", fontsize=14, pad=20)
+        ax.legend(loc="best", ncol=4, fontsize=10)
+        ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()
+
+    def show_memory_access(
+        self, mem_addr_start: int = 0, mem_addr_end: int = 255, figsize=(12, 8)
+    ):
+        """Plot a heatmap showing memory access patterns over time.
+
+        Args:
+            mem_addr_start: Start memory address.
+            mem_addr_end: End memory address.
+            figsize: Figure size as (width, height).
+        """
+        num_steps = len(self.cpu.step_trace)
+        mem_rows = mem_addr_end - mem_addr_start + 1
+        mem_mat = np.zeros((mem_rows, num_steps))
+
+        for idx, entry in enumerate(self.cpu.step_trace):
+            memsnap = entry.get("mem", {})
+            for a, v in memsnap.items():
+                if mem_addr_start <= a <= mem_addr_end:
+                    mem_mat[a - mem_addr_start, idx] = v
+
+        plt.style.use("dark_background")
+        fig, ax = plt.subplots(figsize=figsize)
+
+        im = ax.imshow(mem_mat, aspect="auto", cmap="viridis", interpolation="nearest")
+        ax.set_xlabel("Step", fontsize=12)
+        ax.set_ylabel("Memory Address", fontsize=12)
+        ax.set_title(
+            f"Memory Access Pattern (0x{mem_addr_start:04x} - 0x{mem_addr_end:04x})",
+            fontsize=14,
+            pad=20,
+        )
+
+        num_ticks = min(20, mem_rows)
+        tick_positions = np.linspace(0, mem_rows - 1, num_ticks, dtype=int)
+        ax.set_yticks(tick_positions)
+        ax.set_yticklabels([hex(mem_addr_start + pos) for pos in tick_positions])
+
+        fig.colorbar(im, ax=ax, label="Value")
+        plt.tight_layout()
+        plt.show()
+
+    def show_flag_history(self, figsize=(14, 6)):
+        """Plot SREG flag changes over execution time.
+
+        Args:
+            figsize: Figure size as (width, height).
+        """
+        flag_names = ["C", "Z", "N", "V", "S", "H", "T", "I"]
+        num_steps = len(self.cpu.step_trace)
+        flag_data = {name: np.zeros(num_steps) for name in flag_names}
+
+        for idx, entry in enumerate(self.cpu.step_trace):
+            s = entry.get("sreg", 0)
+            for bit, name in enumerate(flag_names):
+                flag_data[name][idx] = 1 if ((s >> bit) & 1) else 0
+
+        plt.style.use("dark_background")
+        fig, ax = plt.subplots(figsize=figsize)
+
+        offset = 0
+        colors = plt.cm.Set3(np.linspace(0, 1, 8))
+
+        for idx, name in enumerate(flag_names):
+            values = flag_data[name] + offset
+            ax.fill_between(
+                range(num_steps),
+                offset,
+                values,
+                alpha=0.7,
+                label=name,
+                color=colors[idx],
+            )
+            offset += 1.2
+
+        ax.set_xlabel("Step", fontsize=12)
+        ax.set_ylabel("Flags", fontsize=12)
+        ax.set_title("SREG Flag Activity", fontsize=14, pad=20)
+        ax.set_yticks([i * 1.2 + 0.5 for i in range(8)])
+        ax.set_yticklabels(flag_names)
+        ax.legend(loc="upper right", ncol=8, fontsize=10)
+        ax.grid(True, alpha=0.2, axis="x")
+        plt.tight_layout()
+        plt.show()
+
+    def show_statistics(self, top_n: int = 10):
+        """Plot execution summary statistics.
+
+        Args:
+            top_n: Number of top memory addresses to show in access frequency.
+        """
+        num_steps = len(self.cpu.step_trace)
+
+        # Count instruction types
+        instr_counts = {}
+        for entry in self.cpu.step_trace:
+            instr = entry.get("instr", "").split()[0]
+            instr_counts[instr] = instr_counts.get(instr, 0) + 1
+
+        # Track memory access frequency
+        mem_access = {}
+        for entry in self.cpu.step_trace:
+            memsnap = entry.get("mem", {})
+            for addr in memsnap.keys():
+                mem_access[addr] = mem_access.get(addr, 0) + 1
+
+        plt.style.use("dark_background")
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+        # Instruction frequency
+        sorted_instrs = sorted(instr_counts.items(), key=lambda x: x[1], reverse=True)[
+            :top_n
+        ]
+        if sorted_instrs:
+            instrs, counts = zip(*sorted_instrs)
+            axes[0, 0].barh(instrs, counts, color="skyblue")
+            axes[0, 0].set_xlabel("Count", fontsize=11)
+            axes[0, 0].set_title("Top Instructions", fontsize=12)
+            axes[0, 0].invert_yaxis()
+
+        # Memory access frequency
+        sorted_mem = sorted(mem_access.items(), key=lambda x: x[1], reverse=True)[
+            :top_n
+        ]
+        if sorted_mem:
+            addrs, counts = zip(*sorted_mem)
+            addr_labels = [f"0x{a:04x}" for a in addrs]
+            axes[0, 1].barh(addr_labels, counts, color="lightcoral")
+            axes[0, 1].set_xlabel("Access Count", fontsize=11)
+            axes[0, 1].set_title("Top Memory Accesses", fontsize=12)
+            axes[0, 1].invert_yaxis()
+
+        # Register usage
+        reg_changes = [0] * 32
+        for entry in self.cpu.step_trace:
+            regs = entry.get("regs", [])
+            for r in range(min(32, len(regs))):
+                if r < len(regs) and regs[r] != 0:
+                    reg_changes[r] += 1
+
+        axes[1, 0].bar(range(32), reg_changes, color="mediumseagreen")
+        axes[1, 0].set_xlabel("Register", fontsize=11)
+        axes[1, 0].set_ylabel("Non-zero Count", fontsize=11)
+        axes[1, 0].set_title("Register Usage", fontsize=12)
+        axes[1, 0].set_xticks(range(0, 32, 4))
+
+        # Execution timeline
+        axes[1, 1].text(
+            0.5,
+            0.5,
+            f"Total Instructions: {num_steps}\n"
+            f"Unique Instructions: {len(instr_counts)}\n"
+            f"Memory Locations Accessed: {len(mem_access)}\n"
+            f"Final PC: 0x{self.cpu.pc:04x}\n"
+            f"Final SP: 0x{self.cpu.sp:04x}",
+            ha="center",
+            va="center",
+            fontsize=14,
+            bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.3),
+        )
+        axes[1, 1].set_title("Execution Summary", fontsize=12)
+        axes[1, 1].axis("off")
+
+        plt.tight_layout()
+        plt.show()

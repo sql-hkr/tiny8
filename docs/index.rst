@@ -1,151 +1,155 @@
-Tiny8 documentation
-=====================
+.. Tiny8 documentation master file
 
-.. image:: https://img.shields.io/pypi/v/tiny8
-   :target: <https://img.shields.io/pypi/v/tiny8>
+Tiny8 Documentation
+===================
 
-.. image:: https://img.shields.io/github/license/sql-hkr/tiny8
-   :target: <https://img.shields.io/github/license/sql-hkr/tiny8>
+**An educational 8-bit CPU simulator with interactive visualization**
 
-.. image:: https://img.shields.io/pypi/pyversions/tiny8
-   :target: <https://img.shields.io/pypi/pyversions/tiny8>
+Tiny8 is a lightweight and educational toolkit for exploring the fundamentals of computer architecture through hands-on assembly programming and real-time visualization. Designed for learning and experimentation, it features an AVR-inspired 8-bit CPU with 32 registers, a rich instruction set, and powerful debugging tools — all with zero heavy dependencies.
 
-.. image:: https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI
-   :target: <https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI>
-
-Tiny8 is a lightweight toolkit that allows you to explore how computers work at their core through small-scale memory models, handcrafted assembly, and lightweight in-memory data structures.
-Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecessary dependencies, a clean design, and intuitive visualization tools that make learning, debugging, and tinkering enjoyable.
-
-.. image:: _static/examples/bubblesort.gif
-   :alt: Bubble sort
-
-⭐️ NEW FEATURE!
-
-.. image:: https://github.com/user-attachments/assets/cd5a0ae0-8aff-41af-81e0-4ff9c426f617
-   :alt: CLI visualizer
+.. image:: https://github.com/user-attachments/assets/6d4f07ba-21b3-483f-a5d4-7603334c40f4
+   :alt: Animated bubble sort visualization
+   :align: center
    :width: 600px
 
-Installation
-------------
+.. centered:: *Real-time visualization of a bubble sort algorithm executing on Tiny8*
 
-Tiny8 supports Python 3.11 and newer. It has no heavy external dependencies and is suitable for inclusion in virtual environments.
-Follow the steps below to prepare your environment and install from source or PyPI.
+Features
+--------
 
-Prerequisites
+🎯 Interactive Terminal Debugger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Python 3.11+
-- Git (for installing from the repository)
-- Recommended: create and use a virtual environment
+.. image:: https://github.com/user-attachments/assets/5317ebcd-53d5-4966-84be-be94b7830899
+   :alt: CLI visualizer screenshot
+   :align: center
+   :width: 600px
 
-From source (development)
+* **Vim-style navigation**: Step through execution with intuitive keyboard controls
+* **Change highlighting**: See exactly what changed at each step (registers, flags, memory)
+* **Advanced search**: Find instructions, track register/memory changes, locate PC addresses
+* **Marks and bookmarks**: Set and jump to important execution points
+* **Vertical scrolling**: Handle programs with large memory footprints
 
-.. code-block:: bash
+🎬 Graphical Animation
+~~~~~~~~~~~~~~~~~~~~~~~
 
-   git clone https://github.com/sql-hkr/tiny8.git
-   cd tiny8
-   uv venv
-   source .venv/bin/activate
-   uv sync
+* Generate high-quality GIF/MP4 videos of program execution
+* Visualize register evolution, memory access patterns, and flag changes
+* Perfect for presentations, documentation, and learning materials
 
-.. tip::
+🏗️ Complete 8-bit Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   `uv <https://docs.astral.sh/uv/>`_ is an extremely fast Python package and project manager, written in Rust. To install it, run:
+* **32 general-purpose registers** (R0-R31)
+* **8-bit ALU** with arithmetic, logical, and bit manipulation operations
+* **Status register (SREG)** with 8 condition flags
+* **2KB address space** for unified memory and I/O
+* **Stack operations** with dedicated stack pointer
+* **AVR-inspired instruction set** with 60+ instructions
 
-   .. code-block:: bash
-
-      # On macOS and Linux.
-      curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      # On Windows.
-      powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-This flow sets up a development virtual environment, installs development requirements, and prepares the project for local editing and testing.
-
-From PyPI (stable)
-
-.. code-block:: bash
-
-   uv add tiny8
-
-CLI Visualizer
---------------
-
-Tiny8 includes a lightweight terminal-based visualizer that lets you step through a program's execution trace in your terminal. It shows the status register (SREG), the 32 general-purpose registers, and a compact view of a configurable memory range for each step.
-
-Key points
-~~~~~~~~~~
-
-- The CLI visualizer expects the CPU to have a populated ``step_trace`` (run the CPU first with ``cpu.run(...)``).
-- Controls are keyboard-driven (play/pause, step forward/back, jump, quit) and work in most POSIX terminals that support curses.
-- For higher-fidelity animations (GIFs) and interactive matplotlib views, use the ``Visualizer`` class which requires ``matplotlib``.
-
-Interactive controls
+📚 Educational Focus
 ~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: text
+* Clean, readable Python implementation
+* Comprehensive examples (Fibonacci, bubble sort, factorial, and more)
+* Step-by-step execution traces for debugging
+* Full API documentation and instruction set reference
 
-   Space - toggle play/pause
-   l or > - next step
-   h or < - previous step
-   w - jump forward 10 steps
-   b - jump back 10 steps
-   0 - jump to first step
-   $ - jump to last step
-   q or ESC - quit
+Quick Start
+-----------
 
-Programmatic usage
-------------------
+Installation
+~~~~~~~~~~~~
 
-You can invoke the terminal visualizer directly from Python after running the CPU:
+Install Tiny8 using pip:
+
+.. code-block:: bash
+
+   pip install tiny8
+
+Your First Program
+~~~~~~~~~~~~~~~~~~
+
+Create a file called ``fibonacci.asm``:
+
+.. code-block:: asm
+
+   ; Fibonacci Sequence Calculator
+   ; Calculates the 10th Fibonacci number (F(10) = 55)
+   
+       ldi r16, 0          ; F(0) = 0
+       ldi r17, 1          ; F(1) = 1
+       ldi r18, 9          ; Counter: 9 more iterations
+   
+   loop:
+       add r16, r17        ; F(n) = F(n-1) + F(n-2)
+       mov r19, r16        ; Save result temporarily
+       mov r16, r17        ; Shift: previous = current
+       mov r17, r19        ; Shift: current = new result
+       dec r18             ; Decrement counter
+       brne loop           ; Continue if counter != 0
+   
+   done:
+       jmp done            ; Infinite loop at end
+
+Run it with the interactive debugger:
+
+.. code-block:: bash
+
+   tiny8 fibonacci.asm
+
+Or generate an animation:
+
+.. code-block:: bash
+
+   tiny8 fibonacci.asm -m ani -o fibonacci.gif
+
+Using the Python API
+~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
    from tiny8 import CPU, assemble_file
-   from tiny8 import run_cli
-
-   prog, labels = assemble_file("examples/bubblesort.asm")
+   
+   # Assemble and load program
+   asm = assemble_file("fibonacci.asm")
    cpu = CPU()
-   cpu.load_program(prog, labels)
-   cpu.run(max_cycles=15000)
+   cpu.load_program(asm)
+   
+   # Run the program
+   cpu.run(max_steps=1000)
+   
+   # Check the result
+   print(f"Result: R17 = {cpu.read_reg(17)}")  # Final Fibonacci number
 
-   # Run the curses-based CLI visualizer
-   run_cli(cpu, mem_addr_start=100, mem_addr_end=131)
-
-Tiny8 provides a ``tiny8`` console script (see ``pyproject.toml``). You can run the CLI or the animation mode directly:
-
-.. code-block:: bash
-
-   # Run the curses-based CLI visualizer for an assembly file
-   uv run tiny8 examples/bubblesort.asm # --mode cli --mem-start 100 --mem-end 131
-
-   # Produce an animated GIF using matplotlib (requires matplotlib)
-   uv run tiny8 examples/bubblesort.asm --mode ani -o bubblesort.gif --mem-start 100 --mem-end 131 --plot-every 100 --fps 60
-
-.. important::
-
-   Tiny8 uses Python's built-in curses module (Unix-like systems). On Windows, use an appropriate terminal that supports curses or run via WSL.
-
-Examples
---------
+Documentation Contents
+----------------------
 
 .. toctree::
    :maxdepth: 2
+   :caption: User Guide
+   
+   getting_started
+   architecture
+   assembly_language
+   visualization
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Examples
+   
    examples/index
 
-API Reference
----------------
-
-The API section documents the public modules, classes, functions, and configuration options.
-It includes usage notes, parameter descriptions, and return value details so you can use the library reliably in production code.
-
 .. toctree::
    :maxdepth: 2
+   :caption: API Reference
+   
+   api/modules
 
-   api/tiny8
+Indices and Tables
+==================
 
-License
--------
-
-Tiny8 is licensed under the MIT License. See `LICENSE <https://github.com/sql-hkr/tiny8/blob/main/LICENSE>`_ for details.
-Contributions, bug reports, and pull requests are welcome; please follow the repository's CONTRIBUTING guidelines.
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

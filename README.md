@@ -1,297 +1,406 @@
 # Tiny8
 
-![PyPI version](https://img.shields.io/pypi/v/tiny8)
-![License](https://img.shields.io/github/license/sql-hkr/tiny8)
-![Python versions](https://img.shields.io/pypi/pyversions/tiny8)
-![CI](https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI)
+[![PyPI version](https://img.shields.io/pypi/v/tiny8)](https://pypi.org/project/tiny8/)
+[![License](https://img.shields.io/github/license/sql-hkr/tiny8)](LICENSE)
+[![Python versions](https://img.shields.io/pypi/pyversions/tiny8)](https://pypi.org/project/tiny8/)
+[![CI](https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI)](https://github.com/sql-hkr/tiny8/actions)
 
-Tiny8 is a lightweight toolkit that allows you to explore how computers work at their core through small-scale memory models, handcrafted assembly, and lightweight in-memory data structures.
-Designed for rapid experimentation, Tiny8 embraces minimalism with zero unnecessary dependencies, a clean design, and intuitive visualization tools that make learning, debugging, and tinkering enjoyable.
+> **An educational 8-bit CPU simulator with interactive visualization**
 
-![bubblesort](/docs/_static/examples/bubblesort.gif)
+Tiny8 is a lightweight and educational toolkit for exploring the fundamentals of computer architecture through hands-on assembly programming and real-time visualization. Designed for learning and experimentation, it features an AVR-inspired 8-bit CPU with 32 registers, a rich instruction set, and powerful debugging tools — all with zero heavy dependencies.
 
-⭐️ NEW FEATURE!
 
-<img width="600" src="https://github.com/user-attachments/assets/cd5a0ae0-8aff-41af-81e0-4ff9c426f617">
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/6d4f07ba-21b3-483f-a5d4-7603334c40f4" alt="Animated bubble sort visualization" width="600">
+  <p><em>Real-time visualization of a bubble sort algorithm executing on Tiny8</em></p>
+</div>
 
-Why Tiny8?
+## ✨ Features
 
-- Lightweight: tiny install footprint and no heavy runtime dependencies.
-- Educational: clear primitives and examples that demonstrate CPU concepts, memory layout, and algorithms.
-- Fast feedback loop: assemble, run, and visualize within seconds to iterate on ideas.
-- Extensible: meant for experiments, teaching, demos, and small tools that benefit from a predictable, tiny VM.
+### 🎯 **Interactive Terminal Debugger**
+<img width="600" src="https://github.com/user-attachments/assets/5317ebcd-53d5-4966-84be-be94b7830899" alt="CLI visualizer screenshot">
 
-Who should use it?
+- **Vim-style navigation**: Step through execution with intuitive keyboard controls
+- **Change highlighting**: See exactly what changed at each step (registers, flags, memory)
+- **Advanced search**: Find instructions, track register/memory changes, locate PC addresses
+- **Marks and bookmarks**: Set and jump to important execution points
+- **Vertical scrolling**: Handle programs with large memory footprints
 
-- Students learning low-level programming, assembly, or computer architecture who want hands-on examples.
-- Educators building demos and interactive lessons that visualize how registers and memory change.
-- Hobbyists and hackers experimenting with toy CPUs, compact data layouts, or custom instruction ideas.
-- Developers who want a tiny, readable simulator to prototype algorithms that manipulate memory directly.
+### 🎬 **Graphical Animation**
+- Generate high-quality GIF/MP4 videos of program execution
+- Visualize register evolution, memory access patterns, and flag changes
+- Perfect for presentations, documentation, and learning materials
 
-Get started
+### 🏗️ **Complete 8-bit Architecture**
+- **32 general-purpose registers** (R0-R31)
+- **8-bit ALU** with arithmetic, logical, and bit manipulation operations
+- **Status register (SREG)** with 8 condition flags
+- **2KB address space** for unified memory and I/O
+- **Stack operations** with dedicated stack pointer
+- **AVR-inspired instruction set** with 60+ instructions
 
-- Follow the Installation section below to install from PyPI or set up a development environment.
-- See the Examples section (like the bubble sort demo) to run real programs and watch the visualizer in action.
-- Dive into the API Reference for details on the CPU, assembler, and visualization helpers.
+### 📚 **Educational Focus**
+- Clean, readable Python implementation
+- Comprehensive examples (Fibonacci, bubble sort, factorial, and more)
+- Step-by-step execution traces for debugging
+- Full API documentation and instruction set reference
 
-## Installation
+## 🚀 Quick Start
 
-Tiny8 supports Python 3.11 and newer. It has no heavy external dependencies and is suitable for inclusion in virtual environments. Follow the steps below to prepare your environment and install from source or PyPI.
-
-### Prerequisites
-
-- Python 3.11+
-- Git (for installing from the repository)
-- Recommended: create and use a virtual environment
-
-### From source (development)
-
-```bash
-git clone https://github.com/sql-hkr/tiny8.git
-cd tiny8
-uv venv
-source .venv/bin/activate
-uv sync
-```
-
-> [!TIP]
-> [uv](https://docs.astral.sh/uv/) is an extremely fast Python package and project manager, written in Rust. To install it, run:
->
-> ```bash
-> # On macOS and Linux.
-> curl -LsSf https://astral.sh/uv/install.sh | sh
->
-> # On Windows.
-> powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-> ```
-
-This flow sets up a development virtual environment, installs development requirements, and prepares the project for local editing and testing.
-
-### From PyPI (stable)
+### Installation
 
 ```bash
-uv add tiny8
+pip install tiny8
 ```
 
-## CLI Visualizer
+### Your First Program
 
-Tiny8 includes a lightweight terminal-based visualizer that lets you step through a program's execution trace in your terminal. It shows the status register (SREG), the 32 general-purpose registers, and a compact view of a configurable memory range for each step.
+Create `fibonacci.asm`:
+```asm
+; Fibonacci Sequence Calculator
+; Calculates the 10th Fibonacci number (F(10) = 55)
+; F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2)
+;
+; Results stored in registers:
+; R16 and R17 hold the two most recent Fibonacci numbers
 
-Key points:
+    ldi r16, 0          ; F(0) = 0
+    ldi r17, 1          ; F(1) = 1
+    ldi r18, 9          ; Counter: 9 more iterations to reach F(10)
 
-- The CLI visualizer expects the CPU to have a populated `step_trace` (run the CPU first with `cpu.run(...)`).
-- Controls are keyboard-driven (play/pause, step forward/back, jump, quit) and work in most POSIX terminals that support curses.
-- For higher-fidelity animations (GIFs) and interactive matplotlib views, use the `Visualizer` class which requires `matplotlib`.
+loop:
+    add r16, r17        ; F(n) = F(n-1) + F(n-2)
+    mov r19, r16        ; Save result temporarily
+    mov r16, r17        ; Shift: previous = current
+    mov r17, r19        ; Shift: current = new result
+    dec r18             ; Decrement counter
+    brne loop           ; Continue if counter != 0
 
-Interactive controls:
-
-```text
-Space - toggle play/pause
-l or > - next step
-h or < - previous step
-w - jump forward 10 steps
-b - jump back 10 steps
-0 - jump to first step
-$ - jump to last step
-q or ESC - quit
+done:
+    jmp done            ; Infinite loop at end
 ```
 
-Programmatic usage
+Run it:
+```bash
+tiny8 fibonacci.asm # Interactive debugger
+tiny8 fibonacci.asm -m ani -o fibonacci.gif # Generate animation
+```
 
-You can invoke the terminal visualizer directly from Python after running the CPU:
+### Python API
 
 ```python
 from tiny8 import CPU, assemble_file
-from tiny8 import run_cli
 
-prog, labels = assemble_file("examples/bubblesort.asm")
+asm = assemble_file("fibonacci.asm")
 cpu = CPU()
-cpu.load_program(prog, labels)
-cpu.run(max_cycles=15000)
+cpu.load_program(asm)
+cpu.run(max_steps=1000)
 
-# Run the curses-based CLI visualizer
-run_cli(cpu, mem_addr_start=100, mem_addr_end=131)
+print(f"Result: R17 = {cpu.read_reg(17)}")  # Final Fibonacci number
 ```
 
-Tiny8 provides a `tiny8` console script (see `pyproject.toml`). You can run the CLI or the animation mode directly:
+## 💡 Why Tiny8?
+
+**For Students** — Write assembly, see immediate results with visual feedback. Understand how each instruction affects CPU state without abstractions.
+
+**For Educators** — Interactive demonstrations, easy assignment creation, and generate animations for lectures.
+
+**For Hobbyists** — Rapid algorithm prototyping at the hardware level with minimal overhead and an extensible, readable codebase.
+
+## 📖 Documentation
+
+- [**Full Documentation**](https://sql-hkr.github.io/tiny8/) — Complete API reference and guides
+- [**Instruction Set Reference**](#instruction-set-reference) — All 60+ instructions
+- [**CLI Guide**](#interactive-cli-controls) — Terminal debugger keyboard shortcuts
+- [**Examples**](#examples) — Sample programs with explanations
+- [**Contributing**](CONTRIBUTING.md) — Guidelines for contributors
+
+## 🎮 Interactive CLI Controls
+
+The terminal-based debugger provides powerful navigation and inspection capabilities.
+
+### Navigation & Playback
+
+- `l` / `h` or `→` / `←` — Step forward/backward
+- `w` / `b` — Jump ±10 steps
+- `0` / `$` — Jump to first/last step
+- `Space` — Play/pause auto-execution
+- `[` / `]` — Decrease/increase playback speed
+
+### Display & Inspection
+
+- `r` — Toggle register display (all/changed only)
+- `M` — Toggle memory display (all/non-zero only)
+- `=` — Show detailed step information
+- `j` / `k` — Scroll memory view up/down
+
+### Search & Navigation Commands (press `:`)
+
+- `:123` — Jump to step 123
+- `:+50` / `:-20` — Relative jumps
+- `:/ldi` — Search forward for instruction "ldi"
+- `:?add` — Search backward for "add"
+- `:@0x100` — Jump to PC address 0x100
+- `:r10` — Find next change to register R10
+- `:r10=42` — Find where R10 equals 42
+- `:m100` — Find next change to memory[100]
+- `:fZ` — Find next change to flag Z
+
+### Marks & Help
+
+- `ma` — Set mark 'a' at current step
+- `'a` — Jump to mark 'a'
+- `/` — Show help screen
+- `q` or `ESC` — Quit
+
+## 🎓 Examples
+
+The `examples/` directory contains programs demonstrating key concepts:
+
+| Example | Description |
+|---------|-------------|
+| `fibonacci.asm` | Fibonacci sequence using registers |
+| `bubblesort.asm` | Sorting algorithm with memory visualization |
+| `factorial.asm` | Recursive factorial calculation |
+| `find_max.asm` | Finding maximum value in array |
+| `is_prime.asm` | Prime number checking algorithm |
+| `gcd.asm` | Greatest common divisor (Euclidean algorithm) |
+
+### Bubble Sort
+
+Sort 32 bytes in memory:
 
 ```bash
-# Run the curses-based CLI visualizer for an assembly file
-uv run tiny8 examples/bubblesort.asm # --mode cli --mem-start 100 --mem-end 131
-
-# Produce an animated GIF using matplotlib (requires matplotlib)
-uv run tiny8 examples/bubblesort.asm --mode ani -o bubblesort.gif --mem-start 100 --mem-end 131 --plot-every 100 --fps 60
+tiny8 examples/bubblesort.asm -ms 0x60 -me 0x80 # Watch live
+tiny8 examples/bubblesort.asm -m ani -o sort.gif -ms 0x60 -me 0x80   # Create GIF
 ```
 
-> [!IMPORTANT]
-> Tiny8 uses Python's built-in curses module (Unix-like systems). On Windows, use an appropriate terminal that supports curses or run via WSL.
-
-## Examples
-
-### Bubble sort
-
-This example demonstrates a simple bubble sort algorithm implemented in assembly language for the Tiny8 CPU. The program first fills a section of RAM with pseudo-random bytes, then sorts those bytes using the bubble sort algorithm. Finally, a Python script runs the assembly program and visualizes the sorting process.
-
-bubblesort.asm:
-
-```asm
-; Bubble sort using RAM (addresses 100..131) - 32 elements
-; Purpose: fill RAM[100..131] with pseudo-random bytes and sort them
-; Registers (use R16..R31 for LDI immediates):
-;   R16 - base address (start = 100)
-;   R17 - index / loop counter for initialization
-;   R18 - PRNG state (seed)
-;   R19..R24 - temporary registers used in loops and swaps
-;   R25 - PRNG multiplier (kept aside to avoid clobber in MUL)
-;
-; The code below is split into two phases:
-; 1) init_loop: generate and store 32 pseudo-random bytes at RAM[100..131]
-; 2) outer/inner loops: perform a simple bubble sort over those 32 bytes
-
-    ; initialize pointers and PRNG
-    ldi r16, 100    ; base address
-    ldi r17, 0      ; index = 0
-    ldi r18, 123    ; PRNG seed
-    ldi r25, 75     ; PRNG multiplier (kept in r25 so mul doesn't clobber it)
-
-init_loop:
-    ; PRNG step: r2 := lowbyte(r2 * 75), then tweak
-    mul r18, r25      ; r18 = low byte of (r18 * 75)
-    inc r18           ; small increment to avoid repeating patterns
-    ; store generated byte into memory at base + index
-    st r16, r18       ; RAM[base] = r18
-    inc r16           ; advance base pointer
-    inc r17           ; increment index
-    ldi r23, 32
-    cp r17, r23
-    brne init_loop
-
-; Bubble sort for 32 elements (perform passes until i == 31)
-    ldi r18, 0      ; i = 0 (outer loop counter)
-outer_loop:
-    ldi r19, 0      ; j = 0 (inner loop counter)
-inner_loop:
-    ; compute address of element A = base + j
-    ldi r20, 100
-    add r20, r19
-    ld r21, r20      ; r21 = A
-    ; compute address of element B = base + j + 1
-    ldi r22, 100
-    add r22, r19
-    ldi r23, 1
-    add r22, r23
-    ld r24, r22      ; r24 = B
-    ; compare A and B (we'll swap if A < B)
-    cp r21, r24      ; sets carry if r21 < r24
-    brcc no_swap
-    ; swap A and B: store B into A's address, A into B's address
-    st r20, r24
-    st r22, r21
-no_swap:
-    inc r19
-    ldi r23, 31
-    cp r19, r23
-    breq end_inner
-    jmp inner_loop
-end_inner:
-    inc r18
-    ldi r23, 31
-    cp r18, r23
-    breq done
-    jmp outer_loop
-
-done:
-    jmp done
-```
-
-Python Code:
+### Using Python
 
 ```python
-from tiny8 import CPU, Visualizer, assemble_file
+from tiny8 import CPU, assemble_file
 
-prog, labels = assemble_file("examples/bubblesort.asm")
 cpu = CPU()
-cpu.load_program(prog, labels)
-cpu.run(max_cycles=15000)
+cpu.load_program(*assemble_file("examples/bubblesort.asm"))
+cpu.run()
 
-print([cpu.read_ram(i) for i in range(100, 132)])
-
-viz = Visualizer(cpu)
-base = 100
-viz.animate_combined(
-    interval=1,
-    mem_addr_start=base,
-    mem_addr_end=base + 31,
-    plot_every=100,
-    # filename="bubblesort.gif",
-    # fps=60,
-)
+print("Sorted:", [cpu.read_ram(i) for i in range(100, 132)])
 ```
 
-Example Output:
+## 🔧 CLI Options
+
+### Command Syntax
 
 ```bash
-[247, 243, 239, 238, 227, 211, 210, 195, 190, 187, 186, 171, 167, 159, 155, 150, 142, 139, 135, 130, 127, 106, 102, 94, 54, 50, 34, 26, 23, 15, 10, 6]
+tiny8 FILE [OPTIONS]
 ```
 
-## Instruction set summary
+### General Options
 
-Below is a concise, categorized summary of the Tiny8 instruction set (mnemonics are case-insensitive). This is a quick reference — for implementation details see `src/tiny8/cpu.py`.
+| Option | Description |
+|--------|-------------|
+| `-m, --mode {cli,ani}` | Visualization mode: `cli` for interactive debugger (default), `ani` for animation |
+| `-v, --version` | Show version and exit |
+| `--max-steps N` | Maximum execution steps (default: `15000`) |
 
-- Data transfer
-  - LDI Rd, K — load immediate into register
-  - MOV Rd, Rr — copy register
-  - LD Rd, Rr_addr — load from RAM at address in register
-  - ST Rr_addr, Rr — store register into RAM at address in register
-  - IN Rd, port — read byte from RAM/IO into register
-  - OUT port, Rr — write register to RAM/IO
-  - PUSH Rr / POP Rd — stack push/pop
+### Memory Display Options
 
-- Arithmetic
-  - ADD Rd, Rr — add registers
-  - ADC Rd, Rr — add with carry
-  - SUB Rd, Rr / SUBI Rd, K — subtraction
-  - SBC Rd, Rr / SBCI Rd, K — subtract with carry/borrow
-  - INC Rd / DEC Rd — increment / decrement
-  - MUL Rd, Rr — 8x8 -> 16 multiply (low/high in Rd/Rd+1)
-  - DIV Rd, Rr — unsigned divide (quotient->Rd, remainder->Rd+1)
-  - NEG Rd — two's complement negate
-  - CLR Rd / SER Rd — clear or set register to all ones
+| Option | Description |
+|--------|-------------|
+| `-ms, --mem-start ADDR` | Starting memory address (decimal or `0xHEX`, default: `0x00`) |
+| `-me, --mem-end ADDR` | Ending memory address (decimal or `0xHEX`, default: `0xFF`) |
 
-- Logical and bit ops
-  - AND Rd, Rr / ANDI Rd, K — bitwise AND
-  - OR Rd, Rr / ORI Rd, K — bitwise OR
-  - EOR Rd, Rr / EORI Rd, K — exclusive OR
-  - COM Rd — one's complement
-  - SWAP Rd — swap nibbles
-  - TST Rd — test for zero or minus
-  - SBI/CBI / SBIS/SBIC / SBRS/SBRC — set/clear/test single bits and conditional skips
+### CLI Mode Options
 
-- Shifts & rotates
-  - LSL Rd / LSR Rd — logical shift left/right
-  - ROL Rd / ROR Rd — rotate through carry
+| Option | Description |
+|--------|-------------|
+| `-d, --delay SEC` | Initial playback delay in seconds (default: `0.15`) |
 
-- Word (16-bit) ops
-  - SBIW / ADIW — simplified word add/subtract helpers for register pairs
+### Animation Mode Options
 
-- Control flow
-  - JMP label / RJMP offset — unconditional jump
-  - CALL label / RCALL offset — call subroutine (push return address)
-  - RET / RETI — return from subroutine / return from interrupt (sets I)
-  - BRNE / BREQ / BRCS / BRCC / BRGE / BRLT — conditional branches based on flags
-  - CP Rd, Rr / CPI Rd, K — compare (sets flags)
-  - CPSE Rd, Rr — compare and skip if equal
+| Option | Description |
+|--------|-------------|
+| `-o, --output FILE` | Output filename (`.gif`, `.mp4`, `.png`) |
+| `-f, --fps FPS` | Frames per second (default: `60`) |
+| `-i, --interval MS` | Update interval in milliseconds (default: `1`) |
+| `-pe, --plot-every N` | Update plot every N steps (default: `100`, higher = faster) |
 
-Use the assembler in `src/tiny8/assembler.py` (or `parse_asm`) to write programs — register operands are specified as R0..R31 and immediates accept decimal, $hex, 0x, or 0b binary notation.
+> **Windows**: CLI debugger requires WSL or `windows-curses`. Animation works natively.
 
-## API Reference
+## 📋 Instruction Set Reference
 
-The API section documents the public modules, classes, functions, and configuration options. See:
+Tiny8 implements an AVR-inspired instruction set with 62 instructions organized into logical categories. All mnemonics are case-insensitive. Registers are specified as R0-R31, immediates support decimal, hex (`$FF` or `0xFF`), and binary (`0b11111111`) notation.
 
-- [tiny8 package](https://sql-hkr.github.io/tiny8/api/tiny8.html)
+### Data Transfer
 
-## License
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `LDI Rd, K` | Load 8-bit immediate into register | `ldi r16, 42` |
+| `MOV Rd, Rr` | Copy register to register | `mov r17, r16` |
+| `LD Rd, Rr` | Load from RAM at address in Rr | `ld r18, r16` |
+| `ST Rr, Rs` | Store Rs to RAM at address in Rr | `st r16, r18` |
+| `IN Rd, port` | Read from I/O port into register | `in r16, 0x3F` |
+| `OUT port, Rr` | Write register to I/O port | `out 0x3F, r16` |
+| `PUSH Rr` | Push register onto stack | `push r16` |
+| `POP Rd` | Pop from stack into register | `pop r16` |
 
-Tiny8 is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+### Arithmetic Operations
 
-Contributions, bug reports, and pull requests are welcome; please follow the repository's CONTRIBUTING guidelines.
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `ADD Rd, Rr` | Add registers | `add r16, r17` |
+| `ADC Rd, Rr` | Add with carry | `adc r16, r17` |
+| `SUB Rd, Rr` | Subtract registers | `sub r16, r17` |
+| `SUBI Rd, K` | Subtract immediate | `subi r16, 10` |
+| `SBC Rd, Rr` | Subtract with carry | `sbc r16, r17` |
+| `SBCI Rd, K` | Subtract immediate with carry | `sbci r16, 5` |
+| `INC Rd` | Increment register | `inc r16` |
+| `DEC Rd` | Decrement register | `dec r16` |
+| `MUL Rd, Rr` | Multiply (result in Rd:Rd+1) | `mul r16, r17` |
+| `DIV Rd, Rr` | Divide (quotient→Rd, remainder→Rd+1) | `div r16, r17` |
+| `NEG Rd` | Two's complement negation | `neg r16` |
+| `ADIW Rd, K` | Add immediate to word (16-bit) | `adiw r24, 1` |
+| `SBIW Rd, K` | Subtract immediate from word | `sbiw r24, 1` |
+
+### Logical & Bit Operations
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `AND Rd, Rr` | Logical AND | `and r16, r17` |
+| `ANDI Rd, K` | AND with immediate | `andi r16, 0x0F` |
+| `OR Rd, Rr` | Logical OR | `or r16, r17` |
+| `ORI Rd, K` | OR with immediate | `ori r16, 0x80` |
+| `EOR Rd, Rr` | Exclusive OR | `eor r16, r17` |
+| `EORI Rd, K` | XOR with immediate | `eori r16, 0xFF` |
+| `COM Rd` | One's complement | `com r16` |
+| `CLR Rd` | Clear register (XOR with self) | `clr r16` |
+| `SER Rd` | Set register to 0xFF | `ser r16` |
+| `TST Rd` | Test for zero or negative | `tst r16` |
+| `SWAP Rd` | Swap nibbles (high/low 4 bits) | `swap r16` |
+| `SBI port, bit` | Set bit in I/O register | `sbi 0x18, 3` |
+| `CBI port, bit` | Clear bit in I/O register | `cbi 0x18, 3` |
+
+### Shifts & Rotates
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `LSL Rd` | Logical shift left | `lsl r16` |
+| `LSR Rd` | Logical shift right | `lsr r16` |
+| `ROL Rd` | Rotate left through carry | `rol r16` |
+| `ROR Rd` | Rotate right through carry | `ror r16` |
+
+### Control Flow
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `JMP label` | Unconditional jump | `jmp loop` |
+| `RJMP offset` | Relative jump | `rjmp -5` |
+| `CALL label` | Call subroutine | `call function` |
+| `RCALL offset` | Relative call | `rcall -10` |
+| `RET` | Return from subroutine | `ret` |
+| `RETI` | Return from interrupt | `reti` |
+| `BRNE label` | Branch if not equal (Z=0) | `brne loop` |
+| `BREQ label` | Branch if equal (Z=1) | `breq done` |
+| `BRCS label` | Branch if carry set (C=1) | `brcs overflow` |
+| `BRCC label` | Branch if carry clear (C=0) | `brcc no_carry` |
+| `BRGE label` | Branch if greater/equal | `brge positive` |
+| `BRLT label` | Branch if less than | `brlt negative` |
+| `BRMI label` | Branch if minus (N=1) | `brmi negative` |
+| `BRPL label` | Branch if plus (N=0) | `brpl positive` |
+
+### Compare Instructions
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `CP Rd, Rr` | Compare registers (Rd - Rr) | `cp r16, r17` |
+| `CPI Rd, K` | Compare with immediate | `cpi r16, 42` |
+| `CPSE Rd, Rr` | Compare, skip if equal | `cpse r16, r17` |
+
+### Skip Instructions
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `SBRS Rd, bit` | Skip if bit in register is set | `sbrs r16, 7` |
+| `SBRC Rd, bit` | Skip if bit in register is clear | `sbrc r16, 7` |
+| `SBIS port, bit` | Skip if bit in I/O register is set | `sbis 0x16, 3` |
+| `SBIC port, bit` | Skip if bit in I/O register is clear | `sbic 0x16, 3` |
+
+### MCU Control
+
+| Instruction | Description | Example |
+|-------------|-------------|---------|
+| `NOP` | No operation | `nop` |
+| `SEI` | Set global interrupt enable | `sei` |
+| `CLI` | Clear global interrupt enable | `cli` |
+
+### Status Register (SREG) Flags
+
+The 8-bit status register contains condition flags updated by instructions:
+
+| Bit | Flag | Description |
+|-----|------|-------------|
+| 7 | **I** | Global interrupt enable |
+| 6 | **T** | Bit copy storage |
+| 5 | **H** | Half carry (BCD arithmetic) |
+| 4 | **S** | Sign bit (N ⊕ V) |
+| 3 | **V** | Two's complement overflow |
+| 2 | **N** | Negative |
+| 1 | **Z** | Zero |
+| 0 | **C** | Carry/borrow |
+
+Flags are used for conditional branching and tracking arithmetic results.
+
+### Assembly Syntax Notes
+
+- **Comments**: Use `;` for line comments
+- **Labels**: Must end with `:` (e.g., `loop:`)
+- **Registers**: Case-insensitive R0-R31 (r16, R16 equivalent)
+- **Immediates**: Decimal (42), hex ($2A, 0x2A), binary (0b00101010)
+- **Whitespace**: Flexible indentation, spaces/tabs interchangeable
+
+## 🏗️ Architecture Overview
+
+### CPU Components
+
+- **32 General-Purpose Registers** (R0-R31) — 8-bit working registers
+- **Program Counter (PC)** — 16-bit, addresses up to 64KB
+- **Stack Pointer (SP)** — 16-bit, grows downward from high memory
+- **Status Register (SREG)** — 8 condition flags (I, T, H, S, V, N, Z, C)
+- **64KB Address Space** — Unified memory for RAM and I/O
+
+### Memory Map
+
+```text
+0x0000 - 0x001F    Memory-mapped I/O (optional)
+0x0020 - 0xFFFF    Available RAM (stack grows downward from top)
+```
+
+## 🧪 Testing
+
+```bash
+pytest                                    # Run all tests
+pytest --cov=src/tiny8 --cov-report=html  # With coverage
+pytest tests/test_arithmetic.py           # Specific test file
+```
+
+## 🤝 Contributing
+
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**Areas for contribution**: New instructions, example programs, documentation, visualizations, performance optimizations.
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/sql-hkr/tiny8/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/sql-hkr/tiny8/discussions)
+- **Documentation**: [sql-hkr.github.io/tiny8](https://sql-hkr.github.io/tiny8/)
+
+---
+
+**Made with ❤️ for learners, educators, and curious minds**
+
+*Star ⭐ the repo if you find it useful!*
