@@ -1,52 +1,21 @@
-; Simple iterative Fibonacci
-; Purpose: compute fib(n) and leave the result in R16.
-; Registers:
-;   R17 - input n (non-negative integer)
-;   R16 - 'a' (accumulator / result)
-;   R18 - 'b' (next Fibonacci term)
-;   R19 - temporary scratch used for moves/subtracts
+; Fibonacci Sequence Calculator
+; Calculates the 10th Fibonacci number (F(10) = 55)
+; F(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2)
 ;
-; Algorithm (iterative):
-;   a = 0
-;   b = 1
-;   if n == 0 -> result = a
-;   if n == 1 -> result = b
-;   else repeat (n-1) times: (a, b) = (b, a + b)
+; Results stored in registers:
+; R16 and R17 hold the two most recent Fibonacci numbers
 
-start:
-    ; initialize: a = 0, b = 1
-    LDI R16, 0        ; a = 0
-    LDI R18, 1        ; b = 1
+    ldi r16, 0          ; F(0) = 0
+    ldi r17, 1          ; F(1) = 1
+    ldi r18, 9          ; Counter: 9 more iterations to reach F(10)
 
-    ; quick exit: if n == 0 then result is a (R16 == 0)
-    CPI R17, 0
-    BREQ done
-
-    ; main loop: run until we've advanced n-1 times
-main_loop:
-    ; if n == 1 then the current 'b' is the result
-    CPI R17, 1
-    BREQ from_b
-
-    ; decrement n (n = n - 1)
-    LDI R19, 1
-    SUB R17, R19
-
-    ; compute a = a + b (new 'sum' temporarily in R16)
-    ADD R16, R18
-
-    ; rotate registers: new a = old b, new b = sum (we used R19 as temp)
-    MOV R19, R16      ; temp = sum
-    MOV R16, R18      ; a = old b
-    MOV R18, R19      ; b = sum
-
-    JMP main_loop
-
-from_b:
-    ; when n reached 1, result is b
-    MOV R16, R18
-    ; fall through to halt
+loop:
+    add r16, r17        ; F(n) = F(n-1) + F(n-2)
+    mov r19, r16        ; Save result temporarily
+    mov r16, r17        ; Shift: previous = current
+    mov r17, r19        ; Shift: current = new result
+    dec r18             ; Decrement counter
+    brne loop           ; Continue if counter != 0
 
 done:
-    ; infinite loop to halt; result in R16
-    JMP done
+    jmp done            ; Infinite loop at end

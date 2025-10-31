@@ -1,164 +1,243 @@
-Fibonacci
-==========
+Fibonacci Sequence
+==================
 
-This example demonstrates a simple iterative implementation of the Fibonacci sequence in Tiny8 assembly language. The program computes the n-th Fibonacci number, where n is provided in register R17, and returns the result in register R16.
+This example calculates the 10th Fibonacci number using an iterative approach.
 
+Overview
+--------
+
+**Difficulty**: Beginner
+
+**Concepts**: Loops, register arithmetic, conditional branching
+
+**Output**: R17 contains F(10) = 55
+
+The Program
+-----------
+
+.. literalinclude:: ../../examples/fibonacci.asm
+   :language: asm
+   :linenos:
+
+Algorithm Explanation
+---------------------
+
+The Fibonacci sequence is defined as:
+
+* F(0) = 0
+* F(1) = 1
+* F(n) = F(n-1) + F(n-2) for n > 1
+
+This program uses an iterative approach with three registers:
+
+* **R16**: Previous Fibonacci number (F(n-1))
+* **R17**: Current Fibonacci number (F(n))
+* **R18**: Counter (remaining iterations)
+
+Step-by-Step Walkthrough
+-------------------------
+
+Initialization (Lines 8-10)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: asm
-    :caption: fibonacci.asm
 
-    ; Simple iterative Fibonacci
-    ; Purpose: compute fib(n) and leave the result in R16.
-    ; Registers:
-    ;   R17 - input n (non-negative integer)
-    ;   R16 - 'a' (accumulator / result)
-    ;   R18 - 'b' (next Fibonacci term)
-    ;   R19 - temporary scratch used for moves/subtracts
-    ;
-    ; Algorithm (iterative):
-    ;   a = 0
-    ;   b = 1
-    ;   if n == 0 -> result = a
-    ;   if n == 1 -> result = b
-    ;   else repeat (n-1) times: (a, b) = (b, a + b)
+   ldi r16, 0          ; F(0) = 0
+   ldi r17, 1          ; F(1) = 1
+   ldi r18, 9          ; Counter: 9 more iterations
 
-    start:
-        ; initialize: a = 0, b = 1
-        LDI R16, 0        ; a = 0
-        LDI R18, 1        ; b = 1
+We start with F(0) = 0 and F(1) = 1. Since we want F(10), we need 9 more iterations (F(2) through F(10)).
 
-        ; quick exit: if n == 0 then result is a (R16 == 0)
-        CPI R17, 0
-        BREQ done
+Main Loop (Lines 12-18)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-        ; main loop: run until we've advanced n-1 times
-    main_loop:
-        ; if n == 1 then the current 'b' is the result
-        CPI R17, 1
-        BREQ from_b
+.. code-block:: asm
 
-        ; decrement n (n = n - 1)
-        LDI R19, 1
-        SUB R17, R19
+   loop:
+       add r16, r17        ; F(n) = F(n-1) + F(n-2)
+       mov r19, r16        ; Save result temporarily
+       mov r16, r17        ; Shift: previous = current
+       mov r17, r19        ; Shift: current = new result
+       dec r18             ; Decrement counter
+       brne loop           ; Continue if counter != 0
 
-        ; compute a = a + b (new 'sum' temporarily in R16)
-        ADD R16, R18
+Each iteration:
 
-        ; rotate registers: new a = old b, new b = sum (we used R19 as temp)
-        MOV R19, R16      ; temp = sum
-        MOV R16, R18      ; a = old b
-        MOV R18, R19      ; b = sum
+1. **Add**: Compute next Fibonacci number (R16 + R17)
+2. **Save**: Store result in temporary register R19
+3. **Shift**: Move R17 to R16 (previous ← current)
+4. **Update**: Move R19 to R17 (current ← new result)
+5. **Decrement**: Decrease counter
+6. **Branch**: Loop if counter ≠ 0
 
-        JMP main_loop
+Execution Trace
+---------------
 
-    from_b:
-        ; when n reached 1, result is b
-        MOV R16, R18
-        ; fall through to halt
+Here's how the registers evolve:
 
-    done:
-        ; infinite loop to halt; result in R16
-        JMP done
+.. list-table:: Fibonacci Calculation
+   :header-rows: 1
+   :widths: 10 15 15 15 30
 
-.. code-block:: python
-    :caption: Running the Fibonacci Example
+   * - Iter
+     - R16 (prev)
+     - R17 (curr)
+     - R18 (count)
+     - Calculation
+   * - Init
+     - 0
+     - 1
+     - 9
+     - F(0), F(1)
+   * - 1
+     - 1
+     - 1
+     - 8
+     - F(2) = 0 + 1 = 1
+   * - 2
+     - 1
+     - 2
+     - 7
+     - F(3) = 1 + 1 = 2
+   * - 3
+     - 2
+     - 3
+     - 6
+     - F(4) = 1 + 2 = 3
+   * - 4
+     - 3
+     - 5
+     - 5
+     - F(5) = 2 + 3 = 5
+   * - 5
+     - 5
+     - 8
+     - 4
+     - F(6) = 3 + 5 = 8
+   * - 6
+     - 8
+     - 13
+     - 3
+     - F(7) = 5 + 8 = 13
+   * - 7
+     - 13
+     - 21
+     - 2
+     - F(8) = 8 + 13 = 21
+   * - 8
+     - 21
+     - 34
+     - 1
+     - F(9) = 13 + 21 = 34
+   * - 9
+     - 34
+     - 55
+     - 0
+     - F(10) = 21 + 34 = 55
 
-    from tiny8 import CPU, assemble_file
+Running the Example
+-------------------
 
-    n = 13
-
-    assert n <= 13, "n must be <= 13 to avoid 8-bit overflow"
-
-    program, labels = assemble_file("examples/fibonacci.asm")
-    cpu = CPU()
-    cpu.load_program(program, labels)
-
-    cpu.write_reg(17, n)
-    cpu.run(max_cycles=1000)
-
-    print("R16 =", cpu.read_reg(16))
-    print("R17 =", cpu.read_reg(17))
-    print("PC =", cpu.pc)
-    print("SP =", cpu.sp)
-    print("register changes (reg_trace):\n", *[str(reg) + "\n" for reg in cpu.reg_trace])
-
+Interactive Debugger
+~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
-    :caption: Example Output
 
-    R16 = 233
-    R17 = 1
-    PC = 14
-    SP = 2047
-    register changes (reg_trace):
-    (0, 17, 13)
-    (1, 18, 1)
-    (6, 19, 1)
-    (7, 17, 12)
-    (8, 16, 1)
-    (16, 17, 11)
-    (17, 16, 2)
-    (18, 19, 2)
-    (19, 16, 1)
-    (20, 18, 2)
-    (24, 19, 1)
-    (25, 17, 10)
-    (26, 16, 3)
-    (27, 19, 3)
-    (28, 16, 2)
-    (29, 18, 3)
-    (33, 19, 1)
-    (34, 17, 9)
-    (35, 16, 5)
-    (36, 19, 5)
-    (37, 16, 3)
-    (38, 18, 5)
-    (42, 19, 1)
-    (43, 17, 8)
-    (44, 16, 8)
-    (45, 19, 8)
-    (46, 16, 5)
-    (47, 18, 8)
-    (51, 19, 1)
-    (52, 17, 7)
-    (53, 16, 13)
-    (54, 19, 13)
-    (55, 16, 8)
-    (56, 18, 13)
-    (60, 19, 1)
-    (61, 17, 6)
-    (62, 16, 21)
-    (63, 19, 21)
-    (64, 16, 13)
-    (65, 18, 21)
-    (69, 19, 1)
-    (70, 17, 5)
-    (71, 16, 34)
-    (72, 19, 34)
-    (73, 16, 21)
-    (74, 18, 34)
-    (78, 19, 1)
-    (79, 17, 4)
-    (80, 16, 55)
-    (81, 19, 55)
-    (82, 16, 34)
-    (83, 18, 55)
-    (87, 19, 1)
-    (88, 17, 3)
-    (89, 16, 89)
-    (90, 19, 89)
-    (91, 16, 55)
-    (92, 18, 89)
-    (96, 19, 1)
-    (97, 17, 2)
-    (98, 16, 144)
-    (99, 19, 144)
-    (100, 16, 89)
-    (101, 18, 144)
-    (105, 19, 1)
-    (106, 17, 1)
-    (107, 16, 233)
-    (108, 19, 233)
-    (109, 16, 144)
-    (110, 18, 233)
-    (114, 16, 233)
+   tiny8 examples/fibonacci.asm
+
+Step through with ``j`` and watch registers R16, R17, and R18 evolve.
+
+Animation
+~~~~~~~~~
+
+.. code-block:: bash
+
+   tiny8 examples/fibonacci.asm -m ani -o fibonacci.gif
+
+Visualize the register changes over time.
+
+Python API
+~~~~~~~~~~
+
+.. code-block:: python
+
+   from tiny8 import CPU, assemble_file
+   
+   cpu = CPU()
+   cpu.load_program(assemble_file("examples/fibonacci.asm"))
+   cpu.run(max_steps=100)
+   
+   print(f"F(10) = {cpu.read_reg(17)}")  # Output: 55
+
+Key Concepts
+------------
+
+Loop Structure
+~~~~~~~~~~~~~~
+
+The loop pattern is common in assembly:
+
+.. code-block:: asm
+
+   ldi r18, N          ; Initialize counter
+   loop:
+       ; ... loop body ...
+       dec r18         ; Decrement counter
+       brne loop       ; Branch if not equal to zero
+
+Register Shifting
+~~~~~~~~~~~~~~~~~
+
+Moving values between registers for state management:
+
+.. code-block:: asm
+
+   mov r19, r16        ; Temporary save
+   mov r16, r17        ; Shift values
+   mov r17, r19        ; Update with new value
+
+This "register rotation" is a fundamental technique in assembly programming.
+
+Exercises
+---------
+
+1. **Modify the counter**: Calculate F(15) instead of F(10)
+2. **Different starting values**: Try F(0) = 1, F(1) = 1 (alternative definition)
+3. **Store in memory**: Save each Fibonacci number to memory
+4. **Detect overflow**: Check when the result exceeds 255
+
+Solutions
+~~~~~~~~~
+
+**F(15) modification**:
+
+.. code-block:: asm
+
+   ldi r18, 14         ; 14 iterations for F(15)
+
+Note: F(15) = 610, which exceeds 8-bit range (wraps to 98).
+
+**Store in memory**:
+
+.. code-block:: asm
+
+   ldi r20, 0x60       ; Memory base address
+   loop:
+       add r16, r17
+       sts r20, r17    ; Store current Fibonacci number
+       inc r20         ; Advance memory pointer
+       ; ... rest of loop ...
+
+Related Examples
+----------------
+
+* :doc:`factorial` - Another iterative calculation
+* :doc:`sum_1_to_n` - Similar loop structure
+* :doc:`power` - Repeated operation pattern
+
+Next Steps
+----------
+
+* Learn about :doc:`../assembly_language` syntax
+* Review the :doc:`../instruction_reference` for ADD, MOV, DEC, BRNE
+* Try the :doc:`../visualization` tools to see execution flow

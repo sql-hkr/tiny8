@@ -5,7 +5,24 @@ assembly syntax and returns a list of instructions and a label mapping.
 """
 
 import re
-from typing import Dict, List, Tuple
+from dataclasses import dataclass, field
+
+
+@dataclass
+class AsmResult:
+    """Result of assembling source code.
+
+    Attributes:
+        program: List of instruction tuples (mnemonic, operands).
+        labels: Mapping from label names to program counter addresses.
+        pc_to_line: Mapping from program counter to original source line number.
+        source_lines: Original source text split into lines for display.
+    """
+
+    program: list[tuple[str, tuple]] = field(default_factory=list)
+    labels: dict[str, int] = field(default_factory=dict)
+    pc_to_line: dict[int, int] = field(default_factory=dict)
+    source_lines: list[str] = field(default_factory=list)
 
 
 def _parse_number(token: str) -> int:
@@ -47,135 +64,105 @@ def _parse_number(token: str) -> int:
     raise ValueError(f"Unable to parse numeric token: {token}")
 
 
-def parse_asm(text: str) -> Tuple[List[Tuple[str, Tuple]], Dict[str, int]]:
+def parse_asm(text: str) -> AsmResult:
     """Parse assembly source text into a program listing and a label table.
 
-    The function scans the given assembly text line-by-line and produces two
-    values:
-
-    - program: a list of instructions, where each instruction is a tuple
-      (MNEMONIC, OPERANDS_TUPLE). MNEMONIC is stored in uppercase for
-      readability (the CPU/runtime looks up handlers using mnemonic.lower()).
-      OPERANDS_TUPLE is an immutable tuple of operand values in the order they
-      appear.
-    - labels: a mapping from label name (str) to program counter (int), where
-      the program counter is the zero-based index of the instruction in the
-      produced program list.
+    The function scans the given assembly text line-by-line and produces
+    an AsmResult containing the parsed program, labels, source line
+    mapping, and original source text.
 
     Args:
         text: Assembly source code as a single string. May contain comments,
             blank lines and labels.
 
     Returns:
-        A pair (program, labels) as described above.
+        AsmResult object containing program, labels, pc_to_line mapping,
+        and source_lines.
 
-    Notes:
-        - Comments begin with ';' and extend to the end of the line and are
-          removed before parsing.
+    Note:
+        - Comments begin with ';' and extend to the end of the line.
         - Labels may appear on a line by themselves or before an instruction
-          with the form "label: instr ...". A label associates the name
-          with the current instruction index.
+          with the form "label: instr ...".
         - Registers are encoded as ("reg", N) where N is the register number.
         - Numeric operands are parsed using _parse_number; non-numeric tokens
           are preserved as strings (symbols) for later resolution.
     """
-    program: List[Tuple[str, Tuple]] = []
-    labels: Dict[str, int] = {}
+    result = AsmResult()
     pc = 0
     lines = text.splitlines()
-    for line in lines:
-        # remove comments
+    result.source_lines = lines.copy()
+    for line_num, line in enumerate(lines):
         line = line.split(";", 1)[0].strip()
         if not line:
             continue
-        # label on same line: "label: instr ops"
         if ":" in line:
             left, right = line.split(":", 1)
             lbl = left.strip()
-            labels[lbl] = pc
+            result.labels[lbl] = pc
             line = right.strip()
             if not line:
                 continue
-        # tokenization by commas and whitespace
         parts = [p for p in re.split(r"[\s,]+", line) if p != ""]
-        # store mnemonic in uppercase for readability; handlers are looked up
-        # using lower() by the CPU when dispatching.
         instr = parts[0].upper()
         ops = []
         for p in parts[1:]:
             pl = p.lower()
-            # register like r0: mark as a register operand to preserve formatting
             if pl.startswith("r") and pl[1:].isdigit():
                 ops.append(("reg", int(pl[1:])))
             else:
-                # try numeric parse, otherwise keep as label string
                 try:
                     n = _parse_number(p)
                     ops.append(n)
                 except ValueError:
                     ops.append(p)
-        program.append((instr, tuple(ops)))
+        result.program.append((instr, tuple(ops)))
+        result.pc_to_line[pc] = line_num
         pc += 1
-    return program, labels
+    return result
 
 
-def assemble(text: str) -> Tuple[List[Tuple[str, Tuple]], Dict[str, int]]:
+def assemble(text: str) -> AsmResult:
     """Parse assembly source text and return parsed instructions and label map.
 
     Args:
-        text (str): Assembly source code as a single string. May contain
+        text: Assembly source code as a single string. May contain
             multiple lines, labels and comments.
 
     Returns:
-        Tuple[List[Tuple[str, Tuple]], Dict[str, int]]: A pair (instructions, labels):
-            - instructions: list of parsed instructions in source order. Each
-              instruction is a tuple (mnemonic, operands) where `mnemonic` is a
-              string and `operands` is a tuple of operand values as produced by
-              the assembler.
-            - labels: mapping from label names (str) to integer addresses
-              (instruction indices).
+        AsmResult object containing program, labels, source line mapping,
+        and original source text.
 
     Raises:
-        Exception: Propagates parsing errors from the underlying parser
-            (for example, syntax or operand errors).
-
-    Notes:
-        This function is a thin wrapper around parse_asm(...) and forwards any
-        exceptions raised by the parser.
+        Exception: Propagates parsing errors from the underlying parser.
 
     Example:
         >>> src = "start: MOV R1, 5\\nJMP start"
-        >>> instructions, labels = assemble(src)
-        >>> labels
+        >>> result = assemble(src)
+        >>> result.labels
         {'start': 0}
     """
     return parse_asm(text)
 
 
-def assemble_file(path: str):
+def assemble_file(path: str) -> AsmResult:
     """Assemble the contents of a source file.
 
-    Reads the entire file at `path` and passes its contents to assemble(...).
-
     Args:
-        path (str): Path to the source file to assemble.
+        path: Path to the source file to assemble.
 
     Returns:
-        Any: The result produced by calling assemble(source_text). The exact
-        type depends on the implementation of assemble(...).
+        The result produced by calling assemble(source_text).
 
     Raises:
         FileNotFoundError: If the specified file does not exist.
         OSError: For other I/O related errors when opening or reading the file.
         Exception: Any exception raised by assemble(...) will be propagated.
 
-    Notes:
-        The file is opened in text mode and read entirely into memory; for very
-        large files this may be inefficient.
+    Note:
+        The file is opened in text mode and read entirely into memory.
 
     Example:
         >>> result = assemble_file("program.asm")
-        >>> # result now holds the assembled output produced by assemble(...)
     """
     with open(path, "r") as f:
         return assemble(f.read())
