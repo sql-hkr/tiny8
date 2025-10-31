@@ -212,7 +212,7 @@ class TestPerformance:
         calls = "\n".join([f"call func{i}" for i in range(10)])
         funcs = "\n".join([f"func{i}:\n    nop\n    ret" for i in range(10)])
 
-        cpu = cpu_with_program(
+        cpu_with_program(
             f"""
             ldi r0, 0
             {calls}

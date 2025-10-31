@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install --system -e ".[dev]"
+          uv pip install --system -e . --group dev
 
       - name: Run pytest with coverage
         run: |
@@ -63,7 +63,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install --system -e ".[dev]"
+          uv pip install --system -e . --group dev
 
       - name: Run ruff check
         run: |
