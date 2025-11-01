@@ -149,12 +149,3 @@ Recommended order for learning:
 3. **Master control flow**: linear_search, gcd
 4. **Tackle algorithms**: bubblesort, power, is_prime
 5. **Explore bit operations**: multiply_by_shift, count_bits
-
-Next Steps
-----------
-
-* Read the detailed :doc:`fibonacci` walkthrough
-* Study the :doc:`bubblesort` algorithm implementation  
-* Review the :doc:`../architecture` for CPU details
-* Practice with :doc:`../visualization` tools
-* Explore the :doc:`../api/modules` for Python integration

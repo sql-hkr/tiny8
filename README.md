@@ -12,14 +12,14 @@ Tiny8 is a lightweight and educational toolkit for exploring the fundamentals of
 
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/6d4f07ba-21b3-483f-a5d4-7603334c40f4" alt="Animated bubble sort visualization" width="600">
+  <img src="https://github.com/user-attachments/assets/ffbcb2c4-2c3a-469f-b7b7-e6e86eb374da" alt="Animated bubble sort visualization" width="600">
   <p><em>Real-time visualization of a bubble sort algorithm executing on Tiny8</em></p>
 </div>
 
 ## ✨ Features
 
 ### 🎯 **Interactive Terminal Debugger**
-<img width="600" src="https://github.com/user-attachments/assets/5317ebcd-53d5-4966-84be-be94b7830899" alt="CLI visualizer screenshot">
+<img width="600" src="https://github.com/user-attachments/assets/0bbd4382-806e-4b5a-af0b-54d83417fcfb" alt="CLI visualizer screenshot">
 
 - **Vim-style navigation**: Step through execution with intuitive keyboard controls
 - **Change highlighting**: See exactly what changed at each step (registers, flags, memory)
@@ -182,10 +182,10 @@ tiny8 examples/bubblesort.asm -m ani -o sort.gif -ms 0x60 -me 0x80   # Create GI
 from tiny8 import CPU, assemble_file
 
 cpu = CPU()
-cpu.load_program(*assemble_file("examples/bubblesort.asm"))
+cpu.load_program(assemble_file("examples/bubblesort.asm"))
 cpu.run()
 
-print("Sorted:", [cpu.read_ram(i) for i in range(100, 132)])
+print("Sorted:", [cpu.read_ram(i) for i in range(0x60, 0x80)])
 ```
 
 ## 🔧 CLI Options

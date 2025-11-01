@@ -193,7 +193,6 @@ class TestPUSHPOP:
             pop r21
             pop r22
         """)
-        # LIFO: last in (30), first out
         helper.assert_registers(cpu, {20: 30, 21: 20, 22: 10})
 
     def test_stack_preserves_registers(self, cpu_with_program, helper):
@@ -229,7 +228,6 @@ class TestPUSHPOP:
 
         cpu = cpu_with_program(push_code + "\n" + pop_code)
 
-        # Verify LIFO order
         for i, value in enumerate(reversed(values)):
             helper.assert_register(cpu, i, value)
 
