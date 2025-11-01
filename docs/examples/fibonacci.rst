@@ -234,10 +234,3 @@ Related Examples
 * :doc:`factorial` - Another iterative calculation
 * :doc:`sum_1_to_n` - Similar loop structure
 * :doc:`power` - Repeated operation pattern
-
-Next Steps
-----------
-
-* Learn about :doc:`../assembly_language` syntax
-* Review the :doc:`../instruction_reference` for ADD, MOV, DEC, BRNE
-* Try the :doc:`../visualization` tools to see execution flow

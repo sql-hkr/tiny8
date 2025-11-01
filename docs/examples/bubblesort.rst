@@ -104,11 +104,11 @@ Inner Loop
        add r22, r23
        ld r24, r22     ; r24 = B
        
-       ; compare and swap if needed
+       ; compare and swap if A > B (for ascending order)
        cp r21, r24
-       brcc no_swap
-       st r20, r24     ; swap
-       st r22, r21
+       brcs no_swap    ; skip if A < B
+       st r20, r24     ; swap: RAM[addr_A] = B
+       st r22, r21     ; swap: RAM[addr_B] = A
        
    no_swap:
        inc r19
@@ -118,6 +118,7 @@ For each j:
 
 1. Load adjacent elements (j and j+1)
 2. Compare them
+3. Swap if first > second (for ascending order)
 3. Swap if first > second
 4. Advance to next pair
 
@@ -225,11 +226,12 @@ Python API
    cpu.run(max_steps=50000)  # Bubble sort needs many steps!
    
    # Read sorted array
-   sorted_array = [cpu.mem.read(0x60 + i) for i in range(32)]
+   sorted_array = [cpu.read_ram(i) for i in range(0x60, 0x80)]
    print("Sorted array:", sorted_array)
    
-   # Verify it's sorted
-   assert sorted_array == sorted(sorted_array)
+   # Verify it's sorted in ascending order
+   assert all(sorted_array[i] <= sorted_array[i+1] 
+              for i in range(len(sorted_array)-1))
    print("✓ Array is correctly sorted!")
 
 Performance Analysis
@@ -295,10 +297,10 @@ Conditional Swapping
 
 .. code-block:: asm
 
-   cp r21, r24       ; Compare values
-   brcc no_swap      ; Skip swap if in order
-   st r20, r24       ; Perform swap
-   st r22, r21
+   cp r21, r24       ; Compare values (A vs B)
+   brcs no_swap      ; Skip swap if A < B (already in order)
+   st r20, r24       ; Perform swap: RAM[A] = B
+   st r22, r21       ; Perform swap: RAM[B] = A
    no_swap:
 
 Exercises
@@ -317,7 +319,7 @@ Solutions Hints
 
 **Optimize**: Set a flag when swapping, check it at end of outer loop.
 
-**Descending order**: Change ``brcc no_swap`` to ``brcs no_swap``.
+**Descending order**: Change ``brcs no_swap`` to ``brcc no_swap``.
 
 Visualization Tips
 ------------------
@@ -370,11 +372,3 @@ Related Examples
 * :doc:`linear_search` - Sequential array access
 * :doc:`find_max` - Array comparison operations
 * :doc:`reverse` - Array manipulation
-
-Next Steps
-----------
-
-* Study :doc:`../architecture` for memory model details
-* Review :doc:`../instruction_reference` for LD, ST, CP
-* Try implementing other sorting algorithms
-* Use :doc:`../visualization` to understand algorithm behavior
