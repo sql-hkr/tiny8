@@ -3,7 +3,8 @@
 [![PyPI version](https://img.shields.io/pypi/v/tiny8)](https://pypi.org/project/tiny8/)
 [![License](https://img.shields.io/github/license/sql-hkr/tiny8)](LICENSE)
 [![Python versions](https://img.shields.io/pypi/pyversions/tiny8)](https://pypi.org/project/tiny8/)
-[![CI](https://img.shields.io/github/actions/workflow/status/sql-hkr/tiny8/ci.yml?label=CI)](https://github.com/sql-hkr/tiny8/actions)
+[![CI](https://github.com/sql-hkr/tiny8/actions/workflows/ci.yml/badge.svg)](https://github.com/sql-hkr/tiny8/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/sql-hkr/tiny8/graph/badge.svg?token=OBM58R8MCL)](https://codecov.io/github/sql-hkr/tiny8)
 
 > **An educational 8-bit CPU simulator with interactive visualization**
 
