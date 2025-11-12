@@ -353,6 +353,7 @@ class CPU:
             self.running = False
             return False
 
+        pre_exec_pc = self.pc
         instr, operands = self.program[self.pc]
 
         # Build textual form of the instruction for tracing (uppercase mnemonic
@@ -396,11 +397,12 @@ class CPU:
 
         # record step trace after execution (post-state)
         self.step_count += 1
-        source_line = self.pc_to_line.get(self.pc, -1)
+
+        source_line = self.pc_to_line.get(pre_exec_pc, -1)
         self.step_trace.append(
             {
                 "step": self.step_count,
-                "pc": self.pc,
+                "pc": pre_exec_pc,
                 "instr": instr_text,
                 "regs": regs_snapshot,
                 "mem": mem_snapshot,
