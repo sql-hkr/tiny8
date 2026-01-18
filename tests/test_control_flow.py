@@ -5,7 +5,7 @@ Covers: JMP, RJMP, CALL, RCALL, RET, RETI, BR* (branches), CP, CPI, CPSE
 
 import pytest
 
-from tiny8.cpu import SREG_C, SREG_Z
+from tiny8.cpu import SREG_C, SREG_I, SREG_Z
 
 
 class TestJMP:
@@ -166,6 +166,51 @@ class TestBranches:
         """)
         helper.assert_register(cpu, 2, 1)
 
+    def test_brmi_and_brpl_branches(self, cpu_with_program, helper):
+        """Test BRMI (minus) and BRPL (plus) branch behaviors."""
+        # 10 - 20 is negative -> BRMI taken
+        cpu1 = cpu_with_program("""
+            ldi r0, 10
+            ldi r1, 20
+            sub r0, r1
+            brmi minus_taken
+            ldi r2, 0
+            jmp done1
+        minus_taken:
+            ldi r2, 1
+        done1:
+            nop
+        """)
+        helper.assert_register(cpu1, 2, 1)
+
+        # 20 - 10 is positive -> BRPL taken
+        cpu2 = cpu_with_program("""
+            ldi r0, 20
+            ldi r1, 10
+            sub r0, r1
+            brpl plus_taken
+            ldi r2, 0
+            jmp done2
+        plus_taken:
+            ldi r2, 1
+        done2:
+            nop
+        """)
+        helper.assert_register(cpu2, 2, 1)
+
+    def test_branch_with_numeric_target(self, cpu_with_program, helper):
+        """Test branching using explicit numeric instruction address."""
+        cpu = cpu_with_program("""
+            ldi r0, 100
+            ldi r1, 200
+            sub r0, r1
+        """)
+        # Append BRMI jumping directly to instruction index 0
+        cpu.program.append(("BRMI", (0,)))
+        cpu.pc = len(cpu.program) - 1
+        cpu.step()
+        assert cpu.pc == 0
+
     @pytest.mark.parametrize(
         "a,b,branch,expected",
         [
@@ -173,6 +218,8 @@ class TestBranches:
             (10, 5, "brne", 1),  # Not equal
             (5, 10, "brcs", 1),  # Carry set (a < b)
             (10, 5, "brcc", 1),  # Carry clear (a >= b)
+            (5, 10, "brlo", 1),  # Lower unsigned
+            (10, 5, "brsh", 1),  # Same or higher unsigned
         ],
     )
     def test_branches_parametrized(
@@ -261,6 +308,21 @@ class TestCALL:
         """)
         # 100 + 50 = 150, r1 should be preserved as 200
         helper.assert_registers(cpu, {0: 150, 1: 200})
+
+    def test_reti_restores_interrupt_flag(self, cpu_with_program, helper):
+        """Test RETI restores PC and sets Global Interrupt flag (I=1)."""
+        cpu = cpu_with_program("""
+            cli
+            call isr
+            jmp done
+        isr:
+            ldi r0, 77
+            reti
+        done:
+            nop
+        """)
+        helper.assert_register(cpu, 0, 77)
+        helper.assert_flag(cpu, SREG_I, True, "I")
 
 
 class TestCompare:

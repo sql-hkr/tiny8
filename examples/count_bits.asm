@@ -20,9 +20,8 @@ loop:
     inc r16
 
 no_inc:
-    ; shift right (divide by 2)
-    ldi r20, 2
-    div r18, r20
+    ; shift right (logical shift right by 1 bit)
+    lsr r18
     
     jmp loop
 

@@ -113,19 +113,48 @@ class TestLogicalInstructions:
         cpu.run()
         assert cpu.read_reg(16) == 0b11111111
 
-    def test_eori_instruction(self):
-        """Test XOR with immediate."""
+    def test_asr_instruction(self):
+        """Test arithmetic shift right preserves sign bit and updates flags."""
+        from tiny8.cpu import SREG_C, SREG_N
+
         cpu = CPU()
         asm = assemble("""
-            ldi r16, 0b11110000
-            eori r16, 0b11111111
+            ldi r16, 0b10000001
+            asr r16
         """)
         cpu.load_program(asm)
         cpu.run()
-        assert cpu.read_reg(16) == 0b00001111
+        assert cpu.read_reg(16) == 0b11000000
+        assert cpu.get_flag(SREG_C) is True
+        assert cpu.get_flag(SREG_N) is True
+
+    def test_muls_and_mulsu_instructions(self):
+        """Test signed and signed-with-unsigned multiplications."""
+        cpu = CPU()
+        asm = assemble("""
+            ldi r16, 0xFE
+            ldi r17, 3
+            muls r16, r17
+            ldi r18, 0xFE
+            ldi r19, 100
+            mulsu r18, r19
+        """)
+        cpu.load_program(asm)
+        cpu.step()
+        cpu.step()
+        cpu.step()
+        assert cpu.read_reg(0) == 0xFA
+        assert cpu.read_reg(1) == 0xFF
+        cpu.step()
+        cpu.step()
+        cpu.step()
+        assert cpu.read_reg(0) == 0x38
+        assert cpu.read_reg(1) == 0xFF
 
     def test_tst_instruction(self):
         """Test for zero or negative."""
+        from tiny8.cpu import SREG_N, SREG_Z
+
         cpu = CPU()
         asm = assemble("""
             ldi r16, 0
@@ -133,6 +162,21 @@ class TestLogicalInstructions:
         """)
         cpu.load_program(asm)
         cpu.run()
+        assert cpu.read_reg(16) == 0
+        assert cpu.get_flag(SREG_Z) is True
+        assert cpu.get_flag(SREG_N) is False
+
+        # Also test TST with negative value
+        cpu2 = CPU()
+        asm2 = assemble("""
+            ldi r16, 0x80
+            tst r16
+        """)
+        cpu2.load_program(asm2)
+        cpu2.run()
+        assert cpu2.read_reg(16) == 0x80
+        assert cpu2.get_flag(SREG_N) is True
+        assert cpu2.get_flag(SREG_Z) is False
 
 
 class TestImmediateArithmetic:
@@ -158,6 +202,7 @@ class TestImmediateArithmetic:
         """)
         cpu.load_program(asm)
         cpu.run()
+        assert cpu.read_reg(16) == 15
 
     def test_sbc_instruction(self):
         """Test subtract with carry."""
@@ -169,6 +214,7 @@ class TestImmediateArithmetic:
         """)
         cpu.load_program(asm)
         cpu.run()
+        assert cpu.read_reg(16) == 5
 
 
 class TestSkipInstructions:
@@ -375,18 +421,6 @@ class TestInterruptControl:
 class TestArithmeticEdgeCases:
     """Test arithmetic edge cases."""
 
-    def test_div_by_zero(self):
-        """Test division by zero."""
-        cpu = CPU()
-        asm = assemble("""
-            ldi r16, 10
-            ldi r17, 0
-            div r16, r17
-        """)
-        cpu.load_program(asm)
-        cpu.run()
-        # Division by zero sets result to 0xFF and 0
-
     def test_mul_overflow(self):
         """Test multiplication overflow."""
         cpu = CPU()
@@ -397,4 +431,6 @@ class TestArithmeticEdgeCases:
         """)
         cpu.load_program(asm)
         cpu.run()
-        # Result is 16-bit in r0:r1
+        # 255 * 2 = 510 = 0x01FE -> r0=0xFE, r1=0x01
+        assert cpu.read_reg(0) == 0xFE
+        assert cpu.read_reg(1) == 0x01

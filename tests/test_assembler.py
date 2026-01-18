@@ -91,3 +91,12 @@ class TestAssemblerWithFiles:
 
         result = assemble_file(str(asm_file))
         assert len(result.program) == 2
+
+    def test_parse_number_empty_token(self):
+        """Test parsing empty token or hash only raises ValueError."""
+        from tiny8.assembler import _parse_number
+
+        with pytest.raises(ValueError, match="Unable to parse numeric token"):
+            _parse_number("")
+        with pytest.raises(ValueError, match="Unable to parse numeric token"):
+            _parse_number("#")

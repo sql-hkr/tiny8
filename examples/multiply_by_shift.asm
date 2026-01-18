@@ -13,19 +13,17 @@ loop:
     
     ; if multiplier LSB is 1, add multiplicand
     mov r19, r18
-    ldi r20, 1
-    and r19, r20
+    andi r19, 1
     cpi r19, 1
     brne no_add
     add r16, r17
 
 no_add:
-    ; shift multiplicand left (*2)
-    ldi r20, 2
-    mul r17, r20
+    ; shift multiplicand left (*2) using AVR LSL
+    lsl r17
     
-    ; shift multiplier right (/2)
-    div r18, r20
+    ; shift multiplier right (/2) using AVR LSR
+    lsr r18
     
     jmp loop
 

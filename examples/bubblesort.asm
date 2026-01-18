@@ -11,6 +11,7 @@
 init_loop:
     ; Generate random byte: seed = (seed * 75) + 1
     mul r18, r25
+    mov r18, r0
     inc r18
     
     st r16, r18       ; Store random value
@@ -39,9 +40,10 @@ inner_loop:
     add r22, r23
     ld r24, r22       ; r24 = B
     
-    ; Swap if A > B (ascending order)
+    ; Swap if A > B (ascending order: smallest first)
     cp r21, r24
     brcs no_swap      ; Skip if A < B
+    breq no_swap      ; Skip if A == B
     st r20, r24       ; RAM[addr_A] = B
     st r22, r21       ; RAM[addr_B] = A
 
