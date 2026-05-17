@@ -1,7 +1,7 @@
 [project]
 name = "tiny8"
 version = "0.2.0"
-description = "An educational 8-bit CPU simulator with interactive visualization and assembly programming tools"
+description = "From bare metal to Generative AI: educational 8-bit AVR RISC CPU simulator with interactive visualization"
 readme = "README.md"
 authors = [{ name = "sql-hkr", email = "sql.hkr@gmail.com" }]
 requires-python = ">=3.11"
@@ -12,8 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "matplotlib>=3.10.7",
-    "windows-curses ; sys_platform == 'win32'",
+    "textual>=1.0.0",
 ]
 
 [build-system]
@@ -22,12 +21,17 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pillow>=13.0.0",
     "pytest>=8.4.2",
     "pytest-cov>=6.0.0",
+    "resvg-py>=0.5.0",
     "ruff>=0.14.1",
     "shibuya>=2025.10.20",
     "sphinx>=8.2.3",
+    "sphinx-intl>=2.4.0",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
 ]
 
 [project.scripts]
-tiny8 = "tiny8.cli:main"
+tiny8 = "tiny8.tui:main"
