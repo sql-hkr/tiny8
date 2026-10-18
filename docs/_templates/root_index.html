@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tiny8 Documentation</title>
+  <script>
+    (function() {
+      var saved = '';
+      try {
+        saved = localStorage.getItem('tiny8_docs_lang');
+      } catch (e) {}
+      var lang = saved || (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+      var target = lang.startsWith('ja') ? 'ja/index.html' : 'en/index.html';
+      window.location.replace(target);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=en/index.html">
+</head>
+<body style="font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #0a0a0a; color: #eee;">
+  <div style="text-align: center;">
+    <h1 style="font-size: 1.5rem; margin-bottom: 1rem;">Tiny8 Documentation</h1>
+    <p>Redirecting to <a href="en/index.html" style="color: #60a5fa;">English</a> / <a href="ja/index.html" style="color: #60a5fa;">日本語</a>...</p>
+  </div>
+</body>
+</html>

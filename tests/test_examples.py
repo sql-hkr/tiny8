@@ -1,6 +1,7 @@
 """Tests for all example programs in examples/ directory."""
 
 from pathlib import Path
+
 from tiny8 import CPU, assemble, assemble_file, compile_c_file
 
 EXAMPLES_DIR = Path(__file__).parent.parent / "examples"
@@ -138,7 +139,6 @@ def test_example_sum_1_to_n():
     cpu.load_program(assemble_file(str(EXAMPLES_DIR / "sum_1_to_n.asm")))
     cpu.run(max_steps=1000)
     assert cpu.read_reg(16) == 210
-
 
 
 def test_example_diffusion_mnist8_asm():

@@ -1,0 +1,403 @@
+# Japanese translation for Tiny8 visualization documentation.
+# Copyright (C) 2025-2026, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 00:49+0900\n"
+"PO-Revision-Date: 2026-10-24 22:24+0900\n"
+"Last-Translator: sql-hkr <sql.hkr@gmail.com>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../visualization.rst:2
+msgid "Visualization & Debugger"
+msgstr "可視化 & デバッガ"
+
+#: ../../visualization.rst:4
+msgid ""
+"Tiny8 features a modern, real-time terminal visualizer and visual "
+"debugger powered by `Textual <https://textual.textualize.io/>`_. It "
+"provides interactive execution controls, sparse checkpoint time-travel, a"
+" 32x32 TrueColor memory heatmap, and a full-screen built-in modal editor."
+msgstr ""
+"Tiny8は、`Textual <https://textual.textualize.io/>`_ "
+"を採用したモダンなリアルタイムターミナルビジュアライザ＆デバッガを搭載しています。インタラクティブな実行制御、スパースチェックポイントによるタイムトラベルデバッグ、32x32"
+" TrueColorメモリヒートマップ、全画面の内蔵モーダルエディタを提供します。"
+
+#: ../../visualization.rst:7
+msgid "Launching the TUI"
+msgstr "TUIの起動"
+
+#: ../../visualization.rst:9
+msgid "To run any assembly or C program with the interactive debugger:"
+msgstr "インタラクティブデバッガでアセンブリまたはCプログラムを実行するには:"
+
+#: ../../visualization.rst:16
+msgid "You can also specify options such as step limits or editor launch:"
+msgstr "実行ステップ数の上限やエディタ起動などのオプションを指定することもできます:"
+
+#: ../../visualization.rst:30
+msgid "Interface Overview"
+msgstr "インターフェース概要"
+
+#: ../../visualization.rst:32
+msgid ""
+"Real-time generative reverse-diffusion synthesis (MNIST 8) at x5,000 "
+"speed in Tiny8 TUI (Viridis Palette, Forward Pixel + Reverse Hex)"
+msgstr ""
+
+#: ../../visualization.rst:37
+msgid ""
+"*Real-time generative reverse-diffusion synthesis (MNIST 8) executing at "
+"x5,000 speed in Tiny8 TUI (Viridis Palette: Forward Pixel + Reverse Hex)*"
+msgstr ""
+
+#: ../../visualization.rst:39
+msgid ""
+"Real-time generative reverse-diffusion synthesis (MNIST 8) at x5,000 "
+"speed in Tiny8 TUI (Grayscale Palette, Forward Pixel + Reverse Hex)"
+msgstr ""
+
+#: ../../visualization.rst:44
+msgid ""
+"*Real-time generative reverse-diffusion synthesis (MNIST 8) executing at "
+"x5,000 speed in Tiny8 TUI (Grayscale Palette: Forward Pixel + Reverse "
+"Hex)*"
+msgstr ""
+
+#: ../../visualization.rst:46
+msgid "The debugger interface provides real-time reactive panels:"
+msgstr "デバッガ画面はリアルタイムに反応する複数のパネルで構成されています:"
+
+#: ../../visualization.rst:66
+msgid "Interactive Controls"
+msgstr "インタラクティブ操作"
+
+#: ../../visualization.rst:69
+msgid "Execution & Time-Travel"
+msgstr "実行 & タイムトラベル"
+
+#: ../../visualization.rst:75 ../../visualization.rst:105
+msgid "Key"
+msgstr "キー"
+
+#: ../../visualization.rst:76 ../../visualization.rst:106
+msgid "Action"
+msgstr "操作内容"
+
+#: ../../visualization.rst:77
+msgid "``Space``"
+msgstr "``Space``"
+
+#: ../../visualization.rst:78
+msgid "Play / pause automatic continuous execution"
+msgstr "自動連続実行の再生 / 一時停止"
+
+#: ../../visualization.rst:79
+msgid "``Shift+Space``"
+msgstr "``Shift+Space``"
+
+#: ../../visualization.rst:80
+msgid "Reverse playback automatic continuous execution"
+msgstr "逆方向の自動連続再生"
+
+#: ../../visualization.rst:81
+msgid "``n``"
+msgstr "``n``"
+
+#: ../../visualization.rst:82
+msgid "Step forward 1 instruction (+1 step)"
+msgstr "1命令進む (+1ステップ)"
+
+#: ../../visualization.rst:83
+msgid "``p``"
+msgstr "``p``"
+
+#: ../../visualization.rst:84
+msgid "Step backward 1 instruction (-1 step, Time-Travel debug)"
+msgstr "1命令戻る (-1ステップ, タイムトラベルデバッグ)"
+
+#: ../../visualization.rst:85
+msgid "``c``"
+msgstr "``c``"
+
+#: ../../visualization.rst:86
+msgid "Continue forward until next breakpoint or program halt"
+msgstr "次のブレークポイントまたはプログラム終了まで前方継続実行"
+
+#: ../../visualization.rst:87
+msgid "``C`` (``Shift+c``)"
+msgstr "``C`` (``Shift+c``)"
+
+#: ../../visualization.rst:88
+msgid "Reverse continue backward until previous breakpoint or start"
+msgstr "前のブレークポイントまたは開始位置まで後方逆行実行"
+
+#: ../../visualization.rst:89
+msgid "``b``"
+msgstr "``b``"
+
+#: ../../visualization.rst:90
+msgid "Toggle breakpoint at current PC"
+msgstr "現在のPC位置でブレークポイントを設定/解除"
+
+#: ../../visualization.rst:91
+msgid "``+`` / ``-``"
+msgstr "``+`` / ``-``"
+
+#: ../../visualization.rst:92
+msgid "Increase / decrease automatic playback execution speed"
+msgstr "自動再生速度の加速 / 減速"
+
+#: ../../visualization.rst:93
+msgid "``r``"
+msgstr "``r``"
+
+#: ../../visualization.rst:94
+msgid "Reset execution back to Step 0"
+msgstr "ステップ0にリセット"
+
+#: ../../visualization.rst:95
+msgid "``q``"
+msgstr "``q``"
+
+#: ../../visualization.rst:96
+msgid "Quit Tiny8 application"
+msgstr "Tiny8アプリケーションを終了"
+
+#: ../../visualization.rst:99
+msgid "View & Display Controls"
+msgstr "表示 & ビュー操作"
+
+#: ../../visualization.rst:107
+msgid "``j`` / ``k``"
+msgstr "``j`` / ``k``"
+
+#: ../../visualization.rst:108
+msgid "Scroll memory viewport down / up by 32 bytes (1 row)"
+msgstr "メモリビューを32バイト (1行) 下/上にスクロール"
+
+#: ../../visualization.rst:109
+msgid "``J`` / ``K``"
+msgstr "``J`` / ``K``"
+
+#: ../../visualization.rst:110
+msgid "Fast scroll memory viewport down / up by 128 bytes (4 rows)"
+msgstr "メモリビューを128バイト (4行) 下/上に高速スクロール"
+
+#: ../../visualization.rst:111
+msgid "``g``"
+msgstr "``g``"
+
+#: ../../visualization.rst:112
+msgid "Toggle between Viridis and Grayscale color palettes"
+msgstr "Viridisとグレースケールのカラーパレットを切替"
+
+#: ../../visualization.rst:113
+msgid "``x``"
+msgstr "``x``"
+
+#: ../../visualization.rst:114
+msgid "Toggle between Hexadecimal digits (02X) and Graphic Pixel blocks"
+msgstr "16進数表記 (02X) とグラフィックピクセルブロックを切替"
+
+#: ../../visualization.rst:115
+msgid "``m``"
+msgstr "``m``"
+
+#: ../../visualization.rst:116
+msgid ""
+"Cycle view modes (Viridis+Hex -> Viridis+Pixel -> Grayscale+Pixel -> "
+"Grayscale+Hex)"
+msgstr ""
+"表示モード循環切替 (Viridis+Hex -> Viridis+Pixel -> Grayscale+Pixel -> "
+"Grayscale+Hex)"
+
+#: ../../visualization.rst:117
+msgid "``i``"
+msgstr "``i``"
+
+#: ../../visualization.rst:118
+msgid "Inspect details of the currently executing instruction"
+msgstr "現在実行中の命令の詳細情報を表示"
+
+#: ../../visualization.rst:119
+msgid "``h`` or ``?``"
+msgstr "``h`` または ``?``"
+
+#: ../../visualization.rst:120
+msgid "Open full TUI Application Usage & Keyboard Guide"
+msgstr "全TUI使用方法＆キーボードガイドモーダルを開く"
+
+#: ../../visualization.rst:121
+msgid "``e``"
+msgstr "``e``"
+
+#: ../../visualization.rst:122
+msgid "Launch the built-in full-screen Vim-style modal editor"
+msgstr "内蔵の全画面Vim風モーダルエディタを起動"
+
+#: ../../visualization.rst:125
+msgid "Command Bar Prompt (:)"
+msgstr "コマンドバープロンプト (:)"
+
+#: ../../visualization.rst:127
+msgid "Press ``:`` anytime from the debugger to enter commands:"
+msgstr "デバッガ画面で ``:`` を押すといつでもコマンドを入力できます:"
+
+#: ../../visualization.rst:133
+msgid "Command"
+msgstr "コマンド"
+
+#: ../../visualization.rst:134
+msgid "Description"
+msgstr "説明"
+
+#: ../../visualization.rst:135
+msgid "``:goto <step>``"
+msgstr "``:goto <step>``"
+
+#: ../../visualization.rst:136
+msgid "Seek directly to an execution step (e.g., ``:goto 500``)"
+msgstr "指定ステップへ直接ジャンプ (例: ``:goto 500``)"
+
+#: ../../visualization.rst:137
+msgid "``:b <pc> [if expr]``"
+msgstr "``:b <pc> [if expr]``"
+
+#: ../../visualization.rst:138
+msgid "Set conditional breakpoint (e.g., ``:b 0x0010 if R16 > 10``)"
+msgstr "条件付きブレークポイントを設定 (例: ``:b 0x0010 if R16 > 10``)"
+
+#: ../../visualization.rst:139
+msgid "``:watch <target>``"
+msgstr "``:watch <target>``"
+
+#: ../../visualization.rst:140
+msgid "Set watchpoint on register or memory address"
+msgstr "レジスタまたはメモリ番地にウォッチポイントを設定"
+
+#: ../../visualization.rst:141
+msgid "``:set <reg> <val>``"
+msgstr "``:set <reg> <val>``"
+
+#: ../../visualization.rst:142
+msgid "Modify register value dynamically (e.g., ``:set R16 42``)"
+msgstr "レジスタの値を動的に変更 (例: ``:set R16 42``)"
+
+#: ../../visualization.rst:143
+msgid "``:poke <addr> <val>``"
+msgstr "``:poke <addr> <val>``"
+
+#: ../../visualization.rst:144
+msgid "Modify RAM byte value dynamically (e.g., ``:poke 0x0200 255``)"
+msgstr "RAMバイト値を動的に変更 (例: ``:poke 0x0200 255``)"
+
+#: ../../visualization.rst:145
+msgid "``:exec <asm>``"
+msgstr "``:exec <asm>``"
+
+#: ../../visualization.rst:146
+msgid "Execute an assembly instruction immediately (e.g., ``:exec LDI R16, 5``)"
+msgstr "アセンブリ命令を即座に動的実行 (例: ``:exec LDI R16, 5``)"
+
+#: ../../visualization.rst:147
+msgid "``:speed <ms>``"
+msgstr "``:speed <ms>``"
+
+#: ../../visualization.rst:148
+msgid "Set playback speed interval in milliseconds"
+msgstr "再生インターバルをミリ秒単位で設定"
+
+#: ../../visualization.rst:149
+msgid "``:m <addr>``"
+msgstr "``:m <addr>``"
+
+#: ../../visualization.rst:150
+msgid "Jump memory viewport to specified address"
+msgstr "メモリビューポートを指定アドレスへジャンプ"
+
+#: ../../visualization.rst:151
+msgid "``:q`` / ``:quit``"
+msgstr "``:q`` / ``:quit``"
+
+#: ../../visualization.rst:152
+msgid "Exit debugger"
+msgstr "デバッガを終了"
+
+#: ../../visualization.rst:155
+msgid "Built-in Vim Modal Editor"
+msgstr "内蔵Vimモーダルエディタ"
+
+#: ../../visualization.rst:157
+msgid ""
+"Press ``e`` anytime or pass ``--edit`` on the command line to enter the "
+"full-screen Vim editor:"
+msgstr "デバッグ中に ``e`` を押すか、コマンドラインで ``--edit`` を渡すと全画面Vimエディタに入ります:"
+
+#: ../../visualization.rst:159
+msgid ""
+"**NORMAL Mode**: Full cursor navigation with ``h``/``j``/``k``/``l``, "
+"word jump ``w``/``b``, line bounds ``0``/``$``, file bounds ``gg``/``G``,"
+" delete character ``x``, delete line ``dd``, copy line ``yy``, paste "
+"``p``, undo ``u``, redo ``Ctrl+r``."
+msgstr ""
+"**ノーマルモード**: ``h``/``j``/``k``/``l`` によるカーソル移動、``w``/``b`` "
+"による単語移動、``0``/``$`` による行頭行末、``gg``/``G`` によるファイル先頭末尾、``x`` による文字削除、``dd``"
+" による行削除、``yy`` による行コピー、``p`` によるペースト、``u`` によるアンドゥ、``Ctrl+r`` によるリドゥを完備。"
+
+#: ../../visualization.rst:160
+msgid ""
+"**INSERT Mode**: Press ``i``, ``a``, or ``o`` to write code freely. Press"
+" ``Esc`` to return to NORMAL mode."
+msgstr "**インサートモード**: ``i``、``a``、``o`` を押して自由にコードを記述。``Esc`` でノーマルモードに戻ります。"
+
+#: ../../visualization.rst:161
+msgid ""
+"**COMMAND Mode**: Press ``:`` to enter commands: * ``:w`` - Save code to "
+"file * ``:wq`` or ``:x`` - Save and return to debugger * ``:run`` - "
+"Compile/assemble code and restart debugging immediately * ``:q`` or "
+"``:q!`` - Exit editor back to debugger"
+msgstr ""
+"**コマンドモード**: ``:`` を押してコマンドを実行: * ``:w`` - コードをファイルに保存 * ``:wq`` または "
+"``:x`` - 保存してデバッガに戻る * ``:run`` - 再コンパイル/アセンブルして即座にシミュレーションを再開 * ``:q`` "
+"または ``:q!`` - エディタを終了してデバッガに戻る"
+
+#: ../../visualization.rst:168
+msgid "Documentation Internationalization (i18n)"
+msgstr "ドキュメント多言語対応 (i18n)"
+
+#: ../../visualization.rst:170
+msgid ""
+"Tiny8 documentation supports English (en) and Japanese (ja) localization "
+"via Sphinx gettext:"
+msgstr "Tiny8のドキュメントはSphinx gettextを通じて英語 (en) および日本語 (ja) の多言語ローカライゼーションに対応しています:"
+
+#~ msgid "``:lang <en|ja>``"
+#~ msgstr "``:lang <en|ja>``"
+
+#~ msgid "Dynamically switch UI language between English and Japanese"
+#~ msgstr "UI表示言語を英語/日本語間で動的に切り替え"
+
+#~ msgid "**CLI flag**: ``tiny8 <file> --lang ja`` or ``tiny8 <file> -l en``"
+#~ msgstr "**CLIフラグ**: ``tiny8 <file> --lang ja`` または ``tiny8 <file> -l en``"
+
+#~ msgid ""
+#~ "**Environment variables**: ``TINY8_LANG=ja`` or "
+#~ "system locale ``LANG=ja_JP.UTF-8``"
+#~ msgstr "**環境変数**: ``TINY8_LANG=ja`` またはシステムロケール ``LANG=ja_JP.UTF-8``"
+
+#~ msgid ""
+#~ "**Runtime switching**: Enter ``:lang ja`` "
+#~ "or ``:lang en`` in the debugger "
+#~ "command prompt"
+#~ msgstr "**実行時切替**: デバッガのコマンドプロンプトで ``:lang ja`` または ``:lang en`` を入力"
+

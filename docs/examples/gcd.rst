@@ -7,4 +7,4 @@ Computes the GCD of two numbers using Euclidean algorithm.
    :language: asm
    :linenos:
 
-Demonstrates division, modulo operation, and iterative algorithm.
+Demonstrates subtraction-based Euclidean algorithm and conditional comparison.

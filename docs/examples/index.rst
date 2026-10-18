@@ -28,12 +28,6 @@ You can run any example with the interactive debugger:
 
    tiny8 examples/fibonacci.asm
 
-Or generate an animation:
-
-.. code-block:: bash
-
-   tiny8 examples/bubblesort.asm -m ani -o bubblesort.gif
-
 Or use the Python API:
 
 .. code-block:: python
@@ -83,6 +77,13 @@ Advanced Examples
    is_prime
    reverse
 
+C Language Programs & Interactive Demos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Tiny8 includes an embedded C subset compiler capable of compiling and running C programs directly on the simulated CPU:
+
+* **factorial.c**: Recursive factorial calculation demonstration.
+
 Quick Reference
 ---------------
 
@@ -92,52 +93,58 @@ Quick Reference
 
    * - Program
      - Concept
-     - Key Instructions
+     - Key Instructions / Language
    * - Hello World
-     - Basic structure
-     - LDI, JMP
+     - Basic memory writing
+     - LDI, ST, INC, JMP
    * - Fibonacci
-     - Loops, arithmetic
+     - Iterative sequence
      - ADD, MOV, DEC, BRNE
-   * - Factorial
-     - Multiplication
+   * - Factorial (ASM)
+     - Iterative multiplication
      - MUL, DEC, CPI, BRGE
+   * - Factorial (C)
+     - Recursive function calls
+     - C Compiler (CALL, RET, PUSH, POP)
    * - Sum 1 to N
-     - Accumulation
-     - ADD, INC, CP, BRLO
+     - Loop accumulation
+     - ADD, INC, CP, BRLT, BREQ
    * - Array Sum
-     - Memory access
-     - LDS, ADD, INC
+     - Pointer iteration
+     - LD, ST, ADD, INC, BRNE
    * - Find Max
-     - Comparison
-     - CP, BRLO, MOV
+     - Array scanning & comparison
+     - LD, ST, CP, BRGE, MOV
    * - Linear Search
-     - Sequential search
-     - LDS, CP, BREQ
+     - Target search & sentinel
+     - LD, ST, CP, BREQ, INC
    * - Memory Copy
-     - Data transfer
-     - LDS, STS, INC
+     - Block memory transfer
+     - LD, ST, INC, DEC, BRNE
    * - Bubble Sort
-     - Sorting algorithm
-     - LD, ST, CP, BRCC
+     - PRNG & in-place sort
+     - MUL, LD, ST, CP, BRCS
    * - GCD
      - Euclidean algorithm
-     - DIV, MUL, SUB, MOV
+     - DIV, MOV, CPI, BREQ
    * - Power
-     - Repeated multiplication
-     - MUL, DEC, BRNE
+     - Exponentiation
+     - MUL, INC, CP, BRLT
    * - Multiply by Shift
-     - Bit manipulation
-     - LSL, LSR, ADD
+     - Binary shift multiplication
+     - LSL, LSR, ANDI, ADD
    * - Count Bits
-     - Bit operations
-     - LSR, ANDI
+     - Bit testing & division
+     - AND, DIV, CPI, BRNE
    * - Is Prime
-     - Number theory
-     - DIV, MUL, CP
+     - Trial division
+     - DIV, MUL, CP, BRGE, BRLT
    * - Reverse Array
-     - Array manipulation
-     - LDS, STS, SWAP
+     - Two-pointer array reverse
+     - LD, ST, CP, BRGE, INC, DEC
+   * - MNIST Diffusion (ASM)
+     - Iterative reverse-diffusion synthesis
+     - ASM (diffusion_mnist8.asm)
 
 Learning Path
 -------------

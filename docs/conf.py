@@ -35,6 +35,8 @@ templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 language = "en"
+locale_dirs = ["locales/"]
+gettext_compact = False
 
 # -- Autodoc configuration ---------------------------------------------------
 autodoc_default_options = {
@@ -74,7 +76,7 @@ intersphinx_mapping = {
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "shibuya"
-html_static_path = []  # No static files yet
+html_static_path = ["_static"]
 
 # Theme options
 html_theme_options = {
@@ -112,3 +114,24 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
+
+
+def setup(app):
+    """Sphinx application setup hook."""
+
+    def add_language_switcher_context(app, pagename, templatename, context, doctree):
+        depth = pagename.count("/")
+        prefix = "../" * depth
+        outdir_name = os.path.basename(os.path.abspath(app.outdir))
+        current_lang = app.config.language or "en"
+        context["current_language"] = current_lang
+
+        if outdir_name in ("en", "ja"):
+            up_to_langs = prefix + "../"
+            context["en_page_url"] = f"{up_to_langs}en/{pagename}.html"
+            context["ja_page_url"] = f"{up_to_langs}ja/{pagename}.html"
+        else:
+            context["en_page_url"] = f"{prefix}en/{pagename}.html"
+            context["ja_page_url"] = f"{prefix}ja/{pagename}.html"
+
+    app.connect("html-page-context", add_language_switcher_context)

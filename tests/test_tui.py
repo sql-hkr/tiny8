@@ -1,16 +1,19 @@
 """Tests for modern Textual CLI and widgets."""
 
 import asyncio
+
 import pytest
 from textual.widgets import Input
 
 from tiny8 import CPU, assemble
 from tiny8.tui import (
     BtopRegistersWidget,
-    CVariablesWidget,
+    CacheProgressModalScreen,
     CallStackWidget,
     CheckpointManager,
     CodeViewWidget,
+    CVariablesWidget,
+    InstructionDetailModalScreen,
     InstructionDetailWidget,
     LazyStatusWidget,
     MemoryMatrixWidget,
@@ -21,8 +24,6 @@ from tiny8.tui import (
     TelemetryWidget,
     Tiny8App,
     TUIHelpScreen,
-    CacheProgressModalScreen,
-    InstructionDetailModalScreen,
     VimEditorScreen,
     VimTextArea,
     eval_condition,
@@ -985,6 +986,7 @@ def test_memory_widget_full_range_at_0xffff():
 
 def test_tui_memory_navigation_full_range():
     """Verify TUI can scroll and jump across full 0x0000..0xFFFF address space."""
+
     async def _test():
         cpu = CPU()
         asm = assemble("NOP\nNOP\n")
@@ -992,7 +994,7 @@ def test_tui_memory_navigation_full_range():
         cpu.step(record_trace=True)
 
         app = Tiny8App(cpu=cpu, file_path="main.asm", precompute_cache=False)
-        async with app.run_test(size=(120, 36)) as pilot:
+        async with app.run_test(size=(120, 36)):
             inp = app.query_one("#cmd-input", Input)
 
             # Jump to end of RAM via command

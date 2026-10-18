@@ -1,0 +1,11 @@
+<div class="sy-head-languages" style="display: inline-flex; align-items: center; margin-right: 0.5rem; font-size: 0.82rem; font-weight: 600; border: 1px solid var(--sy-c-border); border-radius: 6px; padding: 2px 6px; background: var(--sy-c-surface); height: 28px; z-index: 10; position: relative;">
+  {% if current_language == 'ja' %}
+    <a href="{{ en_page_url }}" onclick="try{localStorage.setItem('tiny8_docs_lang','en');}catch(e){}" style="color: var(--sy-c-text); text-decoration: none; opacity: 0.65; padding: 0 4px; display: inline-block; cursor: pointer;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.65'" title="Switch to English">EN</a>
+    <span style="opacity: 0.3; margin: 0 2px;">|</span>
+    <span style="color: var(--accent-9); padding: 0 4px;" title="日本語（現在の表示言語）">JA</span>
+  {% else %}
+    <span style="color: var(--accent-9); padding: 0 4px;" title="English (current language)">EN</span>
+    <span style="opacity: 0.3; margin: 0 2px;">|</span>
+    <a href="{{ ja_page_url }}" onclick="try{localStorage.setItem('tiny8_docs_lang','ja');}catch(e){}" style="color: var(--sy-c-text); text-decoration: none; opacity: 0.65; padding: 0 4px; display: inline-block; cursor: pointer;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.65'" title="日本語に切り替え">JA</a>
+  {% endif %}
+</div>

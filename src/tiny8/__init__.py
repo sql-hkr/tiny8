@@ -5,7 +5,6 @@ interactive Textual CLI for experimentation and teaching.
 """
 
 from .assembler import AsmResult, assemble, assemble_file
-from .tui import run_cli
 from .compiler import (
     compile_c,
     compile_c_file,
@@ -13,6 +12,7 @@ from .compiler import (
     compile_c_with_symbols,
 )
 from .cpu import CPU
+from .tui import run_cli
 from .utils import ProgressBar
 
 __all__ = [

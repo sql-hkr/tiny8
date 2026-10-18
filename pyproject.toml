@@ -35,3 +35,18 @@ dev = [
 
 [project.scripts]
 tiny8 = "tiny8.tui:main"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+]
+ignore = [
+    "E501",
+]

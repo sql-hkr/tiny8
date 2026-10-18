@@ -1,0 +1,375 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 22:30+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../examples/fibonacci.rst:2
+msgid "Fibonacci Sequence"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:4
+msgid ""
+"This example calculates the 10th Fibonacci number using an iterative "
+"approach."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:7
+msgid "Overview"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:9
+msgid "**Difficulty**: Beginner"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:11
+msgid "**Concepts**: Loops, register arithmetic, conditional branching"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:13
+msgid "**Output**: R17 contains F(10) = 55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:16
+msgid "The Program"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:23
+msgid "Algorithm Explanation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:25
+msgid "The Fibonacci sequence is defined as:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:27
+msgid "F(0) = 0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:28
+msgid "F(1) = 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:29
+msgid "F(n) = F(n-1) + F(n-2) for n > 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:31
+msgid "This program uses an iterative approach with three registers:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:33
+msgid "**R16**: Previous Fibonacci number (F(n-1))"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:34
+msgid "**R17**: Current Fibonacci number (F(n))"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:35
+msgid "**R18**: Counter (remaining iterations)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:38
+msgid "Step-by-Step Walkthrough"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:41
+msgid "Initialization (Lines 8-10)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:49
+msgid ""
+"We start with F(0) = 0 and F(1) = 1. Since we want F(10), we need 9 more "
+"iterations (F(2) through F(10))."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:52
+msgid "Main Loop (Lines 12-18)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:64
+msgid "Each iteration:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:66
+msgid "**Add**: Compute next Fibonacci number (R16 + R17)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:67
+msgid "**Save**: Store result in temporary register R19"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:68
+msgid "**Shift**: Move R17 to R16 (previous ← current)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:69
+msgid "**Update**: Move R19 to R17 (current ← new result)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:70
+msgid "**Decrement**: Decrease counter"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:71
+msgid "**Branch**: Loop if counter ≠ 0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:74
+msgid "Execution Trace"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:76
+msgid "Here's how the registers evolve:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:78
+msgid "Fibonacci Calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:82
+msgid "Iter"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:83
+msgid "R16 (prev)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:84
+msgid "R17 (curr)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:85
+msgid "R18 (count)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:86
+msgid "Calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:87
+msgid "Init"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:88 ../../examples/fibonacci.rst:135
+msgid "0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:89 ../../examples/fibonacci.rst:92
+#: ../../examples/fibonacci.rst:93 ../../examples/fibonacci.rst:94
+#: ../../examples/fibonacci.rst:98 ../../examples/fibonacci.rst:130
+msgid "1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:90 ../../examples/fibonacci.rst:132
+msgid "9"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:91
+msgid "F(0), F(1)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:95 ../../examples/fibonacci.rst:114
+#: ../../examples/fibonacci.rst:118 ../../examples/fibonacci.rst:127
+msgid "8"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:96
+msgid "F(2) = 0 + 1 = 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:97 ../../examples/fibonacci.rst:99
+#: ../../examples/fibonacci.rst:103 ../../examples/fibonacci.rst:125
+msgid "2"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:100 ../../examples/fibonacci.rst:122
+msgid "7"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:101
+msgid "F(3) = 1 + 1 = 2"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:102 ../../examples/fibonacci.rst:104
+#: ../../examples/fibonacci.rst:108 ../../examples/fibonacci.rst:120
+msgid "3"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:105 ../../examples/fibonacci.rst:117
+msgid "6"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:106
+msgid "F(4) = 1 + 2 = 3"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:107 ../../examples/fibonacci.rst:115
+msgid "4"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:109 ../../examples/fibonacci.rst:110
+#: ../../examples/fibonacci.rst:112 ../../examples/fibonacci.rst:113
+msgid "5"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:111
+msgid "F(5) = 2 + 3 = 5"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:116
+msgid "F(6) = 3 + 5 = 8"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:119 ../../examples/fibonacci.rst:123
+msgid "13"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:121
+msgid "F(7) = 5 + 8 = 13"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:124 ../../examples/fibonacci.rst:128
+msgid "21"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:126
+msgid "F(8) = 8 + 13 = 21"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:129 ../../examples/fibonacci.rst:133
+msgid "34"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:131
+msgid "F(9) = 13 + 21 = 34"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:134
+msgid "55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:136
+msgid "F(10) = 21 + 34 = 55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:139
+msgid "Running the Example"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:142
+msgid "Interactive Debugger"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:148
+msgid "Step through with ``j`` and watch registers R16, R17, and R18 evolve."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:151
+msgid "Animation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:157
+msgid "Visualize the register changes over time."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:160
+msgid "Python API"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:173
+msgid "Key Concepts"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:176
+msgid "Loop Structure"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:178
+msgid "The loop pattern is common in assembly:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:189
+msgid "Register Shifting"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:191
+msgid "Moving values between registers for state management:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:199
+msgid ""
+"This \"register rotation\" is a fundamental technique in assembly "
+"programming."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:202
+msgid "Exercises"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:204
+msgid "**Modify the counter**: Calculate F(15) instead of F(10)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:205
+msgid ""
+"**Different starting values**: Try F(0) = 1, F(1) = 1 (alternative "
+"definition)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:206
+msgid "**Store in memory**: Save each Fibonacci number to memory"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:207
+msgid "**Detect overflow**: Check when the result exceeds 255"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:210
+msgid "Solutions"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:212
+msgid "**F(15) modification**:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:218
+msgid "Note: F(15) = 610, which exceeds 8-bit range (wraps to 98)."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:220
+msgid "**Store in memory**:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:232
+msgid "Related Examples"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:234
+msgid ":doc:`factorial` - Another iterative calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:235
+msgid ":doc:`sum_1_to_n` - Similar loop structure"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:236
+msgid ":doc:`power` - Repeated operation pattern"
+msgstr ""
+

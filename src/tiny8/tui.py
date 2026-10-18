@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import argparse
 import bisect
-from collections import Counter
-from pathlib import Path
 import re
 import shutil
+from collections import Counter
+from pathlib import Path
 from typing import Any, Callable
 
 from rich.text import Text

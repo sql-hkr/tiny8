@@ -47,7 +47,8 @@ This generates a sequence of pseudo-random 8-bit values.
    ldi r25, 75       ; PRNG multiplier
 
    init_loop:
-       mul r18, r25  ; multiply seed by 75
+       mul r18, r25  ; multiply seed by 75 (product in R1:R0)
+       mov r18, r0   ; transfer low byte of product
        inc r18       ; add 1
        st r16, r18   ; store at RAM[base + index]
        ; ...
@@ -107,6 +108,7 @@ Inner Loop
        ; compare and swap if A > B (for ascending order)
        cp r21, r24
        brcs no_swap    ; skip if A < B
+       breq no_swap    ; skip if A == B
        st r20, r24     ; swap: RAM[addr_A] = B
        st r22, r21     ; swap: RAM[addr_B] = A
        
@@ -119,7 +121,6 @@ For each j:
 1. Load adjacent elements (j and j+1)
 2. Compare them
 3. Swap if first > second (for ascending order)
-3. Swap if first > second
 4. Advance to next pair
 
 Register Usage

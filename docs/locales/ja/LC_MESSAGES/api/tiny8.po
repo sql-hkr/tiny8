@@ -1,0 +1,2564 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 01:27+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../api/tiny8.rst:2
+msgid "tiny8 package"
+msgstr ""
+
+#: ../../api/tiny8.rst:5
+msgid "Submodules"
+msgstr ""
+
+#: ../../api/tiny8.rst:8
+msgid "tiny8.assembler module"
+msgstr ""
+
+#: of tiny8.assembler:1
+msgid "Assembler for tiny8 converting assembly text into program listings."
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:1 tiny8.compiler.ASTNode:1
+#: tiny8.compiler.CodeGenerator:1 tiny8.compiler.Lexer:1
+#: tiny8.compiler.Parser:1 tiny8.compiler.Token:1 tiny8.cpu.CPU:1
+#: tiny8.memory.Memory:1 tiny8.tui.CheckpointManager:1
+#: tiny8.utils.ProgressBar:1
+msgid "Bases: :py:class:`object`"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:1
+msgid "Result of assembling assembly source code."
+msgstr ""
+
+#: ../../api/tiny8.rst of tiny8.compiler.CodeGenerator.gen_expr
+#: tiny8.compiler.optimize_assembly tiny8.cpu.CPU.restore_snapshot
+#: tiny8.memory.Memory.restore_ram tiny8.tui.CheckpointManager.detect_loop
+#: tiny8.tui.CheckpointManager.invalidate_after
+#: tiny8.tui.CheckpointManager.precompute tiny8.tui.CheckpointManager.record
+#: tiny8.tui.CheckpointManager.record_if_interval
+#: tiny8.tui.CheckpointManager.restore_exact_step
+#: tiny8.tui.MemoryWidget.get_heatmap_bg
+#: tiny8.tui.Tiny8App.action_exec_instruction
+#: tiny8.tui.Tiny8App.on_input_submitted tiny8.tui.Tiny8App.watch_mem_start
+#: tiny8.tui.eval_condition tiny8.tui.extract_call_frames
+#: tiny8.tui.get_widget_available_lines
+msgid "Parameters"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:5 tiny8.cpu.CPU:47 tiny8.cpu.CPU:65
+msgid "List of instruction tuples in (mnemonic, operands) format."
+msgstr ""
+
+#: of tiny8.assembler.AsmResult tiny8.cpu.CPU
+msgid "type"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:7 tiny8.cpu.CPU:67
+msgid "list[tuple[str, tuple]]"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:11
+msgid "Mapping of label names to program counter addresses."
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:13 tiny8.cpu.CPU:73
+msgid "dict[str, int]"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:17 tiny8.cpu.CPU:55 tiny8.cpu.CPU:77
+msgid "Mapping of program counter to source line numbers."
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:19 tiny8.cpu.CPU:79
+msgid "dict[int, int]"
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:23
+msgid "Original source lines for display and debugging."
+msgstr ""
+
+#: of tiny8.assembler.AsmResult:25 tiny8.cpu.CPU:85
+msgid "list[str]"
+msgstr ""
+
+#: ../../api/tiny8.rst of tiny8.compiler.CodeGenerator.gen_expr
+#: tiny8.compiler.Lexer.tokenize tiny8.compiler.optimize_assembly
+#: tiny8.cpu.CPU.clear_traces tiny8.cpu.CPU.restore_snapshot
+#: tiny8.cpu.CPU.snapshot tiny8.memory.Memory.clear_changes
+#: tiny8.memory.Memory.restore_ram tiny8.tui.CacheProgressModalScreen.compose
+#: tiny8.tui.CheckpointManager.detect_loop
+#: tiny8.tui.CheckpointManager.invalidate_after
+#: tiny8.tui.CheckpointManager.precompute tiny8.tui.CheckpointManager.record
+#: tiny8.tui.CheckpointManager.record_if_interval
+#: tiny8.tui.CheckpointManager.restore_exact_step
+#: tiny8.tui.InstructionDetailModalScreen.compose
+#: tiny8.tui.InstructionReferenceScreen.compose
+#: tiny8.tui.MemoryWidget.get_heatmap_bg tiny8.tui.TUIHelpScreen.compose
+#: tiny8.tui.Tiny8App.action_cancel_command
+#: tiny8.tui.Tiny8App.action_continue_run tiny8.tui.Tiny8App.action_cycle_mode
+#: tiny8.tui.Tiny8App.action_exec_instruction tiny8.tui.Tiny8App.action_faster
+#: tiny8.tui.Tiny8App.action_open_command tiny8.tui.Tiny8App.action_open_editor
+#: tiny8.tui.Tiny8App.action_reverse_continue
+#: tiny8.tui.Tiny8App.action_scroll_down
+#: tiny8.tui.Tiny8App.action_scroll_page_down
+#: tiny8.tui.Tiny8App.action_scroll_page_up tiny8.tui.Tiny8App.action_scroll_up
+#: tiny8.tui.Tiny8App.action_show_help
+#: tiny8.tui.Tiny8App.action_show_instruction_detail
+#: tiny8.tui.Tiny8App.action_show_reference tiny8.tui.Tiny8App.action_slower
+#: tiny8.tui.Tiny8App.action_toggle_breakpoint
+#: tiny8.tui.Tiny8App.action_toggle_grayscale
+#: tiny8.tui.Tiny8App.action_toggle_hex tiny8.tui.Tiny8App.action_toggle_play
+#: tiny8.tui.Tiny8App.action_toggle_reverse_play tiny8.tui.Tiny8App.compose
+#: tiny8.tui.Tiny8App.on_input_submitted tiny8.tui.Tiny8App.watch_mem_start
+#: tiny8.tui.VimEditorScreen.compose tiny8.tui.eval_condition
+#: tiny8.tui.extract_call_frames tiny8.tui.get_widget_available_lines
+#: tiny8.tui.main tiny8.utils.ProgressBar.__enter__
+#: tiny8.utils.ProgressBar.__exit__ tiny8.utils.ProgressBar.close
+#: tiny8.utils.ProgressBar.reset
+msgid "Return type"
+msgstr ""
+
+#: of tiny8.assembler.parse_asm:1
+msgid "Parse assembly source text into an AsmResult structure."
+msgstr ""
+
+#: of tiny8.assembler.parse_asm:3
+msgid "Assembly source text."
+msgstr ""
+
+#: ../../api/tiny8.rst
+msgid "Returns"
+msgstr ""
+
+#: of tiny8.assembler.assemble:5 tiny8.assembler.assemble_file:5
+#: tiny8.assembler.parse_asm:5
+msgid "AsmResult containing parsed program, labels, and line mappings."
+msgstr ""
+
+#: of tiny8.assembler.assemble:1
+msgid "Assemble source text into program instructions and label mappings."
+msgstr ""
+
+#: of tiny8.assembler.assemble:3
+msgid "Assembly source code string."
+msgstr ""
+
+#: of tiny8.assembler.assemble_file:1
+msgid "Assemble source file into program instructions and label mappings."
+msgstr ""
+
+#: of tiny8.assembler.assemble_file:3
+msgid "Path to the assembly source file."
+msgstr ""
+
+#: ../../api/tiny8.rst
+msgid "Raises"
+msgstr ""
+
+#: of tiny8.assembler.assemble_file:7
+msgid "If the source file does not exist."
+msgstr ""
+
+#: of tiny8.assembler.assemble_file:8
+msgid "If reading the file fails."
+msgstr ""
+
+#: ../../api/tiny8.rst:16
+msgid "tiny8.cli module"
+msgstr ""
+
+#: of tiny8.cli:1
+msgid "Backward-compatibility wrapper forwarding to tiny8.tui."
+msgstr ""
+
+#: of tiny8.tui.main:1
+msgid "Entry point for tiny8 CLI supporting Assembly and C sources."
+msgstr ""
+
+#: of tiny8.tui.run_cli:1
+msgid ""
+"Launch modern Textual TUI debugger with OLED black theme and gradient "
+"heatmaps."
+msgstr ""
+
+#: of tiny8.tui.run_cli:3
+msgid "CPU emulator with execution history."
+msgstr ""
+
+#: of tiny8.tui.run_cli:4
+msgid "Start address for memory viewer."
+msgstr ""
+
+#: of tiny8.tui.run_cli:5
+msgid "End address for memory viewer."
+msgstr ""
+
+#: of tiny8.tui.run_cli:6
+msgid "Playback interval in seconds."
+msgstr ""
+
+#: of tiny8.tui.run_cli:7
+msgid "Source assembly or C lines."
+msgstr ""
+
+#: of tiny8.tui.run_cli:8
+msgid "C variable metadata symbols."
+msgstr ""
+
+#: ../../api/tiny8.rst:24
+msgid "tiny8.compiler module"
+msgstr ""
+
+#: of tiny8.compiler:1
+msgid "Simple C compiler for Tiny8 converting a subset of C into Tiny8 assembly."
+msgstr ""
+
+#: of tiny8.compiler:3
+msgid ""
+"Features: - Variable declarations and assignments (int/char) - Arithmetic"
+" (+, -, *, /, %), bitwise (&, |, ^, ~), logical (!), and relational (<, "
+"<=, >, >=, ==, !=) - Control structures: if / else, while, return - "
+"Functions with register-based parameter passing (R16..R19) and return "
+"value in R16 - Hardware builtins: peek(addr), poke(addr, val), in(port), "
+"out(port, val)"
+msgstr ""
+
+#: of tiny8.compiler.Token:1
+msgid "Lexical token."
+msgstr ""
+
+#: of tiny8.compiler.Lexer:1
+msgid "Tokenize C source code."
+msgstr ""
+
+#: of tiny8.compiler.Lexer.tokenize:1
+msgid "Convert input source into tokens, ignoring whitespace and comments."
+msgstr ""
+
+#: of tiny8.compiler.ASTNode:1
+msgid "Base AST node."
+msgstr ""
+
+#: of tiny8.compiler.ArrayAccess:1 tiny8.compiler.ArrayAssign:1
+#: tiny8.compiler.ArrayDecl:1 tiny8.compiler.Assign:1 tiny8.compiler.BinaryOp:1
+#: tiny8.compiler.Block:1 tiny8.compiler.BreakStmt:1 tiny8.compiler.Call:1
+#: tiny8.compiler.ExprStmt:1 tiny8.compiler.ForStmt:1
+#: tiny8.compiler.FunctionDef:1 tiny8.compiler.IfStmt:1
+#: tiny8.compiler.Literal:1 tiny8.compiler.Program:1
+#: tiny8.compiler.ReturnStmt:1 tiny8.compiler.StringLiteral:1
+#: tiny8.compiler.UnaryOp:1 tiny8.compiler.Var:1 tiny8.compiler.VarDecl:1
+#: tiny8.compiler.WhileStmt:1
+msgid "Bases: :py:class:`~tiny8.compiler.ASTNode`"
+msgstr ""
+
+#: of tiny8.compiler.Program:1
+msgid "Program root containing functions and global declarations."
+msgstr ""
+
+#: of tiny8.compiler.VarDecl:1
+msgid "Variable declaration."
+msgstr ""
+
+#: of tiny8.compiler.ArrayDecl:1
+msgid "Array variable declaration."
+msgstr ""
+
+#: of tiny8.compiler.ArrayAccess:1
+msgid "Array indexing expression: name[index]."
+msgstr ""
+
+#: of tiny8.compiler.ArrayAssign:1
+msgid "Array element assignment: name[index] = expr."
+msgstr ""
+
+#: of tiny8.compiler.FunctionDef:1
+msgid "Function definition."
+msgstr ""
+
+#: of tiny8.compiler.Block:1
+msgid "Block of statements."
+msgstr ""
+
+#: of tiny8.compiler.Assign:1
+msgid "Assignment statement."
+msgstr ""
+
+#: of tiny8.compiler.IfStmt:1
+msgid "If-else statement."
+msgstr ""
+
+#: of tiny8.compiler.WhileStmt:1
+msgid "While loop."
+msgstr ""
+
+#: of tiny8.compiler.ForStmt:1
+msgid "For loop."
+msgstr ""
+
+#: of tiny8.compiler.BreakStmt:1
+msgid "Break statement."
+msgstr ""
+
+#: of tiny8.compiler.ReturnStmt:1
+msgid "Return statement."
+msgstr ""
+
+#: of tiny8.compiler.ExprStmt:1
+msgid "Expression statement."
+msgstr ""
+
+#: of tiny8.compiler.BinaryOp:1
+msgid "Binary expression."
+msgstr ""
+
+#: of tiny8.compiler.UnaryOp:1
+msgid "Unary expression."
+msgstr ""
+
+#: of tiny8.compiler.Literal:1
+msgid "Literal integer value."
+msgstr ""
+
+#: of tiny8.compiler.StringLiteral:1
+msgid "String literal value."
+msgstr ""
+
+#: of tiny8.compiler.Var:1
+msgid "Variable reference."
+msgstr ""
+
+#: of tiny8.compiler.Call:1
+msgid "Function call expression."
+msgstr ""
+
+#: of tiny8.compiler.Parser:1
+msgid "Recursive descent parser."
+msgstr ""
+
+#: of tiny8.compiler.optimize_assembly:1
+msgid "Perform peephole optimizations on generated assembly lines."
+msgstr ""
+
+#: of tiny8.compiler.optimize_assembly:3
+msgid ""
+"Optimizations include: - Removing redundant self register moves (MOV Rx, "
+"Rx) - Simplifying PUSH Rx followed immediately by POP Ry into MOV Ry, Rx "
+"(or eliminating if Rx == Ry) - Removing redundant LD R16, R30 immediately"
+" after ST R30, R16 - Removing JMP <label> when the next line is <label>:"
+msgstr ""
+
+#: of tiny8.compiler.CodeGenerator:1
+msgid "Generate Tiny8 assembly from AST using register & stack model."
+msgstr ""
+
+#: of tiny8.compiler.CodeGenerator.gen_expr:1
+msgid "Evaluate expression, leaving the 8-bit result in R16."
+msgstr ""
+
+#: of tiny8.compiler.compile_c:1
+msgid "Compile C source code string into Tiny8 assembly."
+msgstr ""
+
+#: of tiny8.compiler.compile_c:3 tiny8.compiler.compile_c_with_symbols:3
+msgid "C language source code text."
+msgstr ""
+
+#: of tiny8.compiler.compile_c:4 tiny8.compiler.compile_c_file:4
+#: tiny8.compiler.compile_c_file_with_symbols:4
+#: tiny8.compiler.compile_c_with_symbols:4
+msgid "Whether to apply peephole optimization. Defaults to True."
+msgstr ""
+
+#: of tiny8.compiler.compile_c:6 tiny8.compiler.compile_c_file:6
+msgid "Generated Tiny8 assembly source string."
+msgstr ""
+
+#: of tiny8.compiler.compile_c_file:1
+msgid "Read and compile C source file into Tiny8 assembly."
+msgstr ""
+
+#: of tiny8.compiler.compile_c_file:3
+#: tiny8.compiler.compile_c_file_with_symbols:3
+msgid "Path to C source file."
+msgstr ""
+
+#: of tiny8.compiler.compile_c_with_symbols:1
+msgid "Compile C source into Tiny8 assembly alongside variable symbol table."
+msgstr ""
+
+#: of tiny8.compiler.compile_c_file_with_symbols:6
+#: tiny8.compiler.compile_c_with_symbols:6
+msgid "Tuple of (assembly_source_string, symbols_dict)."
+msgstr ""
+
+#: of tiny8.compiler.compile_c_file_with_symbols:1
+msgid "Read and compile C source file into Tiny8 assembly with symbol table."
+msgstr ""
+
+#: ../../api/tiny8.rst:32
+msgid "tiny8.cpu module"
+msgstr ""
+
+#: of tiny8.cpu:1
+msgid "Simplified AVR-like 8-bit CPU simulator."
+msgstr ""
+
+#: of tiny8.cpu.CPU:1
+msgid "Lightweight 8-bit AVR CPU emulator compliant with Microchip DS40002198A."
+msgstr ""
+
+#: of tiny8.cpu.CPU:3
+msgid "Optional Memory instance. Defaults to a new Memory instance."
+msgstr ""
+
+#: of tiny8.cpu.CPU:7
+msgid "Attached Memory instance."
+msgstr ""
+
+#: of tiny8.cpu.CPU:11
+msgid "List of 32 8-bit general purpose registers (R0..R31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU:15 tiny8.cpu.CPU:17
+msgid "Current program counter address."
+msgstr ""
+
+#: of tiny8.cpu.CPU:19 tiny8.cpu.CPU:23
+msgid "Stack pointer pointing to current top of stack in RAM."
+msgstr ""
+
+#: of tiny8.cpu.CPU:23 tiny8.cpu.CPU:29
+msgid "Status register integer containing I, T, H, S, V, N, Z, C flags."
+msgstr ""
+
+#: of tiny8.cpu.CPU:27 tiny8.cpu.CPU:35
+msgid "Number of instructions executed so far."
+msgstr ""
+
+#: of tiny8.cpu.CPU:31 tiny8.cpu.CPU:41
+msgid "Mapping of interrupt vector addresses to enabled flags."
+msgstr ""
+
+#: of tiny8.cpu.CPU:35 tiny8.cpu.CPU:47
+msgid "Change history of registers as (step, reg_idx, new_val) tuples."
+msgstr ""
+
+#: of tiny8.cpu.CPU:39 tiny8.cpu.CPU:53
+msgid "Change history of RAM as (step, addr, new_val) tuples."
+msgstr ""
+
+#: of tiny8.cpu.CPU:43 tiny8.cpu.CPU:59
+msgid "Full per-step snapshots for tracing and visualization."
+msgstr ""
+
+#: of tiny8.cpu.CPU:51 tiny8.cpu.CPU:71
+msgid "Mapping of symbolic labels to program counter addresses."
+msgstr ""
+
+#: of tiny8.cpu.CPU:59 tiny8.cpu.CPU:83
+msgid "Original assembly source text lines."
+msgstr ""
+
+#: of tiny8.cpu.CPU:63 tiny8.cpu.CPU:89
+msgid "Flag indicating whether execution loop is active."
+msgstr ""
+
+#: of tiny8.cpu.CPU.clear_traces:1
+msgid "Clear execution traces and history to free memory."
+msgstr ""
+
+#: of tiny8.cpu.CPU.snapshot:1
+msgid "Capture complete CPU and memory execution state snapshot."
+msgstr ""
+
+#: of tiny8.cpu.CPU.restore_snapshot:1
+msgid "Restore CPU and memory execution state from a snapshot."
+msgstr ""
+
+#: of tiny8.cpu.CPU.set_flag:1
+msgid "Set or clear a status register flag bit."
+msgstr ""
+
+#: of tiny8.cpu.CPU.get_flag:3 tiny8.cpu.CPU.set_flag:3
+msgid "SREG bit index (0..7)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.set_flag:4
+msgid "True to set flag, False to clear."
+msgstr ""
+
+#: of tiny8.cpu.CPU.get_flag:1
+msgid "Return boolean status of a specific SREG bit."
+msgstr ""
+
+#: of tiny8.cpu.CPU.get_flag:5
+msgid "True if bit is set, False otherwise."
+msgstr ""
+
+#: of tiny8.cpu.CPU.read_reg:1
+msgid "Return 8-bit value from register r."
+msgstr ""
+
+#: of tiny8.cpu.CPU.read_reg:3 tiny8.cpu.CPU.write_reg:3
+msgid "Register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.read_reg:5
+msgid "8-bit unsigned integer value."
+msgstr ""
+
+#: of tiny8.cpu.CPU.write_reg:1
+msgid "Write 8-bit value to register r and trace changes."
+msgstr ""
+
+#: of tiny8.cpu.CPU.write_reg:4
+msgid "Integer value to store (masked to 8-bit)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.read_ram:1
+msgid "Read byte from RAM address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cbi:7 tiny8.cpu.CPU.op_sbi:7 tiny8.cpu.CPU.read_ram:3
+msgid "Memory address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.read_ram:5
+msgid "Byte value stored at address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.write_ram:1
+msgid "Write byte to RAM address and record memory trace."
+msgstr ""
+
+#: of tiny8.cpu.CPU.write_ram:3
+msgid "Target RAM address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.write_ram:4
+msgid "Byte value to write."
+msgstr ""
+
+#: of tiny8.cpu.CPU.load_program:1
+msgid "Load assembled program instructions into CPU."
+msgstr ""
+
+#: of tiny8.cpu.CPU.load_program:3
+msgid "AsmResult object or list of (mnemonic, operands) tuples."
+msgstr ""
+
+#: of tiny8.cpu.CPU.load_program:4
+msgid "Label mapping if program is a raw list."
+msgstr ""
+
+#: of tiny8.cpu.CPU.load_program:5
+msgid "PC to line mapping if program is a raw list."
+msgstr ""
+
+#: of tiny8.cpu.CPU.load_program:6
+msgid "Source text lines if program is a raw list."
+msgstr ""
+
+#: of tiny8.cpu.CPU.step:1
+msgid "Execute next single instruction at current program counter."
+msgstr ""
+
+#: of tiny8.cpu.CPU.step:3
+msgid "Optional override to enable or disable trace recording for this step."
+msgstr ""
+
+#: of tiny8.cpu.CPU.step:5
+msgid "True if instruction executed successfully, False if PC is out of range."
+msgstr ""
+
+#: of tiny8.cpu.CPU.step:7
+msgid "If instruction mnemonic has no handler."
+msgstr ""
+
+#: of tiny8.cpu.CPU.run:1
+msgid "Run instructions until completion or max_steps limit is reached."
+msgstr ""
+
+#: of tiny8.cpu.CPU.run:3
+msgid "Maximum instruction step executions allowed."
+msgstr ""
+
+#: of tiny8.cpu.CPU.run:4
+msgid "Whether to show progress bar in terminal."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_nop:1
+msgid "No Operation (NOP)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adc:3 tiny8.cpu.CPU.op_add:3 tiny8.cpu.CPU.op_adiw:3
+#: tiny8.cpu.CPU.op_and:3 tiny8.cpu.CPU.op_andi:3 tiny8.cpu.CPU.op_brcc:3
+#: tiny8.cpu.CPU.op_brcs:3 tiny8.cpu.CPU.op_breq:3 tiny8.cpu.CPU.op_brge:3
+#: tiny8.cpu.CPU.op_brlo:3 tiny8.cpu.CPU.op_brlt:3 tiny8.cpu.CPU.op_brmi:3
+#: tiny8.cpu.CPU.op_brne:3 tiny8.cpu.CPU.op_brpl:3 tiny8.cpu.CPU.op_brsh:3
+#: tiny8.cpu.CPU.op_call:3 tiny8.cpu.CPU.op_cbi:3 tiny8.cpu.CPU.op_cli:3
+#: tiny8.cpu.CPU.op_cp:3 tiny8.cpu.CPU.op_cpi:3 tiny8.cpu.CPU.op_cpse:3
+#: tiny8.cpu.CPU.op_dec:3 tiny8.cpu.CPU.op_eor:3 tiny8.cpu.CPU.op_in:3
+#: tiny8.cpu.CPU.op_inc:3 tiny8.cpu.CPU.op_jmp:3 tiny8.cpu.CPU.op_ld:3
+#: tiny8.cpu.CPU.op_ldi:3 tiny8.cpu.CPU.op_lds:3 tiny8.cpu.CPU.op_mov:3
+#: tiny8.cpu.CPU.op_nop:3 tiny8.cpu.CPU.op_or:3 tiny8.cpu.CPU.op_ori:3
+#: tiny8.cpu.CPU.op_out:3 tiny8.cpu.CPU.op_pop:3 tiny8.cpu.CPU.op_push:3
+#: tiny8.cpu.CPU.op_rcall:3 tiny8.cpu.CPU.op_ret:3 tiny8.cpu.CPU.op_reti:3
+#: tiny8.cpu.CPU.op_rjmp:3 tiny8.cpu.CPU.op_sbc:3 tiny8.cpu.CPU.op_sbci:3
+#: tiny8.cpu.CPU.op_sbi:3 tiny8.cpu.CPU.op_sbic:3 tiny8.cpu.CPU.op_sbis:3
+#: tiny8.cpu.CPU.op_sbiw:3 tiny8.cpu.CPU.op_sbrc:3 tiny8.cpu.CPU.op_sbrs:3
+#: tiny8.cpu.CPU.op_sei:3 tiny8.cpu.CPU.op_st:3 tiny8.cpu.CPU.op_sts:3
+#: tiny8.cpu.CPU.op_sub:3 tiny8.cpu.CPU.op_subi:3
+msgid "Per AVR Instruction Set Manual DS40002198A:"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_nop:4
+msgid "Operation: No operation. Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ldi:1
+msgid "Load Immediate (LDI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ldi:4
+msgid ""
+"Operation: Rd <- K (16 <= d <= 31, 0 <= K <= 255) Status Register (SREG):"
+" None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_andi:7 tiny8.cpu.CPU.op_ldi:7 tiny8.cpu.CPU.op_ori:7
+#: tiny8.cpu.CPU.op_sbci:7 tiny8.cpu.CPU.op_subi:7
+msgid "Destination register index (16..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpi:8 tiny8.cpu.CPU.op_ldi:8
+msgid "Immediate byte value."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mov:1
+msgid "Copy Register (MOV)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mov:4
+msgid "Operation: Rd <- Rr (0 <= d, r <= 31) Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adc:7 tiny8.cpu.CPU.op_add:7 tiny8.cpu.CPU.op_and:7
+#: tiny8.cpu.CPU.op_asr:7 tiny8.cpu.CPU.op_clr:7 tiny8.cpu.CPU.op_com:7
+#: tiny8.cpu.CPU.op_dec:7 tiny8.cpu.CPU.op_eor:7 tiny8.cpu.CPU.op_in:7
+#: tiny8.cpu.CPU.op_inc:7 tiny8.cpu.CPU.op_ld:9 tiny8.cpu.CPU.op_lds:7
+#: tiny8.cpu.CPU.op_lsl:7 tiny8.cpu.CPU.op_lsr:7 tiny8.cpu.CPU.op_mov:7
+#: tiny8.cpu.CPU.op_neg:6 tiny8.cpu.CPU.op_or:7 tiny8.cpu.CPU.op_pop:7
+#: tiny8.cpu.CPU.op_rol:7 tiny8.cpu.CPU.op_ror:7 tiny8.cpu.CPU.op_sbc:7
+#: tiny8.cpu.CPU.op_ser:6 tiny8.cpu.CPU.op_sub:7 tiny8.cpu.CPU.op_swap:6
+msgid "Destination register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adc:8 tiny8.cpu.CPU.op_add:8 tiny8.cpu.CPU.op_and:8
+#: tiny8.cpu.CPU.op_eor:8 tiny8.cpu.CPU.op_mov:8 tiny8.cpu.CPU.op_or:8
+#: tiny8.cpu.CPU.op_out:8 tiny8.cpu.CPU.op_push:7 tiny8.cpu.CPU.op_sbc:8
+#: tiny8.cpu.CPU.op_st:10 tiny8.cpu.CPU.op_sts:8 tiny8.cpu.CPU.op_sub:8
+msgid "Source register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_add:1
+msgid "Add without Carry (ADD)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_add:4
+msgid "Operation: Rd <- Rd + Rr Status Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_and:1
+msgid "Logical AND (AND)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_and:4
+msgid ""
+"Operation: Rd <- Rd • Rr Status Register (SREG): S, V=0, N, Z (H, C "
+"unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_or:1
+msgid "Logical OR (OR)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_or:4
+msgid ""
+"Operation: Rd <- Rd v Rr Status Register (SREG): S, V=0, N, Z (H, C "
+"unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_eor:1
+msgid "Exclusive OR (EOR)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_eor:4
+msgid ""
+"Operation: Rd <- Rd ⊕ Rr Status Register (SREG): S, V=0, N, Z (H, C "
+"unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sub:1
+msgid "Subtract without Carry (SUB)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sub:4
+msgid "Operation: Rd <- Rd - Rr Status Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_inc:1
+msgid "Increment (INC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_inc:4
+msgid "Operation: Rd <- Rd + 1 Status Register (SREG): S, V, N, Z (C unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_dec:1
+msgid "Decrement (DEC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_dec:4
+msgid "Operation: Rd <- Rd - 1 Status Register (SREG): S, V, N, Z (C unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mul:1
+msgid "Multiply Unsigned (MUL)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mul:3
+msgid ""
+"AVR Instruction Set Manual DS40002198A: R1:R0 <- Rd * Rr (unsigned). SREG"
+" C: Set if bit 15 of result is set; cleared otherwise. SREG Z: Set if "
+"result is $0000; cleared otherwise."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mul:8
+msgid "Multiplicand register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mul:9
+msgid "Multiplier register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_muls:1
+msgid "Multiply Signed (MULS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_muls:3
+msgid ""
+"AVR Instruction Set Manual DS40002198A: R1:R0 <- Rd * Rr (signed). SREG "
+"C: Set if bit 15 of result is set; cleared otherwise. SREG Z: Set if "
+"result is $0000; cleared otherwise."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_muls:8 tiny8.cpu.CPU.op_mulsu:8
+msgid "Multiplicand signed register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_muls:9
+msgid "Multiplier signed register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mulsu:1
+msgid "Multiply Signed with Unsigned (MULSU)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mulsu:3
+msgid ""
+"AVR Instruction Set Manual DS40002198A: R1:R0 <- Rd * Rr (Rd signed, Rr "
+"unsigned). SREG C: Set if bit 15 of result is set; cleared otherwise. "
+"SREG Z: Set if result is $0000; cleared otherwise."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_mulsu:9
+msgid "Multiplier unsigned register index (0..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adc:1
+msgid "Add with Carry (ADC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adc:4
+msgid "Operation: Rd <- Rd + Rr + C Status Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_clr:1
+msgid "Clear Register: Rd <- Rd ⊕ Rd = $00 (EOR Rd, Rd)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_asr:3 tiny8.cpu.CPU.op_clr:3 tiny8.cpu.CPU.op_com:3
+#: tiny8.cpu.CPU.op_lsl:3 tiny8.cpu.CPU.op_lsr:3 tiny8.cpu.CPU.op_neg:3
+#: tiny8.cpu.CPU.op_rol:3 tiny8.cpu.CPU.op_ror:3 tiny8.cpu.CPU.op_ser:3
+#: tiny8.cpu.CPU.op_swap:3 tiny8.cpu.CPU.op_tst:3
+msgid "Status Register (SREG) per AVR Manual DS40002198A:"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_clr:4
+msgid ""
+"S: 0, V: 0, N: 0, Z: 1; H, C, T, I unaffected. Alternative name to the "
+"EOR Rd, Rd instruction."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ser:1
+msgid "Set Register: Rd <- $FF (LDI Rd, $FF)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ser:4
+msgid "None affected. Alternative name to the LDI Rd, $FF instruction."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_in:1
+msgid "Load an I/O Location to Register (IN)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_in:4
+msgid "Operation: Rd <- P Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_in:8
+msgid "Port/memory address to read from."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_out:1
+msgid "Store Register to an I/O Location (OUT)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_out:4
+msgid "Operation: P <- Rr Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_out:7
+msgid "Port/memory address to write to."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_jmp:1
+msgid "Jump (JMP)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_jmp:4
+msgid "Operation: PC <- k Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_jmp:7
+msgid "Target label name or instruction address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_jmp:9
+msgid "If target label string is not found."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpi:1
+msgid "Compare with Immediate (CPI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpi:4
+msgid ""
+"Operation: Rd - K (16 <= d <= 31, 0 <= K <= 255) Status Register (SREG): "
+"H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpi:7
+msgid "Register index to compare (16..31)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cp:1
+msgid "Compare (CP)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cp:4
+msgid "Operation: Rd - Rr Status Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cp:7 tiny8.cpu.CPU.op_cpse:7
+msgid "First register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cp:8 tiny8.cpu.CPU.op_cpse:8
+msgid "Second register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lsl:1
+msgid "Logical Shift Left: C <- Rd7, Rd(n+1) <- Rd(n), Rd0 <- 0."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lsl:4
+msgid ""
+"H: Rd3, S: N ⊕ V, V: N ⊕ C, N: R7, Z: Set if result is $00, C: Rd7 "
+"Alternative name to the ADD Rd, Rd instruction."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lsr:1
+msgid "Logical Shift Right: 0 -> Rd7 -> ... -> Rd0 -> C."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lsr:4
+msgid ""
+"S: N ⊕ V, V: C, N: 0, Z: Set if result is $00, C: Rd0 H, T, I unaffected "
+"(-)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_asr:1
+msgid "Arithmetic Shift Right: Rd7 -> Rd7 -> ... -> Rd0 -> C."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_asr:4 tiny8.cpu.CPU.op_ror:4
+msgid ""
+"S: N ⊕ V, V: N ⊕ C, N: R7, Z: Set if result is $00, C: Rd0 H, T, I "
+"unaffected (-)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rol:1
+msgid "Rotate Left Through Carry: C <- Rd7, Rd(n+1) <- Rd(n), Rd0 <- C."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rol:4
+msgid ""
+"H: Rd3, S: N ⊕ V, V: N ⊕ C, N: R7, Z: Set if result is $00, C: Rd7 "
+"Alternative name to the ADC Rd, Rd instruction."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ror:1
+msgid "Rotate Right Through Carry: Rd7 <- C, Rd(n) <- Rd(n+1), C <- Rd0."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_com:1
+msgid "One's Complement: Rd <- $FF - Rd."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_com:4
+msgid ""
+"S: N ⊕ V, V: 0, N: R7, Z: Set if result is $00, C: 1 H, T, I unaffected "
+"(-)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_neg:1
+msgid "Two's Complement: Rd <- $00 - Rd."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_neg:4
+msgid ""
+"H: R3 + ~Rd3, S: N ⊕ V, V: Rd == $80, N: R7, Z: Set if result is $00, C: "
+"Rd != $00"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_swap:1
+msgid "Swap Nibbles: Rd(7..4) <-> Rd(3..0)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_swap:4
+msgid "None affected."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_tst:1
+msgid "Test for Zero or Minus: Rd & Rd."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_tst:4
+msgid ""
+"S: N ⊕ V, V: 0, N: R7, Z: Set if Rd is $00 Alternative name to the AND "
+"Rd, Rd instruction."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_tst:7
+msgid "Register index to test."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_andi:1
+msgid "Logical AND with Immediate (ANDI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_andi:4
+msgid ""
+"Operation: Rd <- Rd • K (16 <= d <= 31, 0 <= K <= 255) Status Register "
+"(SREG): S, V=0, N, Z (H, C unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_andi:8 tiny8.cpu.CPU.op_ori:8 tiny8.cpu.CPU.op_sbci:8
+#: tiny8.cpu.CPU.op_subi:8
+msgid "Immediate value."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ori:1
+msgid "Logical OR with Immediate (ORI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ori:4
+msgid ""
+"Operation: Rd <- Rd v K (16 <= d <= 31, 0 <= K <= 255) Status Register "
+"(SREG): S, V=0, N, Z (H, C unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_subi:1
+msgid "Subtract Immediate (SUBI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_subi:4
+msgid ""
+"Operation: Rd <- Rd - K (16 <= d <= 31, 0 <= K <= 255) Status Register "
+"(SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbc:1
+msgid "Subtract with Carry (SBC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbc:4
+msgid "Operation: Rd <- Rd - Rr - C Status Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbci:1
+msgid "Subtract Immediate with Carry (SBCI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbci:4
+msgid ""
+"Operation: Rd <- Rd - K - C (16 <= d <= 31, 0 <= K <= 255) Status "
+"Register (SREG): H, S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sei:1
+msgid "Set Global Interrupt Flag (SEI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sei:4
+msgid "Operation: I <- 1 Status Register (SREG): I"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cli:1
+msgid "Clear Global Interrupt Flag (CLI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cli:4
+msgid "Operation: I <- 0 Status Register (SREG): I"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpse:1
+msgid "Compare Skip if Equal (CPSE)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cpse:4
+msgid ""
+"Operation: If Rd = Rr then PC <- PC + 2 (or 3) Status Register (SREG): "
+"None (all flags unaffected)"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbrs:1
+msgid "Skip if Bit in Register is Set (SBRS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbrs:4
+msgid ""
+"Operation: If Rd(b) = 1 then PC <- PC + 2 (or 3) Status Register (SREG): "
+"None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbrc:7 tiny8.cpu.CPU.op_sbrs:7
+msgid "Register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cbi:8 tiny8.cpu.CPU.op_sbi:8 tiny8.cpu.CPU.op_sbic:8
+#: tiny8.cpu.CPU.op_sbis:8 tiny8.cpu.CPU.op_sbrc:8 tiny8.cpu.CPU.op_sbrs:8
+msgid "Bit index (0..7)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbrc:1
+msgid "Skip if Bit in Register is Cleared (SBRC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbrc:4
+msgid ""
+"Operation: If Rd(b) = 0 then PC <- PC + 2 (or 3) Status Register (SREG): "
+"None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbis:1
+msgid "Skip if Bit in I/O Register is Set (SBIS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbis:4
+msgid ""
+"Operation: If P(b) = 1 then PC <- PC + 2 (or 3) Status Register (SREG): "
+"None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbic:7 tiny8.cpu.CPU.op_sbis:7
+msgid "I/O or RAM address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbic:1
+msgid "Skip if Bit in I/O Register is Cleared (SBIC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbic:4
+msgid ""
+"Operation: If P(b) = 0 then PC <- PC + 2 (or 3) Status Register (SREG): "
+"None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbiw:1
+msgid "Subtract Immediate from Word (SBIW)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbiw:4
+#, python-brace-format
+msgid ""
+"Operation: Rd+1:Rd <- Rd+1:Rd - K (d in {24, 26, 28, 30}, 0 <= K <= 63) "
+"Status Register (SREG): S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adiw:7 tiny8.cpu.CPU.op_sbiw:7
+msgid "Low register index of register pair (e.g. 24, 26, 28, 30)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbiw:8
+msgid "Immediate value to subtract."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adiw:1
+msgid "Add Immediate to Word (ADIW)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adiw:4
+#, python-brace-format
+msgid ""
+"Operation: Rd+1:Rd <- Rd+1:Rd + K (d in {24, 26, 28, 30}, 0 <= K <= 63) "
+"Status Register (SREG): S, V, N, Z, C"
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_adiw:8
+msgid "Immediate value to add."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rjmp:1
+msgid "Relative Jump (RJMP)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rjmp:4
+msgid "Operation: PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rjmp:7
+msgid "Jump target offset or symbolic label."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rcall:1
+msgid "Relative Call to Subroutine (RCALL)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rcall:4
+msgid "Operation: PC <- PC + k + 1, STACK <- PC + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_rcall:7
+msgid "Call target offset or symbolic label."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbi:1
+msgid "Set Bit in I/O Register (SBI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sbi:4
+msgid "Operation: I/O(P, b) <- 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cbi:1
+msgid "Clear Bit in I/O Register (CBI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_cbi:4
+msgid "Operation: I/O(P, b) <- 0 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ld:1
+msgid "Load Indirect from Data Space to Register (LD)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ld:4
+msgid "Operation: Rd <- (X / Y / Z) Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ld:7 tiny8.cpu.CPU.op_st:7
+msgid ""
+"Supports 16-bit pointer pairs (X=R27:R26, Y=R29:R28, Z=R31:R30) when high"
+" byte is set."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ld:10 tiny8.cpu.CPU.op_st:9
+msgid "Pointer register index."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_st:1
+msgid "Store Indirect from Register to Data Space (ST)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_st:4
+msgid "Operation: (X / Y / Z) <- Rr Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lds:1
+msgid "Load Direct from Data Space (LDS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lds:4
+msgid "Operation: Rd <- (k) Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_lds:8 tiny8.cpu.CPU.op_sts:7
+msgid "Memory address (0..ram_size-1)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sts:1
+msgid "Store Direct to Data Space (STS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_sts:4
+msgid "Operation: (k) <- Rr Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brne:1
+msgid "Branch if Not Equal (BRNE)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brne:4
+msgid "Operation: If Z = 0 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brcc:7 tiny8.cpu.CPU.op_brcs:7 tiny8.cpu.CPU.op_breq:7
+#: tiny8.cpu.CPU.op_brge:7 tiny8.cpu.CPU.op_brlo:7 tiny8.cpu.CPU.op_brlt:7
+#: tiny8.cpu.CPU.op_brmi:7 tiny8.cpu.CPU.op_brne:7 tiny8.cpu.CPU.op_brpl:7
+#: tiny8.cpu.CPU.op_brsh:7
+msgid "Jump target label or numeric address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_breq:1
+msgid "Branch if Equal (BREQ)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_breq:4
+msgid "Operation: If Z = 1 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brcs:1
+msgid "Branch if Carry Set (BRCS)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brcs:4
+msgid "Operation: If C = 1 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brcc:1
+msgid "Branch if Carry Cleared (BRCC)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brcc:4
+msgid "Operation: If C = 0 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brlo:1
+msgid "Branch if Lower Unsigned (BRLO)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brlo:4
+msgid ""
+"Operation: If C = 1 then PC <- PC + k + 1 (alias for BRCS) Status "
+"Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brsh:1
+msgid "Branch if Same or Higher Unsigned (BRSH)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brsh:4
+msgid ""
+"Operation: If C = 0 then PC <- PC + k + 1 (alias for BRCC) Status "
+"Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brge:1
+msgid "Branch if Greater or Equal Signed (BRGE)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brge:4
+msgid ""
+"Operation: If S = 0 (N ⊕ V = 0) then PC <- PC + k + 1 Status Register "
+"(SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brlt:1
+msgid "Branch if Less Than Signed (BRLT)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brlt:4
+msgid ""
+"Operation: If S = 1 (N ⊕ V = 1) then PC <- PC + k + 1 Status Register "
+"(SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brmi:1
+msgid "Branch if Minus (BRMI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brmi:4
+msgid "Operation: If N = 1 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brpl:1
+msgid "Branch if Plus (BRPL)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_brpl:4
+msgid "Operation: If N = 0 then PC <- PC + k + 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_push:1
+msgid "Push Register on Stack (PUSH)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_push:4
+msgid "Operation: STACK <- Rr, SP <- SP - 1 Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_pop:1
+msgid "Pop Register from Stack (POP)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_pop:4
+msgid "Operation: SP <- SP + 1, Rd <- STACK Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_call:1
+msgid "Long Call to Subroutine (CALL)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_call:4
+msgid "Operation: STACK <- PC + 1, PC <- k Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_call:7
+msgid "Subroutine target label or address."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ret:1
+msgid "Return from Subroutine (RET)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_ret:4
+msgid "Operation: PC <- STACK Status Register (SREG): None."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_reti:1
+msgid "Return from Interrupt (RETI)."
+msgstr ""
+
+#: of tiny8.cpu.CPU.op_reti:4
+msgid "Operation: PC <- STACK, I <- 1 Status Register (SREG): I"
+msgstr ""
+
+#: of tiny8.cpu.CPU.trigger_interrupt:1
+msgid "Trigger an interrupt if enabled in vector configuration."
+msgstr ""
+
+#: of tiny8.cpu.CPU.trigger_interrupt:3
+msgid "Vector entry address in RAM."
+msgstr ""
+
+#: ../../api/tiny8.rst:40
+msgid "tiny8.memory module"
+msgstr ""
+
+#: of tiny8.memory:1
+msgid "Memory model for tiny8 providing RAM and ROM with change tracking."
+msgstr ""
+
+#: of tiny8.memory.Memory:1
+msgid "Byte-addressable RAM/ROM memory subsystem."
+msgstr ""
+
+#: of tiny8.memory.Memory:3
+msgid ""
+"Maintains separate RAM and ROM buffers as 8-bit unsigned bytes (0-255) "
+"and logs modifications for tracing and visualization."
+msgstr ""
+
+#: of tiny8.memory.Memory:6
+msgid "Number of bytes in RAM. Defaults to 65536."
+msgstr ""
+
+#: of tiny8.memory.Memory:7
+msgid "Number of bytes in ROM. Defaults to 2048."
+msgstr ""
+
+#: of tiny8.memory.Memory:11
+msgid "Size of RAM in bytes."
+msgstr ""
+
+#: of tiny8.memory.Memory:15
+msgid "Size of ROM in bytes."
+msgstr ""
+
+#: of tiny8.memory.Memory:19
+msgid "Bytearray representing RAM contents."
+msgstr ""
+
+#: of tiny8.memory.Memory:23
+msgid "Bytearray representing ROM contents."
+msgstr ""
+
+#: of tiny8.memory.Memory:27
+msgid "Log of RAM writes as (addr, old_val, new_val, step) tuples."
+msgstr ""
+
+#: of tiny8.memory.Memory:31
+msgid "Log of ROM writes as (addr, old_val, new_val, step) tuples."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_ram:1
+msgid "Read a byte from RAM."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_ram:3 tiny8.memory.Memory.write_ram:3
+msgid "Memory address in the range [0, ram_size)."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_ram:5 tiny8.memory.Memory.read_rom:5
+msgid "The byte value stored at the address."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_ram:7 tiny8.memory.Memory.write_ram:7
+msgid "If addr is outside valid RAM boundaries."
+msgstr ""
+
+#: of tiny8.memory.Memory.write_ram:1
+msgid "Write a byte to RAM and log change if value changed."
+msgstr ""
+
+#: of tiny8.memory.Memory.write_ram:4
+msgid "Byte value to store (masked to 8-bit)."
+msgstr ""
+
+#: of tiny8.memory.Memory.write_ram:5
+msgid "Step index associated with this write. Defaults to 0."
+msgstr ""
+
+#: of tiny8.memory.Memory.clear_changes:1
+msgid "Clear memory modification history to free memory."
+msgstr ""
+
+#: of tiny8.memory.Memory.restore_ram:1
+msgid "Restore RAM contents from a dictionary of non-zero entries."
+msgstr ""
+
+#: of tiny8.memory.Memory.load_rom:1
+msgid "Load byte sequence into ROM and record changes."
+msgstr ""
+
+#: of tiny8.memory.Memory.load_rom:3
+msgid "Sequence of byte values to load into ROM."
+msgstr ""
+
+#: of tiny8.memory.Memory.load_rom:5
+msgid "If data length exceeds configured rom_size."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_rom:1
+msgid "Read a byte from ROM."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_rom:3
+msgid "ROM address in the range [0, rom_size)."
+msgstr ""
+
+#: of tiny8.memory.Memory.read_rom:7
+msgid "If addr is outside valid ROM boundaries."
+msgstr ""
+
+#: of tiny8.memory.Memory.snapshot_ram:1
+msgid "Return a shallow copy of RAM contents."
+msgstr ""
+
+#: of tiny8.memory.Memory.snapshot_ram:3
+msgid "List of integers representing current RAM."
+msgstr ""
+
+#: of tiny8.memory.Memory.snapshot_rom:1
+msgid "Return a shallow copy of ROM contents."
+msgstr ""
+
+#: of tiny8.memory.Memory.snapshot_rom:3
+msgid "List of integers representing current ROM."
+msgstr ""
+
+#: ../../api/tiny8.rst:48
+msgid "tiny8.tui module"
+msgstr ""
+
+#: of tiny8.tui:1
+msgid "Modern Textual-based interactive debugger and dashboard for Tiny8."
+msgstr ""
+
+#: of tiny8.tui:3
+msgid ""
+"Provides an OLED black themed TUI with real-time registers, memory, SREG "
+"flags, gradient heatmap bars, stack explorer, breakpoints, and telemetry."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager:1
+msgid "Manages sparse snapshots and loop detection for time-travel."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager:3
+msgid ""
+"Stores complete CPU state snapshots every `interval` steps (default 100),"
+" enabling instant seeking and reverse playback without heavy RAM "
+"overhead."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.record:1
+msgid "Store a CPU snapshot at the given step."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.record_if_interval:1
+msgid "Record snapshot if step is a multiple of interval."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.restore_exact_step:1
+msgid "Restore CPU to exact target_step using the closest preceding snapshot."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.invalidate_after:1
+msgid "Invalidate checkpoints after modified step on memory/register edit."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.detect_loop:1
+msgid "Detect infinite loop (e.g. self-jump HALT or cycling registers/PC)."
+msgstr ""
+
+#: of tiny8.tui.CheckpointManager.precompute:1
+msgid ""
+"Precompute execution checkpoints until an infinite loop or halt is "
+"detected."
+msgstr ""
+
+#: of tiny8.tui.interpolate_color:1
+msgid "Interpolate RGB color matching authentic Viridis style."
+msgstr ""
+
+#: of tiny8.tui.interpolate_color:3
+msgid "Float value from 0.0 to 1.0."
+msgstr ""
+
+#: of tiny8.tui.interpolate_color:5
+msgid "Hex RGB color string (e.g. '#FDE725')."
+msgstr ""
+
+#: of tiny8.tui.get_widget_available_lines:1
+msgid ""
+"Calculate visible content lines available for widget based on "
+"terminal/screen height."
+msgstr ""
+
+#: of tiny8.tui.render_btop_bar:1
+msgid "Render horizontal gradient heatmap bar with trailing dot fill."
+msgstr ""
+
+#: of tiny8.tui.render_btop_bar:3
+msgid "Current numerical value."
+msgstr ""
+
+#: of tiny8.tui.render_btop_bar:4
+msgid "Upper scale limit."
+msgstr ""
+
+#: of tiny8.tui.render_btop_bar:5
+msgid "Character width of bar."
+msgstr ""
+
+#: of tiny8.tui.render_btop_bar:7
+msgid "Rich Text object containing gradient blocks and shade dots."
+msgstr ""
+
+#: of tiny8.tui.BtopRegistersWidget:1 tiny8.tui.CVariablesWidget:1
+#: tiny8.tui.CallStackWidget:1 tiny8.tui.CodeViewWidget:1
+#: tiny8.tui.InstructionDetailWidget:1 tiny8.tui.LazyStatusWidget:1
+#: tiny8.tui.MemoryMatrixWidget:1 tiny8.tui.MemoryWidget:1
+#: tiny8.tui.RegistersWidget:1 tiny8.tui.SregWidget:1 tiny8.tui.StackWidget:1
+#: tiny8.tui.TelemetryWidget:1
+msgid "Bases: :py:class:`~textual.widgets._static.Static`"
+msgstr ""
+
+#: of tiny8.tui.SregWidget:1
+msgid "Badge-style display for SREG condition flags."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:1
+#: tiny8.tui.BtopRegistersWidget.regs:1 tiny8.tui.BtopRegistersWidget.start_r:1
+#: tiny8.tui.BtopRegistersWidget.visible_count:1
+#: tiny8.tui.CVariablesWidget.mem:1 tiny8.tui.CVariablesWidget.prev_mem:1
+#: tiny8.tui.CVariablesWidget.var_symbols:1
+#: tiny8.tui.CallStackWidget.current_pc:1 tiny8.tui.CallStackWidget.frames:1
+#: tiny8.tui.CodeViewWidget.breakpoints:1 tiny8.tui.CodeViewWidget.current_pc:1
+#: tiny8.tui.CodeViewWidget.pc_to_line:1 tiny8.tui.CodeViewWidget.program:1
+#: tiny8.tui.CodeViewWidget.source_lines:1
+#: tiny8.tui.InstructionDetailWidget.current_instr:1
+#: tiny8.tui.InstructionDetailWidget.pc:1
+#: tiny8.tui.InstructionDetailWidget.source_line:1
+#: tiny8.tui.InstructionDetailWidget.source_text:1
+#: tiny8.tui.InstructionDetailWidget.sp:1
+#: tiny8.tui.LazyStatusWidget.current_instr:1
+#: tiny8.tui.LazyStatusWidget.current_pc:1
+#: tiny8.tui.LazyStatusWidget.current_sp:1
+#: tiny8.tui.LazyStatusWidget.current_step:1
+#: tiny8.tui.LazyStatusWidget.filename:1 tiny8.tui.LazyStatusWidget.hint:1
+#: tiny8.tui.LazyStatusWidget.mode:1 tiny8.tui.LazyStatusWidget.sub_info:1
+#: tiny8.tui.LazyStatusWidget.total_steps:1
+#: tiny8.tui.MemoryMatrixWidget.base_addr:1 tiny8.tui.MemoryMatrixWidget.mem:1
+#: tiny8.tui.MemoryMatrixWidget.read_counts:1
+#: tiny8.tui.MemoryMatrixWidget.write_counts:1
+#: tiny8.tui.MemoryWidget.color_mode:1 tiny8.tui.MemoryWidget.mem:1
+#: tiny8.tui.MemoryWidget.prev_mem:1 tiny8.tui.MemoryWidget.show_hex:1
+#: tiny8.tui.MemoryWidget.start_addr:1 tiny8.tui.RegistersWidget.prev_regs:1
+#: tiny8.tui.RegistersWidget.regs:1 tiny8.tui.SregWidget.sreg:1
+#: tiny8.tui.StackWidget.mem:1 tiny8.tui.StackWidget.ram_size:1
+#: tiny8.tui.StackWidget.sp:1 tiny8.tui.TelemetryWidget.current_step:1
+#: tiny8.tui.TelemetryWidget.instr_counts:1
+#: tiny8.tui.TelemetryWidget.total_steps:1 tiny8.tui.Tiny8App.batch_size:1
+#: tiny8.tui.Tiny8App.breakpoints:1 tiny8.tui.Tiny8App.color_mode:1
+#: tiny8.tui.Tiny8App.current_idx:1 tiny8.tui.Tiny8App.execution_mode:1
+#: tiny8.tui.Tiny8App.mem_start:1 tiny8.tui.Tiny8App.play_direction:1
+#: tiny8.tui.Tiny8App.playback_rate_idx:1 tiny8.tui.Tiny8App.playing:1
+#: tiny8.tui.Tiny8App.reg_start:1 tiny8.tui.Tiny8App.show_hex:1
+#: tiny8.tui.Tiny8App.speed_ms:1 tiny8.tui.VimTextArea.is_modified:1
+#: tiny8.tui.VimTextArea.mode:1
+msgid "Create a reactive attribute."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:3
+#: tiny8.tui.BtopRegistersWidget.regs:3 tiny8.tui.BtopRegistersWidget.start_r:3
+#: tiny8.tui.BtopRegistersWidget.visible_count:3
+#: tiny8.tui.CVariablesWidget.mem:3 tiny8.tui.CVariablesWidget.prev_mem:3
+#: tiny8.tui.CVariablesWidget.var_symbols:3
+#: tiny8.tui.CallStackWidget.current_pc:3 tiny8.tui.CallStackWidget.frames:3
+#: tiny8.tui.CodeViewWidget.breakpoints:3 tiny8.tui.CodeViewWidget.current_pc:3
+#: tiny8.tui.CodeViewWidget.pc_to_line:3 tiny8.tui.CodeViewWidget.program:3
+#: tiny8.tui.CodeViewWidget.source_lines:3
+#: tiny8.tui.InstructionDetailWidget.current_instr:3
+#: tiny8.tui.InstructionDetailWidget.pc:3
+#: tiny8.tui.InstructionDetailWidget.source_line:3
+#: tiny8.tui.InstructionDetailWidget.source_text:3
+#: tiny8.tui.InstructionDetailWidget.sp:3
+#: tiny8.tui.LazyStatusWidget.current_instr:3
+#: tiny8.tui.LazyStatusWidget.current_pc:3
+#: tiny8.tui.LazyStatusWidget.current_sp:3
+#: tiny8.tui.LazyStatusWidget.current_step:3
+#: tiny8.tui.LazyStatusWidget.filename:3 tiny8.tui.LazyStatusWidget.hint:3
+#: tiny8.tui.LazyStatusWidget.mode:3 tiny8.tui.LazyStatusWidget.sub_info:3
+#: tiny8.tui.LazyStatusWidget.total_steps:3
+#: tiny8.tui.MemoryMatrixWidget.base_addr:3 tiny8.tui.MemoryMatrixWidget.mem:3
+#: tiny8.tui.MemoryMatrixWidget.read_counts:3
+#: tiny8.tui.MemoryMatrixWidget.write_counts:3
+#: tiny8.tui.MemoryWidget.color_mode:3 tiny8.tui.MemoryWidget.mem:3
+#: tiny8.tui.MemoryWidget.prev_mem:3 tiny8.tui.MemoryWidget.show_hex:3
+#: tiny8.tui.MemoryWidget.start_addr:3 tiny8.tui.RegistersWidget.prev_regs:3
+#: tiny8.tui.RegistersWidget.regs:3 tiny8.tui.SregWidget.sreg:3
+#: tiny8.tui.StackWidget.mem:3 tiny8.tui.StackWidget.ram_size:3
+#: tiny8.tui.StackWidget.sp:3 tiny8.tui.TelemetryWidget.current_step:3
+#: tiny8.tui.TelemetryWidget.instr_counts:3
+#: tiny8.tui.TelemetryWidget.total_steps:3 tiny8.tui.Tiny8App.batch_size:3
+#: tiny8.tui.Tiny8App.breakpoints:3 tiny8.tui.Tiny8App.color_mode:3
+#: tiny8.tui.Tiny8App.current_idx:3 tiny8.tui.Tiny8App.execution_mode:3
+#: tiny8.tui.Tiny8App.mem_start:3 tiny8.tui.Tiny8App.play_direction:3
+#: tiny8.tui.Tiny8App.playback_rate_idx:3 tiny8.tui.Tiny8App.playing:3
+#: tiny8.tui.Tiny8App.reg_start:3 tiny8.tui.Tiny8App.show_hex:3
+#: tiny8.tui.Tiny8App.speed_ms:3 tiny8.tui.VimTextArea.is_modified:3
+#: tiny8.tui.VimTextArea.mode:3
+msgid "A default value or callable that returns a default."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:4
+#: tiny8.tui.BtopRegistersWidget.regs:4 tiny8.tui.BtopRegistersWidget.start_r:4
+#: tiny8.tui.BtopRegistersWidget.visible_count:4
+#: tiny8.tui.CVariablesWidget.mem:4 tiny8.tui.CVariablesWidget.prev_mem:4
+#: tiny8.tui.CVariablesWidget.var_symbols:4
+#: tiny8.tui.CallStackWidget.current_pc:4 tiny8.tui.CallStackWidget.frames:4
+#: tiny8.tui.CodeViewWidget.breakpoints:4 tiny8.tui.CodeViewWidget.current_pc:4
+#: tiny8.tui.CodeViewWidget.pc_to_line:4 tiny8.tui.CodeViewWidget.program:4
+#: tiny8.tui.CodeViewWidget.source_lines:4
+#: tiny8.tui.InstructionDetailWidget.current_instr:4
+#: tiny8.tui.InstructionDetailWidget.pc:4
+#: tiny8.tui.InstructionDetailWidget.source_line:4
+#: tiny8.tui.InstructionDetailWidget.source_text:4
+#: tiny8.tui.InstructionDetailWidget.sp:4
+#: tiny8.tui.LazyStatusWidget.current_instr:4
+#: tiny8.tui.LazyStatusWidget.current_pc:4
+#: tiny8.tui.LazyStatusWidget.current_sp:4
+#: tiny8.tui.LazyStatusWidget.current_step:4
+#: tiny8.tui.LazyStatusWidget.filename:4 tiny8.tui.LazyStatusWidget.hint:4
+#: tiny8.tui.LazyStatusWidget.mode:4 tiny8.tui.LazyStatusWidget.sub_info:4
+#: tiny8.tui.LazyStatusWidget.total_steps:4
+#: tiny8.tui.MemoryMatrixWidget.base_addr:4 tiny8.tui.MemoryMatrixWidget.mem:4
+#: tiny8.tui.MemoryMatrixWidget.read_counts:4
+#: tiny8.tui.MemoryMatrixWidget.write_counts:4
+#: tiny8.tui.MemoryWidget.color_mode:4 tiny8.tui.MemoryWidget.mem:4
+#: tiny8.tui.MemoryWidget.prev_mem:4 tiny8.tui.MemoryWidget.show_hex:4
+#: tiny8.tui.MemoryWidget.start_addr:4 tiny8.tui.RegistersWidget.prev_regs:4
+#: tiny8.tui.RegistersWidget.regs:4 tiny8.tui.SregWidget.sreg:4
+#: tiny8.tui.StackWidget.mem:4 tiny8.tui.StackWidget.ram_size:4
+#: tiny8.tui.StackWidget.sp:4 tiny8.tui.TelemetryWidget.current_step:4
+#: tiny8.tui.TelemetryWidget.instr_counts:4
+#: tiny8.tui.TelemetryWidget.total_steps:4 tiny8.tui.Tiny8App.batch_size:4
+#: tiny8.tui.Tiny8App.breakpoints:4 tiny8.tui.Tiny8App.color_mode:4
+#: tiny8.tui.Tiny8App.current_idx:4 tiny8.tui.Tiny8App.execution_mode:4
+#: tiny8.tui.Tiny8App.mem_start:4 tiny8.tui.Tiny8App.play_direction:4
+#: tiny8.tui.Tiny8App.playback_rate_idx:4 tiny8.tui.Tiny8App.playing:4
+#: tiny8.tui.Tiny8App.reg_start:4 tiny8.tui.Tiny8App.show_hex:4
+#: tiny8.tui.Tiny8App.speed_ms:4 tiny8.tui.VimTextArea.is_modified:4
+#: tiny8.tui.VimTextArea.mode:4
+msgid "Perform a layout on change."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:5
+#: tiny8.tui.BtopRegistersWidget.regs:5 tiny8.tui.BtopRegistersWidget.start_r:5
+#: tiny8.tui.BtopRegistersWidget.visible_count:5
+#: tiny8.tui.CVariablesWidget.mem:5 tiny8.tui.CVariablesWidget.prev_mem:5
+#: tiny8.tui.CVariablesWidget.var_symbols:5
+#: tiny8.tui.CallStackWidget.current_pc:5 tiny8.tui.CallStackWidget.frames:5
+#: tiny8.tui.CodeViewWidget.breakpoints:5 tiny8.tui.CodeViewWidget.current_pc:5
+#: tiny8.tui.CodeViewWidget.pc_to_line:5 tiny8.tui.CodeViewWidget.program:5
+#: tiny8.tui.CodeViewWidget.source_lines:5
+#: tiny8.tui.InstructionDetailWidget.current_instr:5
+#: tiny8.tui.InstructionDetailWidget.pc:5
+#: tiny8.tui.InstructionDetailWidget.source_line:5
+#: tiny8.tui.InstructionDetailWidget.source_text:5
+#: tiny8.tui.InstructionDetailWidget.sp:5
+#: tiny8.tui.LazyStatusWidget.current_instr:5
+#: tiny8.tui.LazyStatusWidget.current_pc:5
+#: tiny8.tui.LazyStatusWidget.current_sp:5
+#: tiny8.tui.LazyStatusWidget.current_step:5
+#: tiny8.tui.LazyStatusWidget.filename:5 tiny8.tui.LazyStatusWidget.hint:5
+#: tiny8.tui.LazyStatusWidget.mode:5 tiny8.tui.LazyStatusWidget.sub_info:5
+#: tiny8.tui.LazyStatusWidget.total_steps:5
+#: tiny8.tui.MemoryMatrixWidget.base_addr:5 tiny8.tui.MemoryMatrixWidget.mem:5
+#: tiny8.tui.MemoryMatrixWidget.read_counts:5
+#: tiny8.tui.MemoryMatrixWidget.write_counts:5
+#: tiny8.tui.MemoryWidget.color_mode:5 tiny8.tui.MemoryWidget.mem:5
+#: tiny8.tui.MemoryWidget.prev_mem:5 tiny8.tui.MemoryWidget.show_hex:5
+#: tiny8.tui.MemoryWidget.start_addr:5 tiny8.tui.RegistersWidget.prev_regs:5
+#: tiny8.tui.RegistersWidget.regs:5 tiny8.tui.SregWidget.sreg:5
+#: tiny8.tui.StackWidget.mem:5 tiny8.tui.StackWidget.ram_size:5
+#: tiny8.tui.StackWidget.sp:5 tiny8.tui.TelemetryWidget.current_step:5
+#: tiny8.tui.TelemetryWidget.instr_counts:5
+#: tiny8.tui.TelemetryWidget.total_steps:5 tiny8.tui.Tiny8App.batch_size:5
+#: tiny8.tui.Tiny8App.breakpoints:5 tiny8.tui.Tiny8App.color_mode:5
+#: tiny8.tui.Tiny8App.current_idx:5 tiny8.tui.Tiny8App.execution_mode:5
+#: tiny8.tui.Tiny8App.mem_start:5 tiny8.tui.Tiny8App.play_direction:5
+#: tiny8.tui.Tiny8App.playback_rate_idx:5 tiny8.tui.Tiny8App.playing:5
+#: tiny8.tui.Tiny8App.reg_start:5 tiny8.tui.Tiny8App.show_hex:5
+#: tiny8.tui.Tiny8App.speed_ms:5 tiny8.tui.VimTextArea.is_modified:5
+#: tiny8.tui.VimTextArea.mode:5
+msgid "Perform a repaint on change."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:6
+#: tiny8.tui.BtopRegistersWidget.regs:6 tiny8.tui.BtopRegistersWidget.start_r:6
+#: tiny8.tui.BtopRegistersWidget.visible_count:6
+#: tiny8.tui.CVariablesWidget.mem:6 tiny8.tui.CVariablesWidget.prev_mem:6
+#: tiny8.tui.CVariablesWidget.var_symbols:6
+#: tiny8.tui.CallStackWidget.current_pc:6 tiny8.tui.CallStackWidget.frames:6
+#: tiny8.tui.CodeViewWidget.breakpoints:6 tiny8.tui.CodeViewWidget.current_pc:6
+#: tiny8.tui.CodeViewWidget.pc_to_line:6 tiny8.tui.CodeViewWidget.program:6
+#: tiny8.tui.CodeViewWidget.source_lines:6
+#: tiny8.tui.InstructionDetailWidget.current_instr:6
+#: tiny8.tui.InstructionDetailWidget.pc:6
+#: tiny8.tui.InstructionDetailWidget.source_line:6
+#: tiny8.tui.InstructionDetailWidget.source_text:6
+#: tiny8.tui.InstructionDetailWidget.sp:6
+#: tiny8.tui.LazyStatusWidget.current_instr:6
+#: tiny8.tui.LazyStatusWidget.current_pc:6
+#: tiny8.tui.LazyStatusWidget.current_sp:6
+#: tiny8.tui.LazyStatusWidget.current_step:6
+#: tiny8.tui.LazyStatusWidget.filename:6 tiny8.tui.LazyStatusWidget.hint:6
+#: tiny8.tui.LazyStatusWidget.mode:6 tiny8.tui.LazyStatusWidget.sub_info:6
+#: tiny8.tui.LazyStatusWidget.total_steps:6
+#: tiny8.tui.MemoryMatrixWidget.base_addr:6 tiny8.tui.MemoryMatrixWidget.mem:6
+#: tiny8.tui.MemoryMatrixWidget.read_counts:6
+#: tiny8.tui.MemoryMatrixWidget.write_counts:6
+#: tiny8.tui.MemoryWidget.color_mode:6 tiny8.tui.MemoryWidget.mem:6
+#: tiny8.tui.MemoryWidget.prev_mem:6 tiny8.tui.MemoryWidget.show_hex:6
+#: tiny8.tui.MemoryWidget.start_addr:6 tiny8.tui.RegistersWidget.prev_regs:6
+#: tiny8.tui.RegistersWidget.regs:6 tiny8.tui.SregWidget.sreg:6
+#: tiny8.tui.StackWidget.mem:6 tiny8.tui.StackWidget.ram_size:6
+#: tiny8.tui.StackWidget.sp:6 tiny8.tui.TelemetryWidget.current_step:6
+#: tiny8.tui.TelemetryWidget.instr_counts:6
+#: tiny8.tui.TelemetryWidget.total_steps:6 tiny8.tui.Tiny8App.batch_size:6
+#: tiny8.tui.Tiny8App.breakpoints:6 tiny8.tui.Tiny8App.color_mode:6
+#: tiny8.tui.Tiny8App.current_idx:6 tiny8.tui.Tiny8App.execution_mode:6
+#: tiny8.tui.Tiny8App.mem_start:6 tiny8.tui.Tiny8App.play_direction:6
+#: tiny8.tui.Tiny8App.playback_rate_idx:6 tiny8.tui.Tiny8App.playing:6
+#: tiny8.tui.Tiny8App.reg_start:6 tiny8.tui.Tiny8App.show_hex:6
+#: tiny8.tui.Tiny8App.speed_ms:6 tiny8.tui.VimTextArea.is_modified:6
+#: tiny8.tui.VimTextArea.mode:6
+msgid "Call watchers on initialize (post mount)."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:7
+#: tiny8.tui.BtopRegistersWidget.regs:7 tiny8.tui.BtopRegistersWidget.start_r:7
+#: tiny8.tui.BtopRegistersWidget.visible_count:7
+#: tiny8.tui.CVariablesWidget.mem:7 tiny8.tui.CVariablesWidget.prev_mem:7
+#: tiny8.tui.CVariablesWidget.var_symbols:7
+#: tiny8.tui.CallStackWidget.current_pc:7 tiny8.tui.CallStackWidget.frames:7
+#: tiny8.tui.CodeViewWidget.breakpoints:7 tiny8.tui.CodeViewWidget.current_pc:7
+#: tiny8.tui.CodeViewWidget.pc_to_line:7 tiny8.tui.CodeViewWidget.program:7
+#: tiny8.tui.CodeViewWidget.source_lines:7
+#: tiny8.tui.InstructionDetailWidget.current_instr:7
+#: tiny8.tui.InstructionDetailWidget.pc:7
+#: tiny8.tui.InstructionDetailWidget.source_line:7
+#: tiny8.tui.InstructionDetailWidget.source_text:7
+#: tiny8.tui.InstructionDetailWidget.sp:7
+#: tiny8.tui.LazyStatusWidget.current_instr:7
+#: tiny8.tui.LazyStatusWidget.current_pc:7
+#: tiny8.tui.LazyStatusWidget.current_sp:7
+#: tiny8.tui.LazyStatusWidget.current_step:7
+#: tiny8.tui.LazyStatusWidget.filename:7 tiny8.tui.LazyStatusWidget.hint:7
+#: tiny8.tui.LazyStatusWidget.mode:7 tiny8.tui.LazyStatusWidget.sub_info:7
+#: tiny8.tui.LazyStatusWidget.total_steps:7
+#: tiny8.tui.MemoryMatrixWidget.base_addr:7 tiny8.tui.MemoryMatrixWidget.mem:7
+#: tiny8.tui.MemoryMatrixWidget.read_counts:7
+#: tiny8.tui.MemoryMatrixWidget.write_counts:7
+#: tiny8.tui.MemoryWidget.color_mode:7 tiny8.tui.MemoryWidget.mem:7
+#: tiny8.tui.MemoryWidget.prev_mem:7 tiny8.tui.MemoryWidget.show_hex:7
+#: tiny8.tui.MemoryWidget.start_addr:7 tiny8.tui.RegistersWidget.prev_regs:7
+#: tiny8.tui.RegistersWidget.regs:7 tiny8.tui.SregWidget.sreg:7
+#: tiny8.tui.StackWidget.mem:7 tiny8.tui.StackWidget.ram_size:7
+#: tiny8.tui.StackWidget.sp:7 tiny8.tui.TelemetryWidget.current_step:7
+#: tiny8.tui.TelemetryWidget.instr_counts:7
+#: tiny8.tui.TelemetryWidget.total_steps:7 tiny8.tui.Tiny8App.batch_size:7
+#: tiny8.tui.Tiny8App.breakpoints:7 tiny8.tui.Tiny8App.color_mode:7
+#: tiny8.tui.Tiny8App.current_idx:7 tiny8.tui.Tiny8App.execution_mode:7
+#: tiny8.tui.Tiny8App.mem_start:7 tiny8.tui.Tiny8App.play_direction:7
+#: tiny8.tui.Tiny8App.playback_rate_idx:7 tiny8.tui.Tiny8App.playing:7
+#: tiny8.tui.Tiny8App.reg_start:7 tiny8.tui.Tiny8App.show_hex:7
+#: tiny8.tui.Tiny8App.speed_ms:7 tiny8.tui.VimTextArea.is_modified:7
+#: tiny8.tui.VimTextArea.mode:7
+msgid "Call watchers even when the new value equals the old value."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:8
+#: tiny8.tui.BtopRegistersWidget.regs:8 tiny8.tui.BtopRegistersWidget.start_r:8
+#: tiny8.tui.BtopRegistersWidget.visible_count:8
+#: tiny8.tui.CVariablesWidget.mem:8 tiny8.tui.CVariablesWidget.prev_mem:8
+#: tiny8.tui.CVariablesWidget.var_symbols:8
+#: tiny8.tui.CallStackWidget.current_pc:8 tiny8.tui.CallStackWidget.frames:8
+#: tiny8.tui.CodeViewWidget.breakpoints:8 tiny8.tui.CodeViewWidget.current_pc:8
+#: tiny8.tui.CodeViewWidget.pc_to_line:8 tiny8.tui.CodeViewWidget.program:8
+#: tiny8.tui.CodeViewWidget.source_lines:8
+#: tiny8.tui.InstructionDetailWidget.current_instr:8
+#: tiny8.tui.InstructionDetailWidget.pc:8
+#: tiny8.tui.InstructionDetailWidget.source_line:8
+#: tiny8.tui.InstructionDetailWidget.source_text:8
+#: tiny8.tui.InstructionDetailWidget.sp:8
+#: tiny8.tui.LazyStatusWidget.current_instr:8
+#: tiny8.tui.LazyStatusWidget.current_pc:8
+#: tiny8.tui.LazyStatusWidget.current_sp:8
+#: tiny8.tui.LazyStatusWidget.current_step:8
+#: tiny8.tui.LazyStatusWidget.filename:8 tiny8.tui.LazyStatusWidget.hint:8
+#: tiny8.tui.LazyStatusWidget.mode:8 tiny8.tui.LazyStatusWidget.sub_info:8
+#: tiny8.tui.LazyStatusWidget.total_steps:8
+#: tiny8.tui.MemoryMatrixWidget.base_addr:8 tiny8.tui.MemoryMatrixWidget.mem:8
+#: tiny8.tui.MemoryMatrixWidget.read_counts:8
+#: tiny8.tui.MemoryMatrixWidget.write_counts:8
+#: tiny8.tui.MemoryWidget.color_mode:8 tiny8.tui.MemoryWidget.mem:8
+#: tiny8.tui.MemoryWidget.prev_mem:8 tiny8.tui.MemoryWidget.show_hex:8
+#: tiny8.tui.MemoryWidget.start_addr:8 tiny8.tui.RegistersWidget.prev_regs:8
+#: tiny8.tui.RegistersWidget.regs:8 tiny8.tui.SregWidget.sreg:8
+#: tiny8.tui.StackWidget.mem:8 tiny8.tui.StackWidget.ram_size:8
+#: tiny8.tui.StackWidget.sp:8 tiny8.tui.TelemetryWidget.current_step:8
+#: tiny8.tui.TelemetryWidget.instr_counts:8
+#: tiny8.tui.TelemetryWidget.total_steps:8 tiny8.tui.Tiny8App.batch_size:8
+#: tiny8.tui.Tiny8App.breakpoints:8 tiny8.tui.Tiny8App.color_mode:8
+#: tiny8.tui.Tiny8App.current_idx:8 tiny8.tui.Tiny8App.execution_mode:8
+#: tiny8.tui.Tiny8App.mem_start:8 tiny8.tui.Tiny8App.play_direction:8
+#: tiny8.tui.Tiny8App.playback_rate_idx:8 tiny8.tui.Tiny8App.playing:8
+#: tiny8.tui.Tiny8App.reg_start:8 tiny8.tui.Tiny8App.show_hex:8
+#: tiny8.tui.Tiny8App.speed_ms:8 tiny8.tui.VimTextArea.is_modified:8
+#: tiny8.tui.VimTextArea.mode:8
+msgid "Compose the widget again when the attribute changes."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:9
+#: tiny8.tui.BtopRegistersWidget.regs:9 tiny8.tui.BtopRegistersWidget.start_r:9
+#: tiny8.tui.BtopRegistersWidget.visible_count:9
+#: tiny8.tui.CVariablesWidget.mem:9 tiny8.tui.CVariablesWidget.prev_mem:9
+#: tiny8.tui.CVariablesWidget.var_symbols:9
+#: tiny8.tui.CallStackWidget.current_pc:9 tiny8.tui.CallStackWidget.frames:9
+#: tiny8.tui.CodeViewWidget.breakpoints:9 tiny8.tui.CodeViewWidget.current_pc:9
+#: tiny8.tui.CodeViewWidget.pc_to_line:9 tiny8.tui.CodeViewWidget.program:9
+#: tiny8.tui.CodeViewWidget.source_lines:9
+#: tiny8.tui.InstructionDetailWidget.current_instr:9
+#: tiny8.tui.InstructionDetailWidget.pc:9
+#: tiny8.tui.InstructionDetailWidget.source_line:9
+#: tiny8.tui.InstructionDetailWidget.source_text:9
+#: tiny8.tui.InstructionDetailWidget.sp:9
+#: tiny8.tui.LazyStatusWidget.current_instr:9
+#: tiny8.tui.LazyStatusWidget.current_pc:9
+#: tiny8.tui.LazyStatusWidget.current_sp:9
+#: tiny8.tui.LazyStatusWidget.current_step:9
+#: tiny8.tui.LazyStatusWidget.filename:9 tiny8.tui.LazyStatusWidget.hint:9
+#: tiny8.tui.LazyStatusWidget.mode:9 tiny8.tui.LazyStatusWidget.sub_info:9
+#: tiny8.tui.LazyStatusWidget.total_steps:9
+#: tiny8.tui.MemoryMatrixWidget.base_addr:9 tiny8.tui.MemoryMatrixWidget.mem:9
+#: tiny8.tui.MemoryMatrixWidget.read_counts:9
+#: tiny8.tui.MemoryMatrixWidget.write_counts:9
+#: tiny8.tui.MemoryWidget.color_mode:9 tiny8.tui.MemoryWidget.mem:9
+#: tiny8.tui.MemoryWidget.prev_mem:9 tiny8.tui.MemoryWidget.show_hex:9
+#: tiny8.tui.MemoryWidget.start_addr:9 tiny8.tui.RegistersWidget.prev_regs:9
+#: tiny8.tui.RegistersWidget.regs:9 tiny8.tui.SregWidget.sreg:9
+#: tiny8.tui.StackWidget.mem:9 tiny8.tui.StackWidget.ram_size:9
+#: tiny8.tui.StackWidget.sp:9 tiny8.tui.TelemetryWidget.current_step:9
+#: tiny8.tui.TelemetryWidget.instr_counts:9
+#: tiny8.tui.TelemetryWidget.total_steps:9 tiny8.tui.Tiny8App.batch_size:9
+#: tiny8.tui.Tiny8App.breakpoints:9 tiny8.tui.Tiny8App.color_mode:9
+#: tiny8.tui.Tiny8App.current_idx:9 tiny8.tui.Tiny8App.execution_mode:9
+#: tiny8.tui.Tiny8App.mem_start:9 tiny8.tui.Tiny8App.play_direction:9
+#: tiny8.tui.Tiny8App.playback_rate_idx:9 tiny8.tui.Tiny8App.playing:9
+#: tiny8.tui.Tiny8App.reg_start:9 tiny8.tui.Tiny8App.show_hex:9
+#: tiny8.tui.Tiny8App.speed_ms:9 tiny8.tui.VimTextArea.is_modified:9
+#: tiny8.tui.VimTextArea.mode:9
+msgid "Refresh bindings when the reactive changes."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.prev_regs:10
+#: tiny8.tui.BtopRegistersWidget.regs:10
+#: tiny8.tui.BtopRegistersWidget.start_r:10
+#: tiny8.tui.BtopRegistersWidget.visible_count:10
+#: tiny8.tui.CVariablesWidget.mem:10 tiny8.tui.CVariablesWidget.prev_mem:10
+#: tiny8.tui.CVariablesWidget.var_symbols:10
+#: tiny8.tui.CallStackWidget.current_pc:10 tiny8.tui.CallStackWidget.frames:10
+#: tiny8.tui.CodeViewWidget.breakpoints:10
+#: tiny8.tui.CodeViewWidget.current_pc:10
+#: tiny8.tui.CodeViewWidget.pc_to_line:10 tiny8.tui.CodeViewWidget.program:10
+#: tiny8.tui.CodeViewWidget.source_lines:10
+#: tiny8.tui.InstructionDetailWidget.current_instr:10
+#: tiny8.tui.InstructionDetailWidget.pc:10
+#: tiny8.tui.InstructionDetailWidget.source_line:10
+#: tiny8.tui.InstructionDetailWidget.source_text:10
+#: tiny8.tui.InstructionDetailWidget.sp:10
+#: tiny8.tui.LazyStatusWidget.current_instr:10
+#: tiny8.tui.LazyStatusWidget.current_pc:10
+#: tiny8.tui.LazyStatusWidget.current_sp:10
+#: tiny8.tui.LazyStatusWidget.current_step:10
+#: tiny8.tui.LazyStatusWidget.filename:10 tiny8.tui.LazyStatusWidget.hint:10
+#: tiny8.tui.LazyStatusWidget.mode:10 tiny8.tui.LazyStatusWidget.sub_info:10
+#: tiny8.tui.LazyStatusWidget.total_steps:10
+#: tiny8.tui.MemoryMatrixWidget.base_addr:10
+#: tiny8.tui.MemoryMatrixWidget.mem:10
+#: tiny8.tui.MemoryMatrixWidget.read_counts:10
+#: tiny8.tui.MemoryMatrixWidget.write_counts:10
+#: tiny8.tui.MemoryWidget.color_mode:10 tiny8.tui.MemoryWidget.mem:10
+#: tiny8.tui.MemoryWidget.prev_mem:10 tiny8.tui.MemoryWidget.show_hex:10
+#: tiny8.tui.MemoryWidget.start_addr:10 tiny8.tui.RegistersWidget.prev_regs:10
+#: tiny8.tui.RegistersWidget.regs:10 tiny8.tui.SregWidget.sreg:10
+#: tiny8.tui.StackWidget.mem:10 tiny8.tui.StackWidget.ram_size:10
+#: tiny8.tui.StackWidget.sp:10 tiny8.tui.TelemetryWidget.current_step:10
+#: tiny8.tui.TelemetryWidget.instr_counts:10
+#: tiny8.tui.TelemetryWidget.total_steps:10 tiny8.tui.Tiny8App.batch_size:10
+#: tiny8.tui.Tiny8App.breakpoints:10 tiny8.tui.Tiny8App.color_mode:10
+#: tiny8.tui.Tiny8App.current_idx:10 tiny8.tui.Tiny8App.execution_mode:10
+#: tiny8.tui.Tiny8App.mem_start:10 tiny8.tui.Tiny8App.play_direction:10
+#: tiny8.tui.Tiny8App.playback_rate_idx:10 tiny8.tui.Tiny8App.playing:10
+#: tiny8.tui.Tiny8App.reg_start:10 tiny8.tui.Tiny8App.show_hex:10
+#: tiny8.tui.Tiny8App.speed_ms:10 tiny8.tui.VimTextArea.is_modified:10
+#: tiny8.tui.VimTextArea.mode:10
+msgid ""
+"An optional TCSS classname(s) to toggle based on the truthiness of the "
+"value."
+msgstr ""
+
+#: of tiny8.tui.BtopRegistersWidget.render:1
+#: tiny8.tui.CVariablesWidget.render:1 tiny8.tui.CallStackWidget.render:1
+#: tiny8.tui.CodeViewWidget.render:1 tiny8.tui.InstructionDetailWidget.render:1
+#: tiny8.tui.LazyStatusWidget.render:1 tiny8.tui.MemoryMatrixWidget.render:1
+#: tiny8.tui.MemoryWidget.render:1 tiny8.tui.RegistersWidget.render:1
+#: tiny8.tui.SregWidget.render:1 tiny8.tui.StackWidget.render:1
+#: tiny8.tui.TelemetryWidget.render:1
+msgid "Get a rich renderable for the widget's content."
+msgstr ""
+
+#: of tiny8.tui.BtopRegistersWidget.render:3
+#: tiny8.tui.CVariablesWidget.render:3 tiny8.tui.CallStackWidget.render:3
+#: tiny8.tui.CodeViewWidget.render:3 tiny8.tui.InstructionDetailWidget.render:3
+#: tiny8.tui.LazyStatusWidget.render:3 tiny8.tui.MemoryMatrixWidget.render:3
+#: tiny8.tui.MemoryWidget.render:3 tiny8.tui.RegistersWidget.render:3
+#: tiny8.tui.SregWidget.render:3 tiny8.tui.StackWidget.render:3
+#: tiny8.tui.TelemetryWidget.render:3
+msgid "A rich renderable."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.can_focus:1
+#: tiny8.tui.CVariablesWidget.can_focus:1
+#: tiny8.tui.CacheProgressModalScreen.can_focus:1
+#: tiny8.tui.CallStackWidget.can_focus:1 tiny8.tui.CodeViewWidget.can_focus:1
+#: tiny8.tui.InstructionDetailModalScreen.can_focus:1
+#: tiny8.tui.InstructionDetailWidget.can_focus:1
+#: tiny8.tui.InstructionReferenceScreen.can_focus:1
+#: tiny8.tui.LazyStatusWidget.can_focus:1
+#: tiny8.tui.MemoryMatrixWidget.can_focus:1 tiny8.tui.MemoryWidget.can_focus:1
+#: tiny8.tui.RegistersWidget.can_focus:1 tiny8.tui.SregWidget.can_focus:1
+#: tiny8.tui.StackWidget.can_focus:1 tiny8.tui.TUIHelpScreen.can_focus:1
+#: tiny8.tui.TelemetryWidget.can_focus:1 tiny8.tui.VimEditorScreen.can_focus:1
+#: tiny8.tui.VimTextArea.can_focus:1
+msgid "Widget may receive focus."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.BtopRegistersWidget.can_focus_children:1
+#: tiny8.tui.CVariablesWidget.can_focus_children:1
+#: tiny8.tui.CacheProgressModalScreen.can_focus_children:1
+#: tiny8.tui.CallStackWidget.can_focus_children:1
+#: tiny8.tui.CodeViewWidget.can_focus_children:1
+#: tiny8.tui.InstructionDetailModalScreen.can_focus_children:1
+#: tiny8.tui.InstructionDetailWidget.can_focus_children:1
+#: tiny8.tui.InstructionReferenceScreen.can_focus_children:1
+#: tiny8.tui.LazyStatusWidget.can_focus_children:1
+#: tiny8.tui.MemoryMatrixWidget.can_focus_children:1
+#: tiny8.tui.MemoryWidget.can_focus_children:1
+#: tiny8.tui.RegistersWidget.can_focus_children:1
+#: tiny8.tui.SregWidget.can_focus_children:1
+#: tiny8.tui.StackWidget.can_focus_children:1
+#: tiny8.tui.TUIHelpScreen.can_focus_children:1
+#: tiny8.tui.TelemetryWidget.can_focus_children:1
+#: tiny8.tui.VimEditorScreen.can_focus_children:1
+#: tiny8.tui.VimTextArea.can_focus_children:1
+msgid "Widget's children may receive focus."
+msgstr ""
+
+#: of tiny8.tui.BtopRegistersWidget:1
+msgid "Register bars with graphical gradient heatmaps in a 2-column layout."
+msgstr ""
+
+#: of tiny8.tui.RegistersWidget:1
+msgid "Grid displaying 32 8-bit general purpose registers."
+msgstr ""
+
+#: of tiny8.tui.MemoryWidget:1
+msgid ""
+"32x32 Memory Dump with rich heatmap background coloring for direct visual"
+" rendering."
+msgstr ""
+
+#: of tiny8.tui.MemoryWidget.get_heatmap_bg:1
+msgid "Calculate rich heat color background for byte value 0..255."
+msgstr ""
+
+#: of tiny8.tui.StackWidget:1
+msgid "Call stack and stack pointer inspector."
+msgstr ""
+
+#: of tiny8.tui.InstructionDetailWidget:1
+msgid ""
+"Deep-dive inspector displaying current instruction details, syntax, and "
+"effects."
+msgstr ""
+
+#: of tiny8.tui.TelemetryWidget:1
+msgid "Real-time execution metrics and instruction distribution dashboard."
+msgstr ""
+
+#: of tiny8.tui.CodeViewWidget:1
+msgid ""
+"Assembly and source line inspection with execution pointer and "
+"breakpoints."
+msgstr ""
+
+#: of tiny8.tui.eval_condition:1
+msgid "Safely evaluate debugger watch and conditional breakpoint expressions."
+msgstr ""
+
+#: of tiny8.tui.extract_call_frames:1
+msgid "Reconstruct active function call frames up to current trace index."
+msgstr ""
+
+#: of tiny8.tui.CVariablesWidget:1
+msgid "Live C variable table showing symbol names, addresses, and runtime values."
+msgstr ""
+
+#: of tiny8.tui.CallStackWidget:1
+msgid "Dynamic function backtrace reconstructed from execution calls and returns."
+msgstr ""
+
+#: of tiny8.tui.MemoryMatrixWidget:1
+msgid "2D RAM access heatmap showing read and write activity across addresses."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen:1
+#: tiny8.tui.InstructionDetailModalScreen:1
+#: tiny8.tui.InstructionReferenceScreen:1 tiny8.tui.TUIHelpScreen:1
+msgid "Bases: :py:class:`~textual.screen.ModalScreen`"
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen:1
+msgid ""
+"Sleek modal dialog displaying a progress bar while precomputing cache "
+"checkpoints."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.CacheProgressModalScreen.CSS:1
+#: tiny8.tui.InstructionDetailModalScreen.CSS:1
+#: tiny8.tui.InstructionReferenceScreen.CSS:1 tiny8.tui.TUIHelpScreen.CSS:1
+#: tiny8.tui.VimEditorScreen.CSS:1
+msgid ""
+"Inline CSS, useful for quick scripts. Rules here take priority over "
+"CSS_PATH."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.CacheProgressModalScreen.CSS:3
+#: tiny8.tui.InstructionDetailModalScreen.CSS:3
+#: tiny8.tui.InstructionReferenceScreen.CSS:3 tiny8.tui.TUIHelpScreen.CSS:3
+#: tiny8.tui.VimEditorScreen.CSS:3
+msgid "This CSS applies to the whole app."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen.__init__:1
+#: tiny8.tui.InstructionDetailModalScreen.__init__:1
+#: tiny8.tui.VimEditorScreen.__init__:1
+msgid "Initialize the screen."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen.__init__:3
+#: tiny8.tui.InstructionDetailModalScreen.__init__:3
+#: tiny8.tui.VimEditorScreen.__init__:3
+msgid "The name of the screen."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen.__init__:4
+#: tiny8.tui.InstructionDetailModalScreen.__init__:4
+#: tiny8.tui.VimEditorScreen.__init__:4
+msgid "The ID of the screen in the DOM."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen.__init__:5
+#: tiny8.tui.InstructionDetailModalScreen.__init__:5
+#: tiny8.tui.VimEditorScreen.__init__:5
+msgid "The CSS classes for the screen."
+msgstr ""
+
+#: of tiny8.tui.CacheProgressModalScreen.compose:1
+msgid "Compose modal progress bar widgets."
+msgstr ""
+
+#: of tiny8.tui.TUIHelpScreen:1
+msgid ""
+"Full-screen modal displaying TUI application usage, keyboard shortcuts, "
+"and guides."
+msgstr ""
+
+#: of tiny8.tui.TUIHelpScreen.compose:1
+msgid "Compose help screen dialog widgets."
+msgstr ""
+
+#: of tiny8.tui.InstructionDetailModalScreen:1
+msgid ""
+"Full-screen modal displaying in-depth specifications for the currently "
+"selected instruction."
+msgstr ""
+
+#: of tiny8.tui.InstructionDetailModalScreen.compose:1
+msgid "Compose instruction detail modal widgets."
+msgstr ""
+
+#: of tiny8.tui.InstructionReferenceScreen:1
+msgid "Full-screen reference modal showing all instruction details."
+msgstr ""
+
+#: of tiny8.tui.InstructionReferenceScreen.compose:1
+msgid "Compose instruction reference modal widgets."
+msgstr ""
+
+#: of tiny8.tui.LazyStatusWidget:1
+msgid "Bottom statusline with mode badge, file stats, and help hint."
+msgstr ""
+
+#: of tiny8.tui.VimTextArea:1
+msgid "Bases: :py:class:`~textual.widgets._text_area.TextArea`"
+msgstr ""
+
+#: of tiny8.tui.VimTextArea:1
+msgid "TextArea enhanced with Vim modal navigation and editing."
+msgstr ""
+
+#: of tiny8.tui.VimEditorScreen:1
+msgid "Bases: :py:class:`~textual.screen.Screen`"
+msgstr ""
+
+#: of tiny8.tui.VimEditorScreen:1
+msgid "Full-screen modal Vim editor for creating and modifying C and ASM files."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.VimEditorScreen.BINDINGS:1
+msgid "A list of key bindings."
+msgstr ""
+
+#: of tiny8.tui.VimEditorScreen.compose:1
+msgid "Compose widgets for the Vim editor screen."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App:1
+msgid "Bases: :py:class:`~textual.app.App`"
+msgstr ""
+
+#: of tiny8.tui.Tiny8App:1
+msgid ""
+"Textual application with OLED black background and advanced debugger "
+"features."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.Tiny8App.TITLE:1
+msgid "A class variable to set the *default* title for the application."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.Tiny8App.TITLE:3
+msgid ""
+"To update the title while the app is running, you can set the "
+"[title][textual.app.App.title] attribute. See also [the `Screen.TITLE` "
+"attribute][textual.screen.Screen.TITLE]."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.Tiny8App.CSS:1
+msgid ""
+"Inline CSS, useful for quick scripts. This is loaded after CSS_PATH, and "
+"therefore takes priority in the event of a specificity clash."
+msgstr ""
+
+#: ../../../docstring of tiny8.tui.Tiny8App.BINDINGS:1
+msgid "The default key bindings."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:1
+msgid "Create an instance of an app."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:3
+msgid ""
+"Driver class or `None` to auto-detect. This will be used by some Textual "
+"tools."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:5
+msgid ""
+"Path to CSS or `None` to use the `CSS_PATH` class variable. To load "
+"multiple CSS files, pass a list of strings or paths which will be loaded "
+"in order."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:8
+msgid ""
+"Reload CSS if the files changed. This is set automatically if you are "
+"using `textual run` with the `dev` switch."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:10
+msgid ""
+"Allow ANSI colors if `True`, or convert ANSI colors to RGB if `False`, "
+"`None` to use \"ansi\" parameter from themes."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.__init__:12
+msgid "When the supplied CSS path(s) are an unexpected type."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.compose:1
+msgid "Compose the root application layout and widgets."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_open_editor:1
+msgid "Open full-screen Vim editor for source code."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_toggle_breakpoint:1
+msgid "Toggle breakpoint on current PC."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_continue_run:1
+msgid "Run forward until next breakpoint, watchpoint, or program completion."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_reverse_continue:1
+msgid "Run backward until previous breakpoint, watchpoint, or program start."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_exec_instruction:1
+msgid "Execute an assembly instruction dynamically in REPL mode."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.watch_mem_start:1
+msgid "Update only the memory widget when mem_start changes."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_scroll_down:1
+msgid "Scroll memory down (1 row = 32 bytes)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_scroll_up:1
+msgid "Scroll memory up (1 row = 32 bytes)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_scroll_page_down:1
+msgid "Fast scroll memory down (4 rows = 128 bytes)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_scroll_page_up:1
+msgid "Fast scroll memory up (4 rows = 128 bytes)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_open_command:1
+msgid "Open command bar input."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_cancel_command:1
+msgid "Cancel and close command input or dismiss modal dialog."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.on_input_submitted:1
+msgid "Process entered command."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_toggle_grayscale:1
+msgid "Toggle between Viridis and Grayscale color palette."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_toggle_hex:1
+msgid "Toggle between Hexadecimal digits (02X) and Graphic Pixel blocks."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_cycle_mode:1
+msgid ""
+"Cycle view modes (Viridis+Hex -> Viridis+Pixel -> Grayscale+Pixel -> "
+"Grayscale+Hex)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_show_help:1
+msgid "Show full TUI application usage and keyboard guide."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_show_instruction_detail:1
+msgid ""
+"Show in-depth specification and effects for the currently selected "
+"instruction."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_show_reference:1
+msgid "Show full instruction set reference modal."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_toggle_play:1
+msgid "Toggle forward automatic playback."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_toggle_reverse_play:1
+msgid "Toggle reverse automatic playback (time-travel replay)."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_faster:1
+msgid "Increase playback execution speed."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_faster:3
+msgid ""
+"Decreases timer interval down to visual limit (30ms / ~33 fps), then "
+"automatically transitions to adaptive batch processing scaling up to "
+"50,000 steps per tick."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_slower:1
+msgid "Decrease playback execution speed."
+msgstr ""
+
+#: of tiny8.tui.Tiny8App.action_slower:3
+msgid ""
+"Scales down batch processing first, then transitions back to observable "
+"visual delay."
+msgstr ""
+
+#: ../../api/tiny8.rst:56
+msgid "tiny8.utils module"
+msgstr ""
+
+#: of tiny8.utils:1
+msgid "Utility helpers for tiny8 including terminal progress bar."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:1
+msgid "Terminal progress bar indicator adapting to terminal width."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:3
+msgid "Total number of iterations, or None for indeterminate progress."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:4
+msgid "Prefix description string. Defaults to \"\"."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:5
+msgid "True to disable output completely. Defaults to False."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:6
+msgid "Explicit width in characters, or None for auto-detection."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:7
+msgid "Minimum interval in seconds between screen refreshes."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:11
+msgid "Total iterations expected."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:15
+msgid "Description prefix text."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:19
+msgid "Flag controlling output suppression."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:23
+msgid "Target bar character width."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:27
+msgid "Refresh rate throttle in seconds."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:31
+msgid "Current iteration step count."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:35
+msgid "Monotonic start timestamp."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar:39
+msgid "Timestamp of last bar render."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.__enter__:1
+msgid "Enter context manager."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.__exit__:1
+msgid "Exit context manager and flush output."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.update:1
+msgid "Increment progress by n steps."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.update:3
+msgid "Number of iterations to increment. Defaults to 1."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.set_description:1
+msgid "Update description prefix and re-render bar."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.set_description:3
+msgid "New description text."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.close:1
+msgid "Finalize progress bar and print trailing newline."
+msgstr ""
+
+#: of tiny8.utils.ProgressBar.reset:1
+msgid "Reset progress counter and timers to initial state."
+msgstr ""
+
+#: ../../api/tiny8.rst:64
+msgid "Module contents"
+msgstr ""
+
+#: of tiny8:1
+msgid "A tiny AVR-like 8-bit CPU simulator package."
+msgstr ""
+
+#: of tiny8:3
+msgid ""
+"Provides a compact CPU implementation, assembler, C compiler, and "
+"interactive Textual CLI for experimentation and teaching."
+msgstr ""
+
+#: of tiny8.cpu.CPU:13
+msgid "list[int]"
+msgstr ""
+
+#: of tiny8.cpu.CPU:19 tiny8.cpu.CPU:25 tiny8.cpu.CPU:31 tiny8.cpu.CPU:37
+msgid "int"
+msgstr ""
+
+#: of tiny8.cpu.CPU:43
+msgid "dict[int, bool]"
+msgstr ""
+
+#: of tiny8.cpu.CPU:49 tiny8.cpu.CPU:55
+msgid "collections.deque[tuple[int, int, int]]"
+msgstr ""
+
+#: of tiny8.cpu.CPU:61
+msgid "collections.deque[dict]"
+msgstr ""
+
+#: of tiny8.cpu.CPU:91
+msgid "bool"
+msgstr ""
+
+#~ msgid ""
+#~ "Launch modern Textual TUI debugger with"
+#~ " OLED black theme and btop heatmaps."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Provides an OLED black themed TUI "
+#~ "with real-time registers, memory, SREG"
+#~ " flags, btop-style gradient heatmap "
+#~ "bars, stack explorer, breakpoints, and "
+#~ "telemetry."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Btop-style register bars with graphical"
+#~ " gradient heatmaps in a 2-column "
+#~ "layout."
+#~ msgstr ""
+
+#~ msgid "Number of bytes in RAM. Defaults to 2048."
+#~ msgstr ""
+
+#~ msgid "Exclusive OR with Immediate (EORI)."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Operation: Rd <- Rd ⊕ K (16 "
+#~ "<= d <= 31, 0 <= K <= "
+#~ "255) Status Register (SREG): S, V=0, "
+#~ "N, Z (H, C unaffected)"
+#~ msgstr ""
+

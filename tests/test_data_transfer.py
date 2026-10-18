@@ -94,11 +94,11 @@ class TestLDST:
             ldi r20, 100
             ldi r21, 11
             st r20, r21
-            
+
             ldi r20, 101
             ldi r21, 22
             st r20, r21
-            
+
             ldi r20, 102
             ldi r21, 33
             st r20, r21
@@ -248,7 +248,7 @@ class TestDataTransferIntegration:
             inc r0
             ldi r1, 33
             st r0, r1
-            
+
             ; Copy to destination [200-202]
             ldi r2, 100
             ldi r3, 200

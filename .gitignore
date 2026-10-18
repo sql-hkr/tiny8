@@ -6,6 +6,8 @@ dist/
 wheels/
 *.egg-info
 .pytest_cache/
+.ruff_cache/
+data/
 
 # Virtual environments
 .venv
@@ -16,3 +18,5 @@ wheels/
 # sphinx
 docs/_build/
 docs/api/
+*.mo
+.doctrees/

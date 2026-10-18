@@ -4,6 +4,7 @@ Tests for RAM, ROM operations, memory snapshots, and edge cases.
 """
 
 from pathlib import Path
+
 import pytest
 
 from tiny8 import CPU, assemble, compile_c_file_with_symbols
