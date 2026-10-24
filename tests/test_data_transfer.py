@@ -94,11 +94,11 @@ class TestLDST:
             ldi r20, 100
             ldi r21, 11
             st r20, r21
-            
+
             ldi r20, 101
             ldi r21, 22
             st r20, r21
-            
+
             ldi r20, 102
             ldi r21, 33
             st r20, r21
@@ -248,7 +248,7 @@ class TestDataTransferIntegration:
             inc r0
             ldi r1, 33
             st r0, r1
-            
+
             ; Copy to destination [200-202]
             ldi r2, 100
             ldi r3, 200
@@ -279,3 +279,30 @@ class TestDataTransferIntegration:
             pop r17
         """)
         helper.assert_registers(cpu, {16: 99, 17: 42})
+
+
+class TestLDSSTS:
+    """Test LDS (Load Direct from SRAM) and STS (Store Direct to SRAM)."""
+
+    def test_lds_sts_basic(self, cpu_with_program, helper):
+        """Test direct 16-bit address load and store."""
+        cpu = cpu_with_program("""
+            ldi r16, 0x42
+            sts 0x0250, r16
+            lds r17, 0x0250
+        """)
+        helper.assert_register(cpu, 17, 0x42)
+        helper.assert_memory(cpu, 0x0250, 0x42)
+
+    def test_16bit_pointer_pair(self, cpu_with_program, helper):
+        """Test 16-bit pointer pairs (Z=R31:R30) with LD and ST."""
+        cpu = cpu_with_program("""
+            ldi r30, 0x10
+            ldi r31, 0x02
+            ldi r16, 99
+            st r30, r16
+            ldi r17, 0
+            ld r17, r30
+        """)
+        helper.assert_register(cpu, 17, 99)
+        helper.assert_memory(cpu, 0x0210, 99)

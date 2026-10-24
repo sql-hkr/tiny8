@@ -20,17 +20,15 @@ class TestCPUExceptions:
         ):
             cpu.step()
 
-    def test_operand_formatting_exception(self):
-        """Test that operand formatting exceptions are handled."""
+    def test_operand_formatting_none_operand(self):
+        """Test formatting instruction when operand list contains None."""
         cpu = CPU()
-        cpu.program = [("LDI", (None,))]
-        try:
-            cpu.step()
-        except Exception:
-            pass
+        cpu.program = [("NOP", ())]
+        cpu._build_predecoded()
+        assert cpu._predecoded[0][2] == "NOP"
 
     def test_operand_formatting_with_exception(self):
-        """Test operand formatting exception handling in step function."""
+        """Test operand formatting fallback when operand str() raises an exception."""
         cpu = CPU()
 
         class BadOperand:
@@ -41,11 +39,9 @@ class TestCPUExceptions:
                 raise ValueError("Cannot format")
 
         cpu.program = [("LDI", (("reg", 16), BadOperand()))]
-        cpu.pc = 0
-        try:
-            cpu.step()
-        except Exception:
-            pass
+        cpu._build_predecoded()
+        # Fallback catches the exception and falls back to base instruction mnemonic
+        assert cpu._predecoded[0][2] == "LDI"
 
     def test_jmp_with_invalid_label(self):
         """Test JMP with invalid label raises KeyError."""
@@ -157,6 +153,8 @@ class TestCPUFlagOperations:
 
     def test_set_flags_logical_negative(self):
         """Test _set_flags_logical with negative result."""
+        from tiny8.cpu import SREG_N, SREG_S, SREG_V, SREG_Z
+
         cpu = CPU()
         asm = assemble("""
             ldi r16, 0x80
@@ -165,10 +163,16 @@ class TestCPUFlagOperations:
         """)
         cpu.load_program(asm)
         cpu.run()
-        # Result should be 0x80 which has bit 7 set (negative)
+        assert cpu.read_reg(16) == 0x80
+        assert cpu.get_flag(SREG_N) is True
+        assert cpu.get_flag(SREG_Z) is False
+        assert cpu.get_flag(SREG_V) is False
+        assert cpu.get_flag(SREG_S) is True
 
     def test_set_flags_logical_zero(self):
         """Test _set_flags_logical with zero result."""
+        from tiny8.cpu import SREG_N, SREG_S, SREG_V, SREG_Z
+
         cpu = CPU()
         asm = assemble("""
             ldi r16, 0xFF
@@ -177,10 +181,14 @@ class TestCPUFlagOperations:
         """)
         cpu.load_program(asm)
         cpu.run()
-        # Result should be 0
+        assert cpu.read_reg(16) == 0x00
+        assert cpu.get_flag(SREG_Z) is True
+        assert cpu.get_flag(SREG_N) is False
+        assert cpu.get_flag(SREG_V) is False
+        assert cpu.get_flag(SREG_S) is False
 
     def test_mul_result_storage(self):
-        """Test MUL stores result in rd:rd+1."""
+        """Test MUL stores result in R1:R0 per AVR DS40002198A."""
         cpu = CPU()
         asm = assemble("""
             ldi r16, 10
@@ -189,20 +197,205 @@ class TestCPUFlagOperations:
         """)
         cpu.load_program(asm)
         cpu.run()
-        # Result 200 = 0x00C8, so r16=200, r17=0
-        assert cpu.read_reg(16) == 200  # low byte
-        assert cpu.read_reg(17) == 0  # high byte
+        # Result 200 = 0x00C8, so r0=200, r1=0
+        assert cpu.read_reg(0) == 200  # low byte in R0
+        assert cpu.read_reg(1) == 0  # high byte in R1
 
-    def test_div_quotient_remainder(self):
-        """Test DIV stores quotient and remainder correctly."""
+
+class TestSREGCompliance:
+    """Comprehensive tests for AVR DS40002198A Status Register (SREG) compliance."""
+
+    def test_sreg_bit_positions(self):
+        """Verify exact SREG bit indices: I=7, T=6, H=5, S=4, V=3, N=2, Z=1, C=0."""
+        from tiny8.cpu import (
+            SREG_C,
+            SREG_H,
+            SREG_I,
+            SREG_N,
+            SREG_S,
+            SREG_T,
+            SREG_V,
+            SREG_Z,
+        )
+
         cpu = CPU()
+        flags = [
+            (SREG_C, 0, 0x01),
+            (SREG_Z, 1, 0x02),
+            (SREG_N, 2, 0x04),
+            (SREG_V, 3, 0x08),
+            (SREG_S, 4, 0x10),
+            (SREG_H, 5, 0x20),
+            (SREG_T, 6, 0x40),
+            (SREG_I, 7, 0x80),
+        ]
+        for flag_const, bit_idx, bit_mask in flags:
+            assert flag_const == bit_idx
+            cpu.sreg = 0
+            cpu.set_flag(flag_const, True)
+            assert cpu.sreg == bit_mask
+            assert cpu.get_flag(flag_const) is True
+            cpu.set_flag(flag_const, False)
+            assert cpu.sreg == 0
+            assert cpu.get_flag(flag_const) is False
+
+    def test_sreg_flags_add_half_carry_and_overflow(self):
+        """Test ADD calculates H, V, S, N, Z, C and preserves I, T."""
+        from tiny8.cpu import (
+            SREG_C,
+            SREG_H,
+            SREG_I,
+            SREG_N,
+            SREG_S,
+            SREG_T,
+            SREG_V,
+            SREG_Z,
+        )
+
+        cpu = CPU()
+        cpu.set_flag(SREG_I, True)
+        cpu.set_flag(SREG_T, True)
+        # 0x0F + 0x01 = 0x10 (Half Carry set, no overflow, no carry, not zero)
+        cpu._set_flags_add(0x0F, 0x01, 0, 0x10)
+        assert cpu.get_flag(SREG_I) is True
+        assert cpu.get_flag(SREG_T) is True
+        assert cpu.get_flag(SREG_H) is True
+        assert cpu.get_flag(SREG_C) is False
+        assert cpu.get_flag(SREG_Z) is False
+        assert cpu.get_flag(SREG_N) is False
+        assert cpu.get_flag(SREG_V) is False
+        assert cpu.get_flag(SREG_S) is False
+
+        # Signed overflow: 127 + 1 = 128 (0x7F + 0x01 = 0x80)
+        # Pos + Pos = Neg -> V=1, N=1, S = N ^ V = 0
+        cpu._set_flags_add(0x7F, 0x01, 0, 0x80)
+        assert cpu.get_flag(SREG_V) is True
+        assert cpu.get_flag(SREG_N) is True
+        assert cpu.get_flag(SREG_S) is False
+        assert cpu.get_flag(SREG_H) is True
+        assert cpu.get_flag(SREG_C) is False
+
+    def test_sreg_flags_sub_half_borrow_and_overflow(self):
+        """Test SUB calculates H, V, S, N, Z, C and preserves I, T."""
+        from tiny8.cpu import (
+            SREG_C,
+            SREG_H,
+            SREG_N,
+            SREG_S,
+            SREG_V,
+            SREG_Z,
+        )
+
+        cpu = CPU()
+        # 0x10 - 0x01 = 0x0F (Half borrow: (0 - 1) < 0 -> H=1, no unsigned borrow -> C=0)
+        cpu._set_flags_sub(0x10, 0x01, 0, 0x0F)
+        assert cpu.get_flag(SREG_H) is True
+        assert cpu.get_flag(SREG_C) is False
+        assert cpu.get_flag(SREG_Z) is False
+        assert cpu.get_flag(SREG_N) is False
+        assert cpu.get_flag(SREG_V) is False
+        assert cpu.get_flag(SREG_S) is False
+
+        # Signed underflow: -128 - 1 = +127 (0x80 - 0x01 = 0x7F)
+        # Neg - Pos = Pos -> V=1, N=0, S = N ^ V = 1
+        cpu._set_flags_sub(0x80, 0x01, 0, 0x7F)
+        assert cpu.get_flag(SREG_V) is True
+        assert cpu.get_flag(SREG_N) is False
+        assert cpu.get_flag(SREG_S) is True
+        assert cpu.get_flag(SREG_C) is False
+
+    def test_sreg_logical_preserves_c_h_t_i(self):
+        """Test logical ops (AND, OR, EOR) clear V, set S=N, and preserve C, H, T, I."""
+        from tiny8.cpu import (
+            SREG_C,
+            SREG_H,
+            SREG_I,
+            SREG_N,
+            SREG_S,
+            SREG_T,
+            SREG_V,
+            SREG_Z,
+        )
+
+        cpu = CPU()
+        cpu.set_flag(SREG_C, True)
+        cpu.set_flag(SREG_H, True)
+        cpu.set_flag(SREG_T, True)
+        cpu.set_flag(SREG_I, True)
+        cpu.set_flag(SREG_V, True)
+
+        # Result is 0x80 (Negative, non-zero)
+        cpu._set_flags_logical(0x80)
+        assert cpu.get_flag(SREG_C) is True  # Preserved
+        assert cpu.get_flag(SREG_H) is True  # Preserved
+        assert cpu.get_flag(SREG_T) is True  # Preserved
+        assert cpu.get_flag(SREG_I) is True  # Preserved
+        assert cpu.get_flag(SREG_V) is False  # Cleared
+        assert cpu.get_flag(SREG_N) is True  # Set
+        assert cpu.get_flag(SREG_S) is True  # S = N ^ V = 1 ^ 0 = 1
+        assert cpu.get_flag(SREG_Z) is False  # Non-zero
+
+    def test_sreg_inc_dec_preserves_c_h_t_i(self):
+        """Test INC and DEC preserve C, H, T, I while updating S, V, N, Z."""
+        from tiny8.cpu import (
+            SREG_C,
+            SREG_H,
+            SREG_I,
+            SREG_N,
+            SREG_S,
+            SREG_T,
+            SREG_V,
+            SREG_Z,
+        )
+
+        cpu = CPU()
+        cpu.set_flag(SREG_C, True)
+        cpu.set_flag(SREG_H, True)
+        cpu.set_flag(SREG_T, True)
+        cpu.set_flag(SREG_I, True)
+
+        # INC from 0x7F to 0x80 -> Signed overflow V=1, N=1, S=0
+        cpu._set_flags_inc(0x7F, 0x80)
+        assert cpu.get_flag(SREG_C) is True  # Preserved
+        assert cpu.get_flag(SREG_H) is True  # Preserved
+        assert cpu.get_flag(SREG_T) is True  # Preserved
+        assert cpu.get_flag(SREG_I) is True  # Preserved
+        assert cpu.get_flag(SREG_V) is True
+        assert cpu.get_flag(SREG_N) is True
+        assert cpu.get_flag(SREG_S) is False
+        assert cpu.get_flag(SREG_Z) is False
+
+        # DEC from 0x80 to 0x7F -> Signed overflow V=1, N=0, S=1
+        cpu._set_flags_dec(0x80, 0x7F)
+        assert cpu.get_flag(SREG_C) is True  # Preserved
+        assert cpu.get_flag(SREG_H) is True  # Preserved
+        assert cpu.get_flag(SREG_V) is True
+        assert cpu.get_flag(SREG_N) is False
+        assert cpu.get_flag(SREG_S) is True
+        assert cpu.get_flag(SREG_Z) is False
+
+    def test_cpu_fast_path_run_and_invoker(self):
+        """Test CPU fast-path execution loop without progress or tracing."""
+        from tiny8.cpu import _make_invoker
+
+        cpu = CPU()
+        cpu.trace_enabled = False
         asm = assemble("""
-            ldi r16, 17
-            ldi r17, 5
-            div r16, r17
+            ldi r16, 1
+            ldi r17, 2
+            add r16, r17
         """)
         cpu.load_program(asm)
-        cpu.run()
-        # 17 / 5 = 3 remainder 2
-        assert cpu.read_reg(16) == 3  # quotient
-        assert cpu.read_reg(17) == 2  # remainder
+        cpu.run(show_progress=False)
+        assert cpu.read_reg(16) == 3
+
+        # Test _make_invoker with 3+ operands fallback
+        called_args = []
+
+        def dummy_handler(a, b, c):
+            called_args.extend([a, b, c])
+
+        inv_n = _make_invoker(dummy_handler, (1, 2, 3))
+        assert inv_n is not None
+        inv_n()
+        assert called_args == [1, 2, 3]

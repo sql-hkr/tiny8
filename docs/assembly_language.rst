@@ -486,3 +486,338 @@ Common Patterns
 ---------------
 
 See the :doc:`getting_started` guide for common assembly patterns like loops, conditionals, and memory operations.
+
+Instruction Set Reference
+-------------------------
+
+The Tiny8 instruction set strictly follows the **Microchip AVR® Instruction Set Manual (DS40002198A)**. All mnemonics and register identifiers are case-insensitive. Immediates can be specified in decimal, hexadecimal (``$FF`` or ``0xFF``), or binary (``0b11111111``).
+
+Arithmetic and Logic Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 26 36 20
+
+   * - Mnemonic & Operands
+     - Description (DS40002198A)
+     - Operation
+     - Flags
+   * - ``ADD Rd, Rr``
+     - Add without Carry
+     - Rd ← Rd + Rr
+     - H, S, V, N, Z, C
+   * - ``ADC Rd, Rr``
+     - Add with Carry
+     - Rd ← Rd + Rr + C
+     - H, S, V, N, Z, C
+   * - ``ADIW Rd, K``
+     - Add Immediate to Word
+     - Rd+1:Rd ← Rd+1:Rd + K
+     - S, V, N, Z, C
+   * - ``SUB Rd, Rr``
+     - Subtract without Carry
+     - Rd ← Rd - Rr
+     - H, S, V, N, Z, C
+   * - ``SUBI Rd, K``
+     - Subtract Immediate
+     - Rd ← Rd - K
+     - H, S, V, N, Z, C
+   * - ``SBC Rd, Rr``
+     - Subtract with Carry
+     - Rd ← Rd - Rr - C
+     - H, S, V, N, Z, C
+   * - ``SBCI Rd, K``
+     - Subtract Immediate with Carry
+     - Rd ← Rd - K - C
+     - H, S, V, N, Z, C
+   * - ``SBIW Rd, K``
+     - Subtract Immediate from Word
+     - Rd+1:Rd ← Rd+1:Rd - K
+     - S, V, N, Z, C
+   * - ``AND Rd, Rr``
+     - Logical AND
+     - Rd ← Rd · Rr
+     - S, V=0, N, Z
+   * - ``ANDI Rd, K``
+     - Logical AND with Immediate
+     - Rd ← Rd · K
+     - S, V=0, N, Z
+   * - ``OR Rd, Rr``
+     - Logical OR
+     - Rd ← Rd ∨ Rr
+     - S, V=0, N, Z
+   * - ``ORI Rd, K``
+     - Logical OR with Immediate
+     - Rd ← Rd ∨ K
+     - S, V=0, N, Z
+   * - ``EOR Rd, Rr``
+     - Exclusive OR
+     - Rd ← Rd ⊕ Rr
+     - S, V=0, N, Z
+   * - ``COM Rd``
+     - One's Complement
+     - Rd ← 0xFF - Rd
+     - S, V=0, N, Z, C=1
+   * - ``NEG Rd``
+     - Two's Complement Negation
+     - Rd ← 0x00 - Rd
+     - H, S, V, N, Z, C
+   * - ``INC Rd``
+     - Increment
+     - Rd ← Rd + 1
+     - S, V, N, Z
+   * - ``DEC Rd``
+     - Decrement
+     - Rd ← Rd - 1
+     - S, V, N, Z
+   * - ``TST Rd``
+     - Test for Zero or Minus
+     - Rd ← Rd · Rd (alias for AND)
+     - S, V=0, N, Z
+   * - ``CLR Rd``
+     - Clear Register
+     - Rd ← Rd ⊕ Rd (alias for EOR)
+     - S=0, V=0, N=0, Z=1
+   * - ``SER Rd``
+     - Set Register
+     - Rd ← 0xFF (alias for LDI)
+     - None
+   * - ``MUL Rd, Rr``
+     - Multiply Unsigned
+     - R1:R0 ← Rd × Rr
+     - Z, C
+   * - ``MULS Rd, Rr``
+     - Multiply Signed
+     - R1:R0 ← Rd × Rr (signed)
+     - Z, C
+   * - ``MULSU Rd, Rr``
+     - Multiply Signed with Unsigned
+     - R1:R0 ← Rd × Rr (Rd signed, Rr unsigned)
+     - Z, C
+
+Branch Instructions
+~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 26 36 20
+
+   * - Mnemonic & Operands
+     - Description (DS40002198A)
+     - Operation
+     - Flags
+   * - ``JMP target``
+     - Jump
+     - PC ← target
+     - None
+   * - ``RJMP offset``
+     - Relative Jump
+     - PC ← PC + offset + 1
+     - None
+   * - ``CALL target``
+     - Long Call to Subroutine
+     - STACK ← PC + 1, PC ← target
+     - None
+   * - ``RCALL offset``
+     - Relative Call to Subroutine
+     - STACK ← PC + 1, PC ← PC + offset + 1
+     - None
+   * - ``RET``
+     - Return from Subroutine
+     - PC ← STACK
+     - None
+   * - ``RETI``
+     - Return from Interrupt
+     - PC ← STACK, I ← 1
+     - I
+   * - ``CPSE Rd, Rr``
+     - Compare Skip if Equal
+     - If Rd = Rr then skip next instruction
+     - None
+   * - ``CP Rd, Rr``
+     - Compare
+     - Rd - Rr
+     - H, S, V, N, Z, C
+   * - ``CPI Rd, K``
+     - Compare with Immediate
+     - Rd - K
+     - H, S, V, N, Z, C
+   * - ``BREQ label``
+     - Branch if Equal
+     - If Z = 1 then PC ← label
+     - None
+   * - ``BRNE label``
+     - Branch if Not Equal
+     - If Z = 0 then PC ← label
+     - None
+   * - ``BRCS label``
+     - Branch if Carry Set
+     - If C = 1 then PC ← label
+     - None
+   * - ``BRCC label``
+     - Branch if Carry Clear
+     - If C = 0 then PC ← label
+     - None
+   * - ``BRLO label``
+     - Branch if Lower (Unsigned)
+     - If C = 1 then PC ← label (alias for BRCS)
+     - None
+   * - ``BRSH label``
+     - Branch if Same or Higher
+     - If C = 0 then PC ← label (alias for BRCC)
+     - None
+   * - ``BRGE label``
+     - Branch if Greater or Equal (Signed)
+     - If S = 0 (N ⊕ V = 0) then PC ← label
+     - None
+   * - ``BRLT label``
+     - Branch if Less Than (Signed)
+     - If S = 1 (N ⊕ V = 1) then PC ← label
+     - None
+   * - ``BRMI label``
+     - Branch if Minus
+     - If N = 1 then PC ← label
+     - None
+   * - ``BRPL label``
+     - Branch if Plus
+     - If N = 0 then PC ← label
+     - None
+
+Data Transfer Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 26 36 20
+
+   * - Mnemonic & Operands
+     - Description (DS40002198A)
+     - Operation
+     - Flags
+   * - ``MOV Rd, Rr``
+     - Copy Register
+     - Rd ← Rr
+     - None
+   * - ``LDI Rd, K``
+     - Load Immediate
+     - Rd ← K (16 ≤ d ≤ 31)
+     - None
+   * - ``LD Rd, addr_reg``
+     - Load Indirect from Data Space
+     - Rd ← (addr_reg)
+     - None
+   * - ``ST addr_reg, Rr``
+     - Store Indirect to Data Space
+     - (addr_reg) ← Rr
+     - None
+   * - ``LDS Rd, addr``
+     - Load Direct from Data Space
+     - Rd ← (addr)
+     - None
+   * - ``STS addr, Rr``
+     - Store Direct to Data Space
+     - (addr) ← Rr
+     - None
+   * - ``IN Rd, port``
+     - Load an I/O Location to Register
+     - Rd ← P
+     - None
+   * - ``OUT port, Rr``
+     - Store Register to an I/O Location
+     - P ← Rr
+     - None
+   * - ``PUSH Rr``
+     - Push Register on Stack
+     - STACK ← Rr, SP ← SP - 1
+     - None
+   * - ``POP Rd``
+     - Pop Register from Stack
+     - SP ← SP + 1, Rd ← STACK
+     - None
+
+Bit and Bit-Test Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 26 36 20
+
+   * - Mnemonic & Operands
+     - Description (DS40002198A)
+     - Operation
+     - Flags
+   * - ``SBI port, bit``
+     - Set Bit in I/O Register
+     - I/O(P, bit) ← 1
+     - None
+   * - ``CBI port, bit``
+     - Clear Bit in I/O Register
+     - I/O(P, bit) ← 0
+     - None
+   * - ``LSL Rd``
+     - Logical Shift Left
+     - Rd ← Rd ≪ 1 (alias for ADD Rd, Rd)
+     - H, S, V, N, Z, C
+   * - ``LSR Rd``
+     - Logical Shift Right
+     - 0 → Rd7 … Rd0 → C
+     - S, V, N, Z, C
+   * - ``ASR Rd``
+     - Arithmetic Shift Right
+     - Rd7 → Rd7 … Rd0 → C
+     - S, V, N, Z, C
+   * - ``ROL Rd``
+     - Rotate Left through Carry
+     - C ← Rd7 … Rd0 ← C (alias for ADC Rd, Rd)
+     - H, S, V, N, Z, C
+   * - ``ROR Rd``
+     - Rotate Right through Carry
+     - C → Rd7 … Rd0 → C
+     - S, V, N, Z, C
+   * - ``SWAP Rd``
+     - Swap Nibbles
+     - Rd(7..4) ↔ Rd(3..0)
+     - None
+   * - ``SBRS Rd, bit``
+     - Skip if Bit in Register is Set
+     - If Rd(bit) = 1 then skip next instruction
+     - None
+   * - ``SBRC Rd, bit``
+     - Skip if Bit in Register is Cleared
+     - If Rd(bit) = 0 then skip next instruction
+     - None
+   * - ``SBIS port, bit``
+     - Skip if Bit in I/O Register is Set
+     - If I/O(P, bit) = 1 then skip next instruction
+     - None
+   * - ``SBIC port, bit``
+     - Skip if Bit in I/O Register is Cleared
+     - If I/O(P, bit) = 0 then skip next instruction
+     - None
+
+MCU Control Instructions
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 18 26 36 20
+
+   * - Mnemonic & Operands
+     - Description (DS40002198A)
+     - Operation
+     - Flags
+   * - ``NOP``
+     - No Operation
+     - No operation performed
+     - None
+   * - ``SEI``
+     - Set Global Interrupt Flag
+     - I ← 1
+     - I
+   * - ``CLI``
+     - Clear Global Interrupt Flag
+     - I ← 0
+     - I
+
+

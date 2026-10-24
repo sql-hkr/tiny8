@@ -94,44 +94,38 @@ Debugger Controls
 
 Use these keyboard shortcuts to control execution:
 
-**Navigation:**
+**Execution:**
 
-* ``l`` or ``→`` - Step forward one instruction
-* ``h`` or ``←`` - Step backward one instruction  
-* ``w`` - Jump forward 10 steps
-* ``b`` - Jump backward 10 steps
-* ``0`` - Go to first step
-* ``$`` - Go to last step
+* ``Space`` - Play / pause automatic continuous execution
+* ``Shift+Space`` - Reverse playback execution
+* ``n`` - Step forward 1 instruction (+1 step)
+* ``p`` - Step backward 1 instruction (-1 step, time-travel)
+* ``c`` - Continue forward to next breakpoint
+* ``C`` (``Shift+c``) - Reverse continue backward to previous breakpoint
+* ``b`` - Toggle breakpoint at current PC
+* ``+`` / ``-`` - Increase / decrease playback speed
+* ``r`` - Reset execution back to Step 0
 
-**Playback:**
+**Display & Navigation:**
 
-* ``Space`` - Toggle play/pause
-* ``[`` - Slower playback
-* ``]`` - Faster playback
+* ``j`` / ``k`` - Scroll memory view down / up by 32 bytes (1 row)
+* ``J`` / ``K`` - Fast scroll memory view down / up by 128 bytes (4 rows)
+* ``g`` - Toggle Grayscale / Viridis color palette
+* ``x`` - Toggle Hexadecimal (02X) / Graphic Pixel blocks
+* ``m`` - Cycle view modes
+* ``i`` - Inspect details of currently executing instruction
+* ``h`` or ``?`` - Open full help and keyboard guide modal
+* ``e`` - Open built-in Vim modal editor
 
-**Display:**
+**Command Bar Prompt:**
 
-* ``r`` - Toggle showing all registers
-* ``M`` - Toggle showing all memory
-* ``=`` - Show detailed step information
-* ``j`` - Scroll memory view down
-* ``k`` - Scroll memory view up
-
-**Marks:**
-
-* ``m`` + letter - Set a mark at current position
-* ``'`` + letter - Jump to a saved mark
-
-**Search/Commands:**
-
-* ``/`` - Show help screen
-* ``:`` - Enter command mode (for advanced navigation and search)
+* ``:`` - Enter command prompt (e.g. ``:goto <step>``, ``:b <pc>``, ``:q``)
 
 **Exit:**
 
-* ``q`` or ``Esc`` - Quit
+* ``q`` - Quit debugger
 
-Try stepping through your program with ``l`` and watch how the registers change!
+Try stepping through your program with ``n`` and watch how the registers change!
 
 Running from Python
 -------------------

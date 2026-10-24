@@ -3,31 +3,32 @@
 
 start:
     ldi r16, 3        ; base = 3
-    ldi r17, 4        ; exp = 4
+    ldi r18, 4        ; exp = 4
     
     ; save base
-    mov r18, r16
+    mov r19, r16
     
     ; if exp == 0, result = 1
-    cpi r17, 0
+    cpi r18, 0
     breq exp_zero
     
     ; if exp == 1, done
-    cpi r17, 1
+    cpi r18, 1
     breq done
     
     ; counter = 1
-    ldi r19, 1
+    ldi r20, 1
 
 loop:
-    ; result *= base
-    mul r16, r18
+    ; result *= base (stores into R1:R0 per AVR specification)
+    mul r16, r19
+    mov r16, r0
     
     ; counter++
-    inc r19
+    inc r20
     
     ; continue if counter < exp
-    cp r19, r17
+    cp r20, r18
     brlt loop
     
     jmp done

@@ -1,0 +1,1331 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 22:17+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../examples/array_sum.rst:2 ../../examples/index.rst:113
+msgid "Array Sum"
+msgstr ""
+
+#: ../../examples/array_sum.rst:4
+msgid "Sums elements of an array stored in memory."
+msgstr ""
+
+#: ../../examples/array_sum.rst:10
+msgid "Demonstrates memory access and array processing."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:2 ../../examples/bubblesort.rst:351
+#: ../../examples/index.rst:125
+msgid "Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:4
+msgid ""
+"This advanced example demonstrates bubble sort: a classic sorting "
+"algorithm that sorts an array in memory."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:7 ../../examples/fibonacci.rst:7
+#: ../../examples/index.rst:7
+msgid "Overview"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:9
+msgid "**Difficulty**: Advanced"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:11
+msgid ""
+"**Concepts**: Nested loops, memory operations, array manipulation, "
+"pseudo-random number generation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:13
+msgid "**Output**: Sorted array at RAM[0x60..0x7F] (32 bytes in ascending order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:16 ../../examples/fibonacci.rst:16
+msgid "The Program"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:23
+msgid "Algorithm Overview"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:25
+msgid "The program has two main phases:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:27
+msgid "**Initialization**: Generate 32 pseudo-random values and store them in RAM"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:28
+msgid "**Bubble Sort**: Sort the array using the bubble sort algorithm"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:31
+msgid "Phase 1: Array Initialization"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:34
+msgid "Pseudo-Random Number Generator"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:36
+msgid "The program uses a simple linear congruential generator (LCG):"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:42
+msgid "This generates a sequence of pseudo-random 8-bit values."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:56
+msgid "After 32 iterations, RAM[0x60..0x7F] contains pseudo-random values."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:59
+msgid "Phase 2: Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:62 ../../examples/fibonacci.rst:23
+msgid "Algorithm Explanation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:64
+msgid ""
+"Bubble sort works by repeatedly stepping through the array, comparing "
+"adjacent elements, and swapping them if they're in the wrong order."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:74
+msgid "Outer Loop"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:87
+msgid "Runs 31 times (i = 0 to 30)."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:90
+msgid "Inner Loop"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:119
+msgid "For each j:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:121
+msgid "Load adjacent elements (j and j+1)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:122
+msgid "Compare them"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:123
+msgid "Swap if first > second (for ascending order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:124
+msgid "Advance to next pair"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:127
+msgid "Register Usage"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:129
+msgid "Register Allocation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:133
+msgid "Register"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:134
+msgid "Purpose"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:135
+msgid "R16"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:136
+msgid "Memory address pointer / base address"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:137
+msgid "R17"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:138
+msgid "Array index during initialization"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:139
+msgid "R18"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:140
+msgid "PRNG seed / outer loop counter (i)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:141
+msgid "R19"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:142
+msgid "Inner loop counter (j)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:143
+msgid "R20"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:144
+msgid "Address of element A"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:145
+msgid "R21"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:146
+msgid "Value of element A"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:147
+msgid "R22"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:148
+msgid "Address of element B"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:149
+msgid "R23"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:150
+msgid "Temporary comparison value"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:151
+msgid "R24"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:152
+msgid "Value of element B"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:153
+msgid "R25"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:154
+msgid "PRNG multiplier constant (75)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:157
+msgid "Memory Layout"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:174
+msgid "Execution Example"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:177
+msgid "Initial Array (pseudo-random)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:184
+msgid "After Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:190
+msgid ""
+"Bubble sort compares and swaps adjacent elements until the entire array "
+"is sorted."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:193 ../../examples/fibonacci.rst:139
+msgid "Running the Example"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:196 ../../examples/fibonacci.rst:142
+msgid "Interactive Debugger"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:202
+msgid ""
+"Watch the sorting process step-by-step. Set marks at the beginning of "
+"inner_loop to track passes."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:205 ../../examples/fibonacci.rst:151
+msgid "Animation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:212
+msgid "Creates a visualization showing:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:214
+msgid "Memory heatmap of the array being sorted"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:215
+msgid "Register changes during comparisons"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:216
+msgid "Visual pattern of values moving to their correct positions"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:219 ../../examples/fibonacci.rst:160
+msgid "Python API"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:239
+msgid "Performance Analysis"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:242 ../../examples/bubblesort.rst:348
+msgid "Time Complexity"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:244
+msgid "**Best case**: O(n²) - 31 × 31 = 961 comparisons"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:245
+msgid ""
+"**Worst case**: O(n²) - Same as best (this implementation doesn't "
+"optimize)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:246
+msgid "**Average case**: O(n²)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:248
+msgid "For 32 elements:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:250
+msgid "Outer loop: 31 iterations"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:251
+msgid "Inner loop: 31 iterations per outer"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:252
+msgid "Total comparisons: ~961"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:253
+msgid "Total swaps: Variable (depends on initial order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:256
+msgid "Instruction Count"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:258
+msgid "Each comparison involves approximately:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:260
+msgid "10 instructions to load addresses and values"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:261
+msgid "5 instructions for comparison and potential swap"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:262
+msgid "3 instructions for loop control"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:264
+msgid "Total: ~15,000+ instructions for a complete sort."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:267 ../../examples/fibonacci.rst:173
+msgid "Key Concepts"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:270
+msgid "Nested Loops"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:272
+msgid "Two loop counters working together:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:286
+msgid "Address Calculation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:288
+msgid "Computing memory addresses dynamically:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:297
+msgid "Conditional Swapping"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:308 ../../examples/fibonacci.rst:202
+msgid "Exercises"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:310
+msgid "**Count swaps**: Add a counter to track number of swaps"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:311
+msgid "**Optimize**: Add early exit if no swaps occurred in a pass"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:312
+msgid "**Different sizes**: Sort 16 or 64 elements instead"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:313
+msgid "**Descending order**: Modify to sort in descending order"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:314
+msgid "**Different algorithm**: Implement selection sort or insertion sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:317
+msgid "Solutions Hints"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:319
+msgid "**Count swaps**: Add ``inc r26`` in the swap section, initialize R26 to 0."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:321
+msgid "**Optimize**: Set a flag when swapping, check it at end of outer loop."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:323
+msgid "**Descending order**: Change ``brcs no_swap`` to ``brcc no_swap``."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:326
+msgid "Visualization Tips"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:328
+msgid "When viewing the animation:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:330
+msgid "**Memory panel**: Watch values \"bubble\" to their positions"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:331
+msgid "**Register panel**: R19 (j) cycles 0-30 repeatedly"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:332
+msgid "**Register panel**: R18 (i) increments slowly"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:334
+msgid "Look for:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:336
+msgid "Large values moving right (higher addresses)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:337
+msgid "Small values moving left (lower addresses)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:338
+msgid "Progressively fewer changes as array becomes sorted"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:341
+msgid "Comparison with Other Sorts"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:343
+msgid "Sorting Algorithm Comparison"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:347
+msgid "Algorithm"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:349
+msgid "Space"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:350
+msgid "Stability"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:352 ../../examples/bubblesort.rst:356
+#: ../../examples/bubblesort.rst:360
+msgid "O(n²)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:353 ../../examples/bubblesort.rst:357
+#: ../../examples/bubblesort.rst:361
+msgid "O(1)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:354 ../../examples/bubblesort.rst:362
+msgid "Yes"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:355
+msgid "Selection Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:358 ../../examples/bubblesort.rst:366
+msgid "No"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:359
+msgid "Insertion Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:363
+msgid "Quick Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:364
+msgid "O(n log n)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:365
+msgid "O(log n)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:368
+msgid ""
+"Bubble sort is chosen for this example because it's conceptually simple "
+"and demonstrates memory operations clearly."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:371 ../../examples/fibonacci.rst:232
+msgid "Related Examples"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:373
+msgid ":doc:`linear_search` - Sequential array access"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:374
+msgid ":doc:`find_max` - Array comparison operations"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:375
+msgid ":doc:`reverse` - Array manipulation"
+msgstr ""
+
+#: ../../examples/count_bits.rst:2 ../../examples/index.rst:137
+msgid "Count Bits"
+msgstr ""
+
+#: ../../examples/count_bits.rst:4
+msgid "Counts the number of set bits (1s) in a value."
+msgstr ""
+
+#: ../../examples/count_bits.rst:10
+msgid "Demonstrates bit manipulation and counting operations."
+msgstr ""
+
+#: ../../examples/factorial.rst:2
+msgid "Factorial"
+msgstr ""
+
+#: ../../examples/factorial.rst:4
+msgid "Computes factorial of a number using iterative multiplication."
+msgstr ""
+
+#: ../../examples/factorial.rst:10
+msgid ""
+"Calculates 5! = 120 using repeated multiplication and demonstrates loop "
+"control."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:2
+msgid "Fibonacci Sequence"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:4
+msgid ""
+"This example calculates the 10th Fibonacci number using an iterative "
+"approach."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:9
+msgid "**Difficulty**: Beginner"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:11
+msgid "**Concepts**: Loops, register arithmetic, conditional branching"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:13
+msgid "**Output**: R17 contains F(10) = 55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:25
+msgid "The Fibonacci sequence is defined as:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:27
+msgid "F(0) = 0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:28
+msgid "F(1) = 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:29
+msgid "F(n) = F(n-1) + F(n-2) for n > 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:31
+msgid "This program uses an iterative approach with three registers:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:33
+msgid "**R16**: Previous Fibonacci number (F(n-1))"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:34
+msgid "**R17**: Current Fibonacci number (F(n))"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:35
+msgid "**R18**: Counter (remaining iterations)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:38
+msgid "Step-by-Step Walkthrough"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:41
+msgid "Initialization (Lines 8-10)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:49
+msgid ""
+"We start with F(0) = 0 and F(1) = 1. Since we want F(10), we need 9 more "
+"iterations (F(2) through F(10))."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:52
+msgid "Main Loop (Lines 12-18)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:64
+msgid "Each iteration:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:66
+msgid "**Add**: Compute next Fibonacci number (R16 + R17)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:67
+msgid "**Save**: Store result in temporary register R19"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:68
+msgid "**Shift**: Move R17 to R16 (previous ← current)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:69
+msgid "**Update**: Move R19 to R17 (current ← new result)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:70
+msgid "**Decrement**: Decrease counter"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:71
+msgid "**Branch**: Loop if counter ≠ 0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:74
+msgid "Execution Trace"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:76
+msgid "Here's how the registers evolve:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:78
+msgid "Fibonacci Calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:82
+msgid "Iter"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:83
+msgid "R16 (prev)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:84
+msgid "R17 (curr)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:85
+msgid "R18 (count)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:86
+msgid "Calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:87
+msgid "Init"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:88 ../../examples/fibonacci.rst:135
+msgid "0"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:89 ../../examples/fibonacci.rst:92
+#: ../../examples/fibonacci.rst:93 ../../examples/fibonacci.rst:94
+#: ../../examples/fibonacci.rst:98 ../../examples/fibonacci.rst:130
+msgid "1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:90 ../../examples/fibonacci.rst:132
+msgid "9"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:91
+msgid "F(0), F(1)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:95 ../../examples/fibonacci.rst:114
+#: ../../examples/fibonacci.rst:118 ../../examples/fibonacci.rst:127
+msgid "8"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:96
+msgid "F(2) = 0 + 1 = 1"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:97 ../../examples/fibonacci.rst:99
+#: ../../examples/fibonacci.rst:103 ../../examples/fibonacci.rst:125
+msgid "2"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:100 ../../examples/fibonacci.rst:122
+msgid "7"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:101
+msgid "F(3) = 1 + 1 = 2"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:102 ../../examples/fibonacci.rst:104
+#: ../../examples/fibonacci.rst:108 ../../examples/fibonacci.rst:120
+msgid "3"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:105 ../../examples/fibonacci.rst:117
+msgid "6"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:106
+msgid "F(4) = 1 + 2 = 3"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:107 ../../examples/fibonacci.rst:115
+msgid "4"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:109 ../../examples/fibonacci.rst:110
+#: ../../examples/fibonacci.rst:112 ../../examples/fibonacci.rst:113
+msgid "5"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:111
+msgid "F(5) = 2 + 3 = 5"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:116
+msgid "F(6) = 3 + 5 = 8"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:119 ../../examples/fibonacci.rst:123
+msgid "13"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:121
+msgid "F(7) = 5 + 8 = 13"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:124 ../../examples/fibonacci.rst:128
+msgid "21"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:126
+msgid "F(8) = 8 + 13 = 21"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:129 ../../examples/fibonacci.rst:133
+msgid "34"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:131
+msgid "F(9) = 13 + 21 = 34"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:134
+msgid "55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:136
+msgid "F(10) = 21 + 34 = 55"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:148
+msgid "Step through with ``j`` and watch registers R16, R17, and R18 evolve."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:157
+msgid "Visualize the register changes over time."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:176
+msgid "Loop Structure"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:178
+msgid "The loop pattern is common in assembly:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:189
+msgid "Register Shifting"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:191
+msgid "Moving values between registers for state management:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:199
+msgid ""
+"This \"register rotation\" is a fundamental technique in assembly "
+"programming."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:204
+msgid "**Modify the counter**: Calculate F(15) instead of F(10)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:205
+msgid ""
+"**Different starting values**: Try F(0) = 1, F(1) = 1 (alternative "
+"definition)"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:206
+msgid "**Store in memory**: Save each Fibonacci number to memory"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:207
+msgid "**Detect overflow**: Check when the result exceeds 255"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:210
+msgid "Solutions"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:212
+msgid "**F(15) modification**:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:218
+msgid "Note: F(15) = 610, which exceeds 8-bit range (wraps to 98)."
+msgstr ""
+
+#: ../../examples/fibonacci.rst:220
+msgid "**Store in memory**:"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:234
+msgid ":doc:`factorial` - Another iterative calculation"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:235
+msgid ":doc:`sum_1_to_n` - Similar loop structure"
+msgstr ""
+
+#: ../../examples/fibonacci.rst:236
+msgid ":doc:`power` - Repeated operation pattern"
+msgstr ""
+
+#: ../../examples/find_max.rst:2
+msgid "Find Maximum"
+msgstr ""
+
+#: ../../examples/find_max.rst:4
+msgid "Finds the maximum value in an array."
+msgstr ""
+
+#: ../../examples/find_max.rst:10
+msgid "Demonstrates comparison operations and conditional logic."
+msgstr ""
+
+#: ../../examples/gcd.rst:2
+msgid "GCD (Greatest Common Divisor)"
+msgstr ""
+
+#: ../../examples/gcd.rst:4
+msgid "Computes the GCD of two numbers using Euclidean algorithm."
+msgstr ""
+
+#: ../../examples/gcd.rst:10
+msgid ""
+"Demonstrates subtraction-based Euclidean algorithm and conditional "
+"comparison."
+msgstr ""
+
+#: ../../examples/hello_world.rst:2 ../../examples/index.rst:98
+msgid "Hello World"
+msgstr ""
+
+#: ../../examples/hello_world.rst:4
+msgid "A minimal Tiny8 program demonstrating basic structure."
+msgstr ""
+
+#: ../../examples/hello_world.rst:10
+msgid ""
+"This program demonstrates the simplest possible Tiny8 program structure "
+"with initialization and an infinite loop."
+msgstr ""
+
+#: ../../examples/index.rst:2
+msgid "Examples"
+msgstr ""
+
+#: ../../examples/index.rst:4
+msgid ""
+"This section contains detailed walkthroughs of example programs that "
+"demonstrate Tiny8's capabilities and teach assembly programming concepts."
+msgstr ""
+
+#: ../../examples/index.rst:9
+msgid "The examples are organized by complexity and concept:"
+msgstr ""
+
+#: ../../examples/index.rst:11
+msgid "**Basic Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:12
+msgid "Simple programs demonstrating fundamental operations"
+msgstr ""
+
+#: ../../examples/index.rst:14
+msgid "**Intermediate Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:15
+msgid "Programs using loops, conditionals, and memory operations"
+msgstr ""
+
+#: ../../examples/index.rst:17
+msgid "**Advanced Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:18
+msgid "Complex algorithms including sorting and mathematical computations"
+msgstr ""
+
+#: ../../examples/index.rst:20
+msgid ""
+"All examples are available in the ``examples/`` directory of the Tiny8 "
+"repository."
+msgstr ""
+
+#: ../../examples/index.rst:23
+msgid "Running Examples"
+msgstr ""
+
+#: ../../examples/index.rst:25
+msgid "You can run any example with the interactive debugger:"
+msgstr ""
+
+#: ../../examples/index.rst:31
+msgid "Or use the Python API:"
+msgstr ""
+
+#: ../../examples/index.rst:42
+msgid "Example Programs"
+msgstr ""
+
+#: ../../examples/index.rst:45
+msgid "Basic Examples"
+msgstr ""
+
+#: ../../examples/index.rst:55
+msgid "Intermediate Examples"
+msgstr ""
+
+#: ../../examples/index.rst:67
+msgid "Advanced Examples"
+msgstr ""
+
+#: ../../examples/index.rst:81
+msgid "C Language Programs & Interactive Demos"
+msgstr ""
+
+#: ../../examples/index.rst:83
+msgid ""
+"Tiny8 includes an embedded C subset compiler capable of compiling and "
+"running C programs directly on the simulated CPU:"
+msgstr ""
+
+#: ../../examples/index.rst:85
+msgid "**factorial.c**: Recursive factorial calculation demonstration."
+msgstr ""
+
+#: ../../examples/index.rst:86
+msgid ""
+"**mnist_heatmap.c**: 28x28 MNIST real digit heatmap transfer to 32x32 "
+"VRAM."
+msgstr ""
+
+#: ../../examples/index.rst:89
+msgid "Quick Reference"
+msgstr ""
+
+#: ../../examples/index.rst:91
+msgid "Example Summary"
+msgstr ""
+
+#: ../../examples/index.rst:95
+msgid "Program"
+msgstr ""
+
+#: ../../examples/index.rst:96
+msgid "Concept"
+msgstr ""
+
+#: ../../examples/index.rst:97
+msgid "Key Instructions / Language"
+msgstr ""
+
+#: ../../examples/index.rst:99
+msgid "Basic memory writing"
+msgstr ""
+
+#: ../../examples/index.rst:100
+msgid "LDI, ST, INC, JMP"
+msgstr ""
+
+#: ../../examples/index.rst:101
+msgid "Fibonacci"
+msgstr ""
+
+#: ../../examples/index.rst:102
+msgid "Iterative sequence"
+msgstr ""
+
+#: ../../examples/index.rst:103
+msgid "ADD, MOV, DEC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:104
+msgid "Factorial (ASM)"
+msgstr ""
+
+#: ../../examples/index.rst:105
+msgid "Iterative multiplication"
+msgstr ""
+
+#: ../../examples/index.rst:106
+msgid "MUL, DEC, CPI, BRGE"
+msgstr ""
+
+#: ../../examples/index.rst:107
+msgid "Factorial (C)"
+msgstr ""
+
+#: ../../examples/index.rst:108
+msgid "Recursive function calls"
+msgstr ""
+
+#: ../../examples/index.rst:109
+msgid "C Compiler (CALL, RET, PUSH, POP)"
+msgstr ""
+
+#: ../../examples/index.rst:110 ../../examples/sum_1_to_n.rst:2
+msgid "Sum 1 to N"
+msgstr ""
+
+#: ../../examples/index.rst:111
+msgid "Loop accumulation"
+msgstr ""
+
+#: ../../examples/index.rst:112
+msgid "ADD, INC, CP, BRLT, BREQ"
+msgstr ""
+
+#: ../../examples/index.rst:114
+msgid "Pointer iteration"
+msgstr ""
+
+#: ../../examples/index.rst:115
+msgid "LD, ST, ADD, INC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:116
+msgid "Find Max"
+msgstr ""
+
+#: ../../examples/index.rst:117
+msgid "Array scanning & comparison"
+msgstr ""
+
+#: ../../examples/index.rst:118
+msgid "LD, ST, CP, BRGE, MOV"
+msgstr ""
+
+#: ../../examples/index.rst:119 ../../examples/linear_search.rst:2
+msgid "Linear Search"
+msgstr ""
+
+#: ../../examples/index.rst:120
+msgid "Target search & sentinel"
+msgstr ""
+
+#: ../../examples/index.rst:121
+msgid "LD, ST, CP, BREQ, INC"
+msgstr ""
+
+#: ../../examples/index.rst:122 ../../examples/memory_copy.rst:2
+msgid "Memory Copy"
+msgstr ""
+
+#: ../../examples/index.rst:123
+msgid "Block memory transfer"
+msgstr ""
+
+#: ../../examples/index.rst:124
+msgid "LD, ST, INC, DEC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:126
+msgid "PRNG & in-place sort"
+msgstr ""
+
+#: ../../examples/index.rst:127
+msgid "MUL, LD, ST, CP, BRCS"
+msgstr ""
+
+#: ../../examples/index.rst:128
+msgid "GCD"
+msgstr ""
+
+#: ../../examples/index.rst:129
+msgid "Euclidean algorithm"
+msgstr ""
+
+#: ../../examples/index.rst:130
+msgid "DIV, MOV, CPI, BREQ"
+msgstr ""
+
+#: ../../examples/index.rst:131
+msgid "Power"
+msgstr ""
+
+#: ../../examples/index.rst:132
+msgid "Exponentiation"
+msgstr ""
+
+#: ../../examples/index.rst:133
+msgid "MUL, INC, CP, BRLT"
+msgstr ""
+
+#: ../../examples/index.rst:134 ../../examples/multiply_by_shift.rst:2
+msgid "Multiply by Shift"
+msgstr ""
+
+#: ../../examples/index.rst:135
+msgid "Binary shift multiplication"
+msgstr ""
+
+#: ../../examples/index.rst:136
+msgid "LSL, LSR, ANDI, ADD"
+msgstr ""
+
+#: ../../examples/index.rst:138
+msgid "Bit testing & division"
+msgstr ""
+
+#: ../../examples/index.rst:139
+msgid "AND, DIV, CPI, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:140 ../../examples/is_prime.rst:2
+msgid "Is Prime"
+msgstr ""
+
+#: ../../examples/index.rst:141
+msgid "Trial division"
+msgstr ""
+
+#: ../../examples/index.rst:142
+msgid "DIV, MUL, CP, BRGE, BRLT"
+msgstr ""
+
+#: ../../examples/index.rst:143 ../../examples/reverse.rst:2
+msgid "Reverse Array"
+msgstr ""
+
+#: ../../examples/index.rst:144
+msgid "Two-pointer array reverse"
+msgstr ""
+
+#: ../../examples/index.rst:145
+msgid "LD, ST, CP, BRGE, INC, DEC"
+msgstr ""
+
+#: ../../examples/index.rst:146
+msgid "MNIST Heatmap (C)"
+msgstr ""
+
+#: ../../examples/index.rst:147
+msgid "28x28 digit VRAM heatmap"
+msgstr ""
+
+#: ../../examples/index.rst:148
+msgid "C (VRAM 0x0200..0x05FF)"
+msgstr ""
+
+#: ../../examples/index.rst:149
+msgid "MNIST Diffusion (ASM)"
+msgstr ""
+
+#: ../../examples/index.rst:150
+msgid "Iterative reverse-diffusion synthesis"
+msgstr ""
+
+#: ../../examples/index.rst:151
+msgid "ASM (diffusion_mnist8.asm)"
+msgstr ""
+
+#: ../../examples/index.rst:154
+msgid "Learning Path"
+msgstr ""
+
+#: ../../examples/index.rst:156
+msgid "Recommended order for learning:"
+msgstr ""
+
+#: ../../examples/index.rst:158
+msgid "**Start with basics**: hello_world, fibonacci, factorial"
+msgstr ""
+
+#: ../../examples/index.rst:159
+msgid "**Learn memory**: array_sum, memory_copy, find_max"
+msgstr ""
+
+#: ../../examples/index.rst:160
+msgid "**Master control flow**: linear_search, gcd"
+msgstr ""
+
+#: ../../examples/index.rst:161
+msgid "**Tackle algorithms**: bubblesort, power, is_prime"
+msgstr ""
+
+#: ../../examples/index.rst:162
+msgid "**Explore bit operations**: multiply_by_shift, count_bits"
+msgstr ""
+
+#: ../../examples/is_prime.rst:4
+msgid "Tests whether a number is prime."
+msgstr ""
+
+#: ../../examples/is_prime.rst:10
+msgid "Demonstrates trial division and number theory concepts."
+msgstr ""
+
+#: ../../examples/linear_search.rst:4
+msgid "Searches for a value in an array."
+msgstr ""
+
+#: ../../examples/linear_search.rst:10
+msgid "Demonstrates sequential search and early loop exit."
+msgstr ""
+
+#: ../../examples/memory_copy.rst:4
+msgid "Copies data from one memory location to another."
+msgstr ""
+
+#: ../../examples/memory_copy.rst:10
+msgid "Demonstrates memory-to-memory data transfer."
+msgstr ""
+
+#: ../../examples/multiply_by_shift.rst:4
+msgid "Multiplies numbers using bit shifting instead of MUL instruction."
+msgstr ""
+
+#: ../../examples/multiply_by_shift.rst:10
+msgid "Demonstrates bit manipulation and efficient multiplication."
+msgstr ""
+
+#: ../../examples/power.rst:2
+msgid "Power Function"
+msgstr ""
+
+#: ../../examples/power.rst:4
+msgid "Computes x^n using repeated multiplication."
+msgstr ""
+
+#: ../../examples/power.rst:10
+msgid "Demonstrates exponentiation through iteration."
+msgstr ""
+
+#: ../../examples/reverse.rst:4
+msgid "Reverses an array in place."
+msgstr ""
+
+#: ../../examples/reverse.rst:10
+msgid "Demonstrates two-pointer technique and array manipulation."
+msgstr ""
+
+#: ../../examples/sum_1_to_n.rst:4
+msgid "Calculates the sum of integers from 1 to N."
+msgstr ""
+
+#: ../../examples/sum_1_to_n.rst:10
+msgid "Demonstrates accumulation pattern and loop control."
+msgstr ""
+

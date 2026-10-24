@@ -1,0 +1,751 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 01:27+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../architecture.rst:2
+msgid "Architecture"
+msgstr ""
+
+#: ../../architecture.rst:4
+msgid "This guide provides a detailed overview of the Tiny8 CPU architecture, including its registers, memory model, instruction execution, and status flags."
+msgstr ""
+
+#: ../../architecture.rst:7
+msgid "CPU Overview"
+msgstr ""
+
+#: ../../architecture.rst:9
+msgid "Tiny8 implements an 8-bit RISC CPU architecture modeled directly after the Atmel / Microchip AVR instruction set architecture. Instruction semantics, flag behaviors, and operations strictly adhere to the official specification:"
+msgstr ""
+
+#: ../../architecture.rst:11
+msgid "**Official Specification**: `Microchip AVR® Instruction Set Manual (DS40002198A) <https://ww1.microchip.com/downloads/en/DeviceDoc/AVR-Instruction-Set-Manual-DS40002198A.pdf>`_"
+msgstr ""
+
+#: ../../architecture.rst:13
+msgid "The design balances hardware realism with educational clarity, providing full visibility and interactive step debugging."
+msgstr ""
+
+#: ../../architecture.rst:16
+msgid "Key Specifications"
+msgstr ""
+
+#: ../../architecture.rst:18
+msgid "**Word size**: 8 bits"
+msgstr ""
+
+#: ../../architecture.rst:19
+msgid "**Registers**: 32 general-purpose 8-bit registers (R0-R31)"
+msgstr ""
+
+#: ../../architecture.rst:20
+msgid "**Memory**: 64KB RAM (configurable)"
+msgstr ""
+
+#: ../../architecture.rst:21
+msgid "**Stack**: Grows downward from high memory (SP decrements on push)"
+msgstr ""
+
+#: ../../architecture.rst:22
+msgid "**Instruction set**: 67 instructions compliant with AVR DS40002198A"
+msgstr ""
+
+#: ../../architecture.rst:23
+msgid "**Status register**: 8 flags (SREG: I, T, H, S, V, N, Z, C)"
+msgstr ""
+
+#: ../../architecture.rst:26
+msgid "Register Architecture"
+msgstr ""
+
+#: ../../architecture.rst:28
+msgid "In strict alignment with the **Microchip AVR® Instruction Set Manual (DS40002198A, Section 4)**, the CPU register file consists of 32 8-bit general-purpose working registers, labeled **R0** through **R31**. All 32 registers have direct, single-cycle access to the Arithmetic Logic Unit (ALU)."
+msgstr ""
+
+#: ../../architecture.rst:45
+msgid "Register Organization & Special Functions"
+msgstr ""
+
+#: ../../architecture.rst:47
+msgid "**General Working Registers (R0–R15)**: Operate with all two-register arithmetic, logical, and bit operations (e.g., ``ADD``, ``SUB``, ``AND``, ``OR``, ``EOR``, ``MOV``, ``CP``)."
+msgstr ""
+
+#: ../../architecture.rst:49
+msgid "**Upper Registers (R16–R31)**: Support direct immediate instructions (``LDI``, ``SUBI``, ``SBCI``, ``ANDI``, ``ORI``, ``CPI``) where an 8-bit constant :math:`K` is supplied in the instruction."
+msgstr ""
+
+#: ../../architecture.rst:51
+msgid "**16-bit Word Operand Pairs (R25:R24, X, Y, Z)**: The word operations ``ADIW`` (Add Immediate to Word) and ``SBIW`` (Subtract Immediate from Word) operate exclusively on the upper register pairs: * ``R25:R24`` * ``R27:R26`` (X-register) * ``R29:R28`` (Y-register) * ``R31:R30`` (Z-register)"
+msgstr ""
+
+#: ../../architecture.rst:57
+msgid "**16-bit Pointer Registers (X, Y, Z)**: Six registers (R26–R31) serve as three 16-bit indirect address pointers for Data Space memory addressing: * **X-register**: ``XL = R26`` (low byte), ``XH = R27`` (high byte) * **Y-register**: ``YL = R28`` (low byte), ``YH = R29`` (high byte) * **Z-register**: ``ZL = R30`` (low byte), ``ZH = R31`` (high byte)"
+msgstr ""
+
+#: ../../architecture.rst:64
+msgid "Special Registers"
+msgstr ""
+
+#: ../../architecture.rst:67
+msgid "Program Counter (PC)"
+msgstr ""
+
+#: ../../architecture.rst:69
+msgid "16-bit program address pointer referencing instructions in program memory."
+msgstr ""
+
+#: ../../architecture.rst:70
+msgid "Automatically increments during sequential execution."
+msgstr ""
+
+#: ../../architecture.rst:71
+msgid "Modified by jump (``JMP``, ``RJMP``), subroutine call/return (``CALL``, ``RCALL``, ``RET``, ``RETI``), skip instructions (``CPSE``, ``SBRS``, ``SBRC``, ``SBIS``, ``SBIC``), and conditional branches (``BRxx``)."
+msgstr ""
+
+#: ../../architecture.rst:74
+msgid "Stack Pointer (SP)"
+msgstr ""
+
+#: ../../architecture.rst:76
+msgid "16-bit stack pointer pointing to the current top of the stack in Data SRAM."
+msgstr ""
+
+#: ../../architecture.rst:77
+msgid "Initialized to the end of RAM (default: ``0xFFFF`` with 64KB RAM)."
+msgstr ""
+
+#: ../../architecture.rst:78
+msgid "Decrements during ``PUSH``, ``CALL``, and ``RCALL`` (post-decrement)."
+msgstr ""
+
+#: ../../architecture.rst:79
+msgid "Increments during ``POP``, ``RET``, and ``RETI`` (pre-increment)."
+msgstr ""
+
+#: ../../architecture.rst:82
+msgid "Status Register (SREG)"
+msgstr ""
+
+#: ../../architecture.rst:84
+msgid "8-bit condition flag register containing flags: ``I``, ``T``, ``H``, ``S``, ``V``, ``N``, ``Z``, ``C``."
+msgstr ""
+
+#: ../../architecture.rst:85
+msgid "Updated by arithmetic, logical, and shift operations according to exact Boolean algebra defined in DS40002198A."
+msgstr ""
+
+#: ../../architecture.rst:93
+msgid "Memory Model & Addressing Modes"
+msgstr ""
+
+#: ../../architecture.rst:96
+msgid "Data Memory Space"
+msgstr ""
+
+#: ../../architecture.rst:98
+msgid "Tiny8 provides a flat, byte-addressable memory space modeled after AVR SRAM with configurable capacity (default: 65536 bytes / 64KB, addressable range ``0x0000`` to ``0xFFFF``)."
+msgstr ""
+
+#: ../../architecture.rst:117
+msgid "AVR Addressing Modes"
+msgstr ""
+
+#: ../../architecture.rst:119
+msgid "Tiny8 strictly adheres to the standard AVR addressing modes specified in DS40002198A:"
+msgstr ""
+
+#: ../../architecture.rst:121
+msgid "**Direct Single Register**: Operates on a single working register :math:`Rd` (e.g. ``INC Rd``, ``DEC Rd``, ``NEG Rd``, ``COM Rd``, ``CLR Rd``, ``SER Rd``, ``SWAP Rd``, ``LSL Rd``, ``LSR Rd``)."
+msgstr ""
+
+#: ../../architecture.rst:122
+msgid "**Direct Two-Register**: Operates on two working registers :math:`Rd` and :math:`Rr` (e.g. ``ADD Rd, Rr``, ``ADC Rd, Rr``, ``SUB Rd, Rr``, ``SBC Rd, Rr``, ``AND Rd, Rr``, ``OR Rd, Rr``, ``EOR Rd, Rr``, ``CP Rd, Rr``, ``MOV Rd, Rr``)."
+msgstr ""
+
+#: ../../architecture.rst:123
+msgid "**Immediate Addressing**: An 8-bit constant :math:`K` operates on an upper register :math:`R16 \\le Rd \\le R31` (e.g. ``LDI Rd, K``, ``SUBI Rd, K``, ``SBCI Rd, K``, ``ANDI Rd, K``, ``ORI Rd, K``, ``CPI Rd, K``)."
+msgstr ""
+
+#: ../../architecture.rst:124
+msgid "**Word Immediate Addressing**: A 6-bit constant :math:`0 \\le K \\le 63` operates on register pairs :math:`R25:R24`, :math:`X`, :math:`Y`, or :math:`Z` (e.g. ``ADIW Rd, K``, ``SBIW Rd, K``)."
+msgstr ""
+
+#: ../../architecture.rst:125
+msgid "**Direct Data Addressing**: 16-bit absolute memory address :math:`k` loads or stores directly to Data Space (e.g. ``LDS Rd, k``, ``STS k, Rr``)."
+msgstr ""
+
+#: ../../architecture.rst:126
+msgid "**Data Indirect Addressing with Pointer Registers (X, Y, Z)**: Accesses Data Space through 16-bit register pointers :math:`X` (R27:R26), :math:`Y` (R29:R28), or :math:`Z` (R31:R30) (e.g. ``LD Rd, X``, ``ST X, Rr``)."
+msgstr ""
+
+#: ../../architecture.rst:127
+msgid "**I/O Direct Addressing**: Reads or writes to 6-bit I/O addresses :math:`0 \\le P \\le 63` (e.g. ``IN Rd, P``, ``OUT P, Rr``, ``SBI P, b``, ``CBI P, b``, ``SBIS P, b``, ``SBIC P, b``)."
+msgstr ""
+
+#: ../../architecture.rst:128
+msgid "**Relative Program Addressing**: Jumps or branches relative to the current Program Counter within range :math:`PC + k + 1` (e.g. ``RJMP k``, ``RCALL k``, ``BREQ k``, ``BRNE k``, ``BRCS k``, ``BRCC k``, ``BRLO k``, ``BRSH k``, ``BRGE k``, ``BRLT k``, ``BRMI k``, ``BRPL k``)."
+msgstr ""
+
+#: ../../architecture.rst:129
+msgid "**Direct Program Addressing**: Unconditional jump or long subroutine call directly to 16-bit program address :math:`k` (e.g. ``JMP k``, ``CALL k``)."
+msgstr ""
+
+#: ../../architecture.rst:130
+msgid "**Indirect Program Addressing**: Return from subroutine or interrupt through return address popped from the stack (e.g. ``RET``, ``RETI``)."
+msgstr ""
+
+#: ../../architecture.rst:133
+msgid "Memory Access Examples"
+msgstr ""
+
+#: ../../architecture.rst:155
+msgid "All memory is initialized to 0 on CPU creation"
+msgstr ""
+
+#: ../../architecture.rst:156
+msgid "The assembler loads program instructions starting at address 0"
+msgstr ""
+
+#: ../../architecture.rst:157
+msgid "Stack pointer is initialized to the top of memory"
+msgstr ""
+
+#: ../../architecture.rst:160
+msgid "Status Flags"
+msgstr ""
+
+#: ../../architecture.rst:162
+msgid "The Status Register (SREG) contains 8 condition flags that reflect the result of operations and control program flow. In accordance with the **Microchip AVR® Instruction Set Manual (DS40002198A)**, each flag is defined and updated according to exact Boolean algebraic formulas."
+msgstr ""
+
+#: ../../architecture.rst:165
+msgid "Flag Descriptions & Boolean Formulas"
+msgstr ""
+
+#: ../../architecture.rst:171
+msgid "Bit"
+msgstr ""
+
+#: ../../architecture.rst:172
+msgid "Flag"
+msgstr ""
+
+#: ../../architecture.rst:173
+msgid "Name"
+msgstr ""
+
+#: ../../architecture.rst:174
+msgid "DS40002198A Definition & Formula"
+msgstr ""
+
+#: ../../architecture.rst:175
+msgid "7"
+msgstr ""
+
+#: ../../architecture.rst:176
+msgid "**I**"
+msgstr ""
+
+#: ../../architecture.rst:177
+msgid "Global Interrupt"
+msgstr ""
+
+#: ../../architecture.rst:178
+msgid "Set by ``SEI``, cleared by ``CLI`` or hardware interrupt entry."
+msgstr ""
+
+#: ../../architecture.rst:179
+msgid "6"
+msgstr ""
+
+#: ../../architecture.rst:180
+msgid "**T**"
+msgstr ""
+
+#: ../../architecture.rst:181
+msgid "Bit Copy Storage"
+msgstr ""
+
+#: ../../architecture.rst:182
+msgid "Transferred between SREG and register bit locations by ``BST`` / ``BLD``."
+msgstr ""
+
+#: ../../architecture.rst:183
+msgid "5"
+msgstr ""
+
+#: ../../architecture.rst:184
+msgid "**H**"
+msgstr ""
+
+#: ../../architecture.rst:185
+msgid "Half Carry"
+msgstr ""
+
+#: ../../architecture.rst:186
+msgid "Indicates carry/borrow across nibble boundary (bit 3 to bit 4). ADD: :math:`Rd3 \\cdot Rr3 + Rr3 \\cdot \\overline{R3} + \\overline{R3} \\cdot Rd3`. SUB: :math:`\\overline{Rd3} \\cdot Rr3 + Rr3 \\cdot R3 + R3 \\cdot \\overline{Rd3}`."
+msgstr ""
+
+#: ../../architecture.rst:187
+msgid "4"
+msgstr ""
+
+#: ../../architecture.rst:188
+msgid "**S**"
+msgstr ""
+
+#: ../../architecture.rst:189
+msgid "Sign Bit"
+msgstr ""
+
+#: ../../architecture.rst:190
+msgid "True algebraic sign test considering two's complement overflow: :math:`S = N \\oplus V`."
+msgstr ""
+
+#: ../../architecture.rst:191
+msgid "3"
+msgstr ""
+
+#: ../../architecture.rst:192
+msgid "**V**"
+msgstr ""
+
+#: ../../architecture.rst:193
+msgid "Overflow"
+msgstr ""
+
+#: ../../architecture.rst:194
+msgid "Two's complement signed overflow flag. ADD: :math:`Rd7 \\cdot Rr7 \\cdot \\overline{R7} + \\overline{Rd7} \\cdot \\overline{Rr7} \\cdot R7`. SUB: :math:`Rd7 \\cdot \\overline{Rr7} \\cdot \\overline{R7} + \\overline{Rd7} \\cdot Rr7 \\cdot R7`."
+msgstr ""
+
+#: ../../architecture.rst:195
+msgid "2"
+msgstr ""
+
+#: ../../architecture.rst:196
+msgid "**N**"
+msgstr ""
+
+#: ../../architecture.rst:197
+msgid "Negative"
+msgstr ""
+
+#: ../../architecture.rst:198
+msgid "Set if the most significant bit (MSB, bit 7) of the result is 1: :math:`N = R7`."
+msgstr ""
+
+#: ../../architecture.rst:199
+msgid "1"
+msgstr ""
+
+#: ../../architecture.rst:200
+msgid "**Z**"
+msgstr ""
+
+#: ../../architecture.rst:201
+msgid "Zero"
+msgstr ""
+
+#: ../../architecture.rst:202
+msgid "Set if the result equals zero: :math:`Z = \\overline{R7} \\cdot \\overline{R6} \\cdot \\overline{R5} \\cdot \\overline{R4} \\cdot \\overline{R3} \\cdot \\overline{R2} \\cdot \\overline{R1} \\cdot \\overline{R0}`."
+msgstr ""
+
+#: ../../architecture.rst:203
+msgid "0"
+msgstr ""
+
+#: ../../architecture.rst:204
+msgid "**C**"
+msgstr ""
+
+#: ../../architecture.rst:205
+msgid "Carry / Borrow"
+msgstr ""
+
+#: ../../architecture.rst:206
+msgid "Unsigned carry out of bit 7 or borrow. ADD: :math:`Rd7 \\cdot Rr7 + Rr7 \\cdot \\overline{R7} + \\overline{R7} \\cdot Rd7`. SUB: :math:`\\overline{Rd7} \\cdot Rr7 + Rr7 \\cdot R7 + R7 \\cdot \\overline{Rd7}`."
+msgstr ""
+
+#: ../../architecture.rst:209
+msgid "Flag Updates by Instruction Category"
+msgstr ""
+
+#: ../../architecture.rst:211
+msgid "According to AVR Instruction Set Manual DS40002198A:"
+msgstr ""
+
+#: ../../architecture.rst:213
+msgid "**Arithmetic (ADD, ADC, SUB, SUBI, SBC, SBCI)**"
+msgstr ""
+
+#: ../../architecture.rst:214
+msgid "Updates all condition flags: ``H``, ``S``, ``V``, ``N``, ``Z``, ``C``."
+msgstr ""
+
+#: ../../architecture.rst:216
+msgid "**Comparisons (CP, CPI)**"
+msgstr ""
+
+#: ../../architecture.rst:217
+msgid "Identical flag updates to subtraction (``SUB`` / ``SUBI``), but the register value is discarded."
+msgstr ""
+
+#: ../../architecture.rst:219
+msgid "**Bitwise Logical (AND, ANDI, OR, ORI, EOR, TST)**"
+msgstr ""
+
+#: ../../architecture.rst:220
+msgid "Updates ``S``, ``V=0`` (cleared), ``N``, ``Z``. Carry ``C`` and Half-Carry ``H`` are **unaffected** (``-``). ``TST Rd`` is an alias for ``AND Rd, Rd``."
+msgstr ""
+
+#: ../../architecture.rst:222
+msgid "**Register Clearing & Setting (CLR, SER)**"
+msgstr ""
+
+#: ../../architecture.rst:223
+msgid "``CLR Rd`` is an alias for ``EOR Rd, Rd``: sets ``Z=1``, ``S=0``, ``V=0``, ``N=0``; leaves ``C`` and ``H`` unaffected."
+msgstr ""
+
+#: ../../architecture.rst:224
+msgid "``SER Rd`` is an alias for ``LDI Rd, $FF``: **no flags affected**."
+msgstr ""
+
+#: ../../architecture.rst:226
+msgid "**Single-Operand Arithmetic (INC, DEC, NEG, COM)**"
+msgstr ""
+
+#: ../../architecture.rst:227
+msgid "``INC`` / ``DEC``: Update ``S``, ``V``, ``N``, ``Z``. Carry ``C`` is **unaffected** (allows loop counters without clobbering carry)."
+msgstr ""
+
+#: ../../architecture.rst:228
+msgid "``NEG``: Two's complement negation (:math:`R = 0 - Rd`). Updates ``H``, ``S``, ``V``, ``N``, ``Z``, ``C``. (:math:`C = (R \\neq 0)`, :math:`V = (Rd = \\$80)`)."
+msgstr ""
+
+#: ../../architecture.rst:229
+msgid "``COM``: One's complement inversion (:math:`R = \\$FF - Rd`). Updates ``S``, ``V=0``, ``N``, ``Z``, and forces ``C=1``."
+msgstr ""
+
+#: ../../architecture.rst:231
+msgid "**Shifts & Rotates (LSL, LSR, ROL, ROR, SWAP)**"
+msgstr ""
+
+#: ../../architecture.rst:232
+msgid "``LSL Rd``: Alias for ``ADD Rd, Rd``."
+msgstr ""
+
+#: ../../architecture.rst:233
+msgid "``ROL Rd``: Alias for ``ADC Rd, Rd``."
+msgstr ""
+
+#: ../../architecture.rst:234
+msgid "``LSR Rd``: Logical shift right. Sets :math:`C = Rd0`, :math:`N = 0`, :math:`Z = (R = 0)`, :math:`V = N \\oplus C = C`, :math:`S = N \\oplus V = C`."
+msgstr ""
+
+#: ../../architecture.rst:235
+msgid "``ROR Rd``: Rotate right through carry. Sets :math:`C = Rd0`, :math:`N = R7`, :math:`Z = (R = 0)`, :math:`V = N \\oplus C`, :math:`S = N \\oplus V`."
+msgstr ""
+
+#: ../../architecture.rst:236
+msgid "``SWAP Rd``: Swaps nibbles. **No flags affected**."
+msgstr ""
+
+#: ../../architecture.rst:238
+msgid "**Word Operations (ADIW, SBIW)**"
+msgstr ""
+
+#: ../../architecture.rst:239
+msgid "16-bit word addition / subtraction on pointer register pairs (R25:R24, R27:R26, R29:R28, R31:R30). Updates ``S``, ``V``, ``N``, ``Z``, ``C``."
+msgstr ""
+
+#: ../../architecture.rst:241
+msgid "**Data Transfer & Branches (LDI, MOV, LD, ST, LDS, STS, PUSH, POP, IN, OUT, JMP, RJMP, CALL, RCALL, RET, BRxx)**"
+msgstr ""
+
+#: ../../architecture.rst:242
+msgid "Do not affect status flags, except ``RETI`` which sets the Global Interrupt Flag ``I = 1``."
+msgstr ""
+
+#: ../../architecture.rst:245
+msgid "Using Flags for Branches"
+msgstr ""
+
+#: ../../architecture.rst:247
+msgid "Conditional branch instructions inspect specific SREG condition flags (all branches take target label or relative offset without altering flags):"
+msgstr ""
+
+#: ../../architecture.rst:253
+msgid "Mnemonic"
+msgstr ""
+
+#: ../../architecture.rst:254
+msgid "Condition"
+msgstr ""
+
+#: ../../architecture.rst:255
+msgid "Description (per DS40002198A)"
+msgstr ""
+
+#: ../../architecture.rst:256
+msgid "``BREQ label``"
+msgstr ""
+
+#: ../../architecture.rst:257
+msgid ":math:`Z = 1`"
+msgstr ""
+
+#: ../../architecture.rst:258
+msgid "Branch if Equal"
+msgstr ""
+
+#: ../../architecture.rst:259
+msgid "``BRNE label``"
+msgstr ""
+
+#: ../../architecture.rst:260
+msgid ":math:`Z = 0`"
+msgstr ""
+
+#: ../../architecture.rst:261
+msgid "Branch if Not Equal"
+msgstr ""
+
+#: ../../architecture.rst:262
+msgid "``BRCS label``"
+msgstr ""
+
+#: ../../architecture.rst:263
+#: ../../architecture.rst:269
+msgid ":math:`C = 1`"
+msgstr ""
+
+#: ../../architecture.rst:264
+msgid "Branch if Carry Set"
+msgstr ""
+
+#: ../../architecture.rst:265
+msgid "``BRCC label``"
+msgstr ""
+
+#: ../../architecture.rst:266
+#: ../../architecture.rst:272
+msgid ":math:`C = 0`"
+msgstr ""
+
+#: ../../architecture.rst:267
+msgid "Branch if Carry Clear"
+msgstr ""
+
+#: ../../architecture.rst:268
+msgid "``BRLO label``"
+msgstr ""
+
+#: ../../architecture.rst:270
+msgid "Branch if Lower (Unsigned, alias for ``BRCS``)"
+msgstr ""
+
+#: ../../architecture.rst:271
+msgid "``BRSH label``"
+msgstr ""
+
+#: ../../architecture.rst:273
+msgid "Branch if Same or Higher (Unsigned, alias for ``BRCC``)"
+msgstr ""
+
+#: ../../architecture.rst:274
+msgid "``BRGE label``"
+msgstr ""
+
+#: ../../architecture.rst:275
+msgid ":math:`S = 0` (:math:`N \\oplus V = 0`)"
+msgstr ""
+
+#: ../../architecture.rst:276
+msgid "Branch if Greater or Equal (Signed)"
+msgstr ""
+
+#: ../../architecture.rst:277
+msgid "``BRLT label``"
+msgstr ""
+
+#: ../../architecture.rst:278
+msgid ":math:`S = 1` (:math:`N \\oplus V = 1`)"
+msgstr ""
+
+#: ../../architecture.rst:279
+msgid "Branch if Less Than (Signed)"
+msgstr ""
+
+#: ../../architecture.rst:280
+msgid "``BRMI label``"
+msgstr ""
+
+#: ../../architecture.rst:281
+msgid ":math:`N = 1`"
+msgstr ""
+
+#: ../../architecture.rst:282
+msgid "Branch if Minus"
+msgstr ""
+
+#: ../../architecture.rst:283
+msgid "``BRPL label``"
+msgstr ""
+
+#: ../../architecture.rst:284
+msgid ":math:`N = 0`"
+msgstr ""
+
+#: ../../architecture.rst:285
+msgid "Branch if Plus"
+msgstr ""
+
+#: ../../architecture.rst:288
+msgid "Instruction Execution & ALU"
+msgstr ""
+
+#: ../../architecture.rst:291
+msgid "ALU Operation & Register Access"
+msgstr ""
+
+#: ../../architecture.rst:293
+msgid "In strict compliance with the **AVR® Instruction Set Manual (DS40002198A, Section 4)**, the high-performance AVR Arithmetic Logic Unit (ALU) operates in direct connection with all 32 general-purpose registers:"
+msgstr ""
+
+#: ../../architecture.rst:295
+msgid "**Single-Cycle Operation**: Arithmetic and logical register-to-register operations execute within a single instruction transition. In this cycle: 1. Two operand registers are read from the Register File. 2. The operation (Arithmetic, Logical, or Bit manipulation) is evaluated. 3. The result is written back to the destination register :math:`Rd`. 4. The Status Register (SREG) condition flags are updated according to exact Boolean algebraic formulas."
+msgstr ""
+
+#: ../../architecture.rst:300
+msgid "**ALU Functional Blocks**: * **Arithmetic**: Addition (``ADD``, ``ADC``, ``ADIW``), Subtraction (``SUB``, ``SUBI``, ``SBC``, ``SBCI``, ``SBIW``), Comparison (``CP``, ``CPI``), Negation (``NEG``), Increment (``INC``), Decrement (``DEC``), and Multiplication (``MUL``, ``MULS``, ``MULSU``). * **Logical**: Bitwise AND (``AND``, ``ANDI``, ``TST``), OR (``OR``, ``ORI``), Exclusive-OR (``EOR``, ``CLR``), and One's Complement (``COM``). * **Bit & Shift Functions**: Bit set/clear (``SBI``, ``CBI``), Shifts (``LSL``, ``LSR``, ``ASR``), Rotates through carry (``ROL``, ``ROR``), and Nibble swap (``SWAP``)."
+msgstr ""
+
+#: ../../architecture.rst:306
+msgid "Fetch-Decode-Execute Cycle"
+msgstr ""
+
+#: ../../architecture.rst:308
+msgid "Tiny8 executes programs through the classical CPU cycle:"
+msgstr ""
+
+#: ../../architecture.rst:321
+msgid "Instruction Format & Encoding"
+msgstr ""
+
+#: ../../architecture.rst:323
+msgid "In physical AVR microcontrollers: * Most instructions are **16-bit (1-word)** opcodes. * Direct memory instructions (``LDS``, ``STS``) and long jumps/calls (``JMP``, ``CALL``) are **32-bit (2-word)** opcodes."
+msgstr ""
+
+#: ../../architecture.rst:327
+msgid "In Tiny8, the assembler validates operands according to AVR DS40002198A constraints (e.g., verifying that ``LDI``, ``SUBI``, ``CPI`` only target upper registers R16–R31, and that ``ADIW`` / ``SBIW`` target valid pointer register pairs), then stores them as pre-decoded execution tuples:"
+msgstr ""
+
+#: ../../architecture.rst:340
+msgid "Step Tracing & State Inspection"
+msgstr ""
+
+#: ../../architecture.rst:342
+msgid "During each execution step, Tiny8 records changes to facilitate visual debugging:"
+msgstr ""
+
+#: ../../architecture.rst:344
+msgid "**Register Trace**: Tracks register writes as ``(step, register_index, new_value)``."
+msgstr ""
+
+#: ../../architecture.rst:345
+msgid "**Memory Trace**: Tracks SRAM writes as ``(step, address, new_value)``."
+msgstr ""
+
+#: ../../architecture.rst:346
+msgid "**Step Telemetry**: Records PC, SREG flags, cycle counts, and call stack backtraces."
+msgstr ""
+
+#: ../../architecture.rst:349
+msgid "Hardware Realism & AVR Compliance"
+msgstr ""
+
+#: ../../architecture.rst:351
+msgid "Tiny8 is strictly grounded in the **Microchip AVR® Instruction Set Manual (DS40002198A)**:"
+msgstr ""
+
+#: ../../architecture.rst:353
+msgid "**Instruction Set Fidelity**: All 61 supported instructions strictly follow official Microchip AVR definitions, operands, and SREG Boolean formulas without non-standard instruction extensions."
+msgstr ""
+
+#: ../../architecture.rst:354
+msgid "**Hardware MUL Compliance**: In accordance with AVR DS40002198A, ``MUL Rd, Rr`` writes the 16-bit unsigned product strictly into the dedicated register pair ``R1:R0`` (R0 = low byte, R1 = high byte)."
+msgstr ""
+
+#: ../../architecture.rst:355
+msgid "**Software Division**: Conforming to physical AVR silicon, integer division is performed via standard software routines (e.g., subtraction loops or shift-and-subtract) rather than non-standard hardware instructions."
+msgstr ""
+
+#: ../../architecture.rst:356
+msgid "**Execution & Memory Model**: Instructions execute in discrete single-step transitions across a unified flat address space with memory-mapped I/O (ports 0x00..0x3F including CRT matrix and keyboard buffer) for full visibility and educational inspectability."
+msgstr ""
+
+#: ../../architecture.rst:359
+msgid "Design Philosophy"
+msgstr ""
+
+#: ../../architecture.rst:361
+msgid "Tiny8's architecture is designed with these principles:"
+msgstr ""
+
+#: ../../architecture.rst:363
+msgid "**Simplicity**: Easy to understand and implement"
+msgstr ""
+
+#: ../../architecture.rst:364
+msgid "**Educational value**: Teaches fundamental concepts"
+msgstr ""
+
+#: ../../architecture.rst:365
+msgid "**Inspectability**: Full visibility into CPU state"
+msgstr ""
+
+#: ../../architecture.rst:366
+msgid "**Extensibility**: Easy to add new instructions"
+msgstr ""
+
+#: ../../architecture.rst:367
+msgid "**Practicality**: Can run real algorithms and demonstrate CS concepts"
+msgstr ""
+
+#: ../../architecture.rst:369
+msgid "The architecture strikes a balance between realism (standard AVR architecture) and pedagogy (simplified execution model), making it suitable for:"
+msgstr ""
+
+#: ../../architecture.rst:371
+msgid "Computer architecture courses"
+msgstr ""
+
+#: ../../architecture.rst:372
+msgid "Assembly language learning"
+msgstr ""
+
+#: ../../architecture.rst:373
+msgid "Algorithm visualization"
+msgstr ""
+
+#: ../../architecture.rst:374
+msgid "Embedded systems concepts"
+msgstr ""
+
+#: ../../architecture.rst:375
+msgid "Compiler/assembler development"
+msgstr ""

@@ -1,0 +1,43 @@
+{%- macro render_logo(src, classname) -%}
+  {%- if src and src.startswith(('https://', 'http://')) -%}
+    <img class="{{ classname }}" src="{{ src }}" alt="{{ project }}" height="28" loading="lazy" />
+  {%- elif src -%}
+    <img class="{{ classname }}" src="{{ pathto(src, 1) }}" alt="{{ project }}" height="28" loading="lazy" />
+  {%- elif logo_url -%}
+    <img class="{{ classname }}" src="{{ logo_url }}" alt="{{ project }}" height="28" loading="lazy" />
+  {%- endif -%}
+{%- endmacro -%}
+
+<div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="{% if theme_logo_target %}{{ theme_logo_target }}{% else %}{{ pathto(root_doc) }}{% endif %}">
+      {{ render_logo(theme_light_logo, 'light-logo') }}
+      {{ render_logo(theme_dark_logo, 'dark-logo') }}
+      <strong>{{ project }}</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"{% if theme_nav_links_align %} data-align={{ theme_nav_links_align }}{% endif %}>
+        {%- if theme_nav_links -%}
+          {% include "components/nav-links.html" %}
+        {%- endif -%}
+      </nav>
+      <div class="sy-head-extra flex items-center print:hidden">
+        {%- include "components/searchbox.html" -%}
+        {%- include "components/nav-versions.html" -%}
+        {%- include "partials/nav-socials.html" -%}
+      </div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden">
+      {%- include "components/nav-languages.html" -%}
+      {%- include "components/theme-switch.html" -%}
+      <button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

@@ -15,18 +15,24 @@ class TestProgressBarBasic:
         """Test progress bar when disabled."""
         pbar = ProgressBar(total=100, disable=True)
         pbar.update(50)
+        assert pbar.n == 0
+        assert pbar.disable is True
         pbar.close()
 
     def test_progress_bar_zero_total(self):
         """Test progress bar with None total."""
         pbar = ProgressBar(total=None, disable=True)
         pbar.update(10)
+        assert pbar.n == 0
+        assert pbar.total is None
         pbar.close()
 
     def test_progress_bar_with_context(self):
         """Test progress bar as context manager."""
         with ProgressBar(total=10, disable=True) as pbar:
             pbar.update(5)
+            assert pbar.n == 0
+            assert pbar.disable is True
 
 
 class TestProgressBarParameters:
@@ -36,18 +42,24 @@ class TestProgressBarParameters:
         """Test progress bar with description."""
         pbar = ProgressBar(total=100, desc="Test", disable=True)
         pbar.update(10)
+        assert pbar.desc == "Test"
+        assert pbar.n == 0
         pbar.close()
 
     def test_progress_bar_ncols(self):
         """Test progress bar with custom width."""
         pbar = ProgressBar(total=100, ncols=50, disable=True)
         pbar.update(10)
+        assert pbar.ncols == 50
+        assert pbar.n == 0
         pbar.close()
 
     def test_progress_bar_mininterval(self):
         """Test progress bar with custom mininterval."""
         pbar = ProgressBar(total=100, mininterval=0.01, disable=True)
         pbar.update(10)
+        assert pbar.mininterval == 0.01
+        assert pbar.n == 0
         pbar.close()
 
 
@@ -60,6 +72,7 @@ class TestProgressBarEnabled:
         for i in range(10):
             pbar.update(1)
             time.sleep(0.001)
+        assert pbar.n == 10
         pbar.close()
 
     def test_progress_bar_enabled_no_total(self):
@@ -68,6 +81,7 @@ class TestProgressBarEnabled:
         for i in range(5):
             pbar.update(1)
             time.sleep(0.001)
+        assert pbar.n == 5
         pbar.close()
 
 
@@ -77,8 +91,11 @@ class TestProgressBarMethods:
     def test_progress_bar_set_description(self):
         """Test updating progress bar description."""
         pbar = ProgressBar(total=100, desc="Initial", disable=False, mininterval=0)
+        assert pbar.desc == "Initial"
         pbar.set_description("Updated")
+        assert pbar.desc == "Updated"
         pbar.update(10)
+        assert pbar.n == 10
         pbar.close()
 
     def test_progress_bar_reset(self):
@@ -134,12 +151,14 @@ class TestProgressBarEdgeCases:
             mininterval=0,
         )
         pbar.update(50)
+        assert pbar.n == 50
         pbar.close()
 
     def test_progress_bar_update_past_total(self):
         """Test updating progress bar past total."""
         pbar = ProgressBar(total=10, disable=False, mininterval=0)
         pbar.update(15)  # Update past total
+        assert pbar.n == 15
         pbar.close()
 
     def test_progress_bar_mininterval_skip_update(self):
@@ -150,6 +169,7 @@ class TestProgressBarEdgeCases:
         pbar.update(10)
         time.sleep(0.001)
         pbar.update(10)
+        assert pbar.n == 20
         pbar.close()
 
     def test_progress_bar_mininterval_with_completion(self):
@@ -158,6 +178,7 @@ class TestProgressBarEdgeCases:
         pbar.update(5)
         time.sleep(0.001)
         pbar.update(5)
+        assert pbar.n == 10
         pbar.close()
 
     def test_progress_bar_terminal_width_exception(self):

@@ -1,0 +1,1443 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 01:27+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../assembly_language.rst:2
+msgid "Assembly Language"
+msgstr "アセンブリ言語"
+
+#: ../../assembly_language.rst:4
+msgid ""
+"This guide covers the Tiny8 assembly language syntax, including "
+"instruction format, operand types, labels, and assembler directives."
+msgstr "本ガイドでは、命令フォーマット、オペランドの種類、ラベル、アセンブラ構文など、Tiny8アセンブリ言語の構文体系について解説します。"
+
+#: ../../assembly_language.rst:7
+msgid "Syntax Overview"
+msgstr "構文の概要"
+
+#: ../../assembly_language.rst:10
+msgid "Basic Structure"
+msgstr "基本構造"
+
+#: ../../assembly_language.rst:12
+msgid "A Tiny8 assembly program consists of:"
+msgstr "Tiny8のアセンブリプログラムは以下の要素で構成されます:"
+
+#: ../../assembly_language.rst:14
+msgid "**Instructions**: CPU operations (e.g., ``add``, ``mov``, ``ldi``)"
+msgstr "**命令**: CPUの演算操作 (例: ``add``, ``mov``, ``ldi``)"
+
+#: ../../assembly_language.rst:15
+msgid "**Labels**: Named locations in the program"
+msgstr "**ラベル**: プログラム内の指定位置を示す識別子"
+
+#: ../../assembly_language.rst:16
+msgid "**Comments**: Documentation prefixed with ``;``"
+msgstr "**コメント**: ``;`` で始まる注釈記述"
+
+#: ../../assembly_language.rst:17
+msgid "**Blank lines**: For readability (ignored by assembler)"
+msgstr "**空行**: 可読性向上のための空白行 (アセンブラにより無視)"
+
+#: ../../assembly_language.rst:20
+msgid "Example Program"
+msgstr "プログラム例"
+
+#: ../../assembly_language.rst:42
+msgid "Comments"
+msgstr "コメント"
+
+#: ../../assembly_language.rst:45
+msgid "Single-Line Comments"
+msgstr "単一行コメント"
+
+#: ../../assembly_language.rst:47
+msgid "Comments start with a semicolon (``;``) and extend to the end of the line:"
+msgstr "コメントはセミコロン (``;``) で始まり、その行の末尾まで続きます:"
+
+#: ../../assembly_language.rst:55
+msgid ""
+"Comments are stripped during assembly and don't affect the generated "
+"program."
+msgstr "コメントはアセンブル時に除去され、生成される実行コードには影響しません。"
+
+#: ../../assembly_language.rst:58
+msgid "Whitespace"
+msgstr ""
+
+#: ../../assembly_language.rst:60
+msgid "Leading and trailing whitespace is ignored"
+msgstr ""
+
+#: ../../assembly_language.rst:61
+msgid "Multiple spaces between tokens are treated as single space"
+msgstr ""
+
+#: ../../assembly_language.rst:62
+msgid "Blank lines are allowed and ignored"
+msgstr ""
+
+#: ../../assembly_language.rst:65
+msgid "Labels"
+msgstr ""
+
+#: ../../assembly_language.rst:68
+msgid "Defining Labels"
+msgstr ""
+
+#: ../../assembly_language.rst:70
+msgid ""
+"Labels mark locations in your program and can be used as jump/branch "
+"targets:"
+msgstr ""
+
+#: ../../assembly_language.rst:81
+msgid "Label Rules"
+msgstr ""
+
+#: ../../assembly_language.rst:83
+msgid "Labels must end with a colon (``:``)"
+msgstr ""
+
+#: ../../assembly_language.rst:84
+msgid "Label names are case-sensitive"
+msgstr ""
+
+#: ../../assembly_language.rst:85
+msgid "Valid characters: letters, digits, underscore"
+msgstr ""
+
+#: ../../assembly_language.rst:86
+msgid "Cannot start with a digit"
+msgstr ""
+
+#: ../../assembly_language.rst:87
+msgid "Cannot be a reserved instruction mnemonic"
+msgstr ""
+
+#: ../../assembly_language.rst:89
+msgid "**Valid labels:**"
+msgstr ""
+
+#: ../../assembly_language.rst:98
+msgid "**Invalid labels:**"
+msgstr ""
+
+#: ../../assembly_language.rst:107
+msgid "Using Labels"
+msgstr ""
+
+#: ../../assembly_language.rst:109
+msgid "Labels are most commonly used with control flow instructions:"
+msgstr ""
+
+#: ../../assembly_language.rst:129
+msgid "Operand Types"
+msgstr ""
+
+#: ../../assembly_language.rst:132
+msgid "Registers"
+msgstr ""
+
+#: ../../assembly_language.rst:134
+msgid ""
+"Register operands are specified as ``r`` followed by the register number "
+"(0-31):"
+msgstr ""
+
+#: ../../assembly_language.rst:143
+msgid "Some instructions (like ``ldi``) only work with registers R16-R31."
+msgstr ""
+
+#: ../../assembly_language.rst:146
+msgid "Immediate Values"
+msgstr ""
+
+#: ../../assembly_language.rst:148
+msgid "Immediate values are constants embedded in the instruction:"
+msgstr ""
+
+#: ../../assembly_language.rst:150
+msgid "**Decimal** (default)"
+msgstr ""
+
+#: ../../assembly_language.rst:158
+msgid "**Hexadecimal** (prefix with ``0x`` or ``$``)"
+msgstr ""
+
+#: ../../assembly_language.rst:166
+msgid "**Binary** (prefix with ``0b``)"
+msgstr ""
+
+#: ../../assembly_language.rst:174
+msgid "**With Immediate Marker** (optional ``#`` prefix)"
+msgstr ""
+
+#: ../../assembly_language.rst:182
+msgid "Memory Addresses"
+msgstr ""
+
+#: ../../assembly_language.rst:184
+msgid "Memory addresses are used with load and store instructions:"
+msgstr ""
+
+#: ../../assembly_language.rst:193
+msgid "Label References"
+msgstr ""
+
+#: ../../assembly_language.rst:195
+msgid "Labels can be used as operands for jumps, branches, and calls:"
+msgstr ""
+
+#: ../../assembly_language.rst:214
+msgid "Instruction Format"
+msgstr ""
+
+#: ../../assembly_language.rst:217
+msgid "General Pattern"
+msgstr ""
+
+#: ../../assembly_language.rst:219
+msgid "Instructions follow this pattern:"
+msgstr ""
+
+#: ../../assembly_language.rst:225
+msgid "**label**: Optional label ending with ``:``"
+msgstr ""
+
+#: ../../assembly_language.rst:226
+msgid "**mnemonic**: Instruction name (e.g., ``add``, ``mov``, ``ldi``)"
+msgstr ""
+
+#: ../../assembly_language.rst:227
+msgid "**operands**: Zero or more operands separated by commas"
+msgstr ""
+
+#: ../../assembly_language.rst:230
+msgid "Operand Count"
+msgstr ""
+
+#: ../../assembly_language.rst:232
+msgid "Different instructions take different numbers of operands:"
+msgstr ""
+
+#: ../../assembly_language.rst:253
+msgid "Case Sensitivity"
+msgstr ""
+
+#: ../../assembly_language.rst:255
+msgid ""
+"**Instructions**: Case-insensitive (``ADD``, ``add``, ``Add`` are all "
+"valid)"
+msgstr ""
+
+#: ../../assembly_language.rst:256
+msgid "**Registers**: Case-insensitive (``r16``, ``R16`` are both valid)"
+msgstr ""
+
+#: ../../assembly_language.rst:257
+msgid "**Labels**: Case-sensitive (``Loop`` and ``loop`` are different)"
+msgstr ""
+
+#: ../../assembly_language.rst:272
+msgid "Program Structure"
+msgstr ""
+
+#: ../../assembly_language.rst:275
+msgid "Typical Program Layout"
+msgstr ""
+
+#: ../../assembly_language.rst:277
+msgid "Most Tiny8 programs follow this structure:"
+msgstr ""
+
+#: ../../assembly_language.rst:310
+msgid "Initialization"
+msgstr ""
+
+#: ../../assembly_language.rst:312
+msgid "Initialize registers and memory at the start of your program:"
+msgstr ""
+
+#: ../../assembly_language.rst:326
+msgid "Main Loop"
+msgstr ""
+
+#: ../../assembly_language.rst:328
+msgid "Most programs have a main execution loop:"
+msgstr ""
+
+#: ../../assembly_language.rst:346
+msgid "Program Termination"
+msgstr ""
+
+#: ../../assembly_language.rst:348
+msgid ""
+"Since Tiny8 doesn't have a \"halt\" instruction, programs typically end "
+"with an infinite loop:"
+msgstr ""
+
+#: ../../assembly_language.rst:361
+msgid "Assembler Behavior"
+msgstr ""
+
+#: ../../assembly_language.rst:364
+msgid "Two-Pass Assembly"
+msgstr ""
+
+#: ../../assembly_language.rst:366
+msgid "The assembler makes two passes through your code:"
+msgstr ""
+
+#: ../../assembly_language.rst:368
+msgid "**First pass**: Collect all labels and their addresses"
+msgstr ""
+
+#: ../../assembly_language.rst:369
+msgid "**Second pass**: Resolve label references and generate instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:371
+msgid "This allows forward references:"
+msgstr ""
+
+#: ../../assembly_language.rst:383
+msgid "Number Parsing"
+msgstr ""
+
+#: ../../assembly_language.rst:385
+msgid "The assembler recognizes several number formats:"
+msgstr ""
+
+#: ../../assembly_language.rst:391
+msgid "Format"
+msgstr ""
+
+#: ../../assembly_language.rst:392
+msgid "Example"
+msgstr ""
+
+#: ../../assembly_language.rst:393
+msgid "Value"
+msgstr ""
+
+#: ../../assembly_language.rst:394
+msgid "Decimal"
+msgstr ""
+
+#: ../../assembly_language.rst:395
+msgid "``42``"
+msgstr ""
+
+#: ../../assembly_language.rst:396
+msgid "42"
+msgstr ""
+
+#: ../../assembly_language.rst:397
+msgid "Negative decimal"
+msgstr ""
+
+#: ../../assembly_language.rst:398
+msgid "``-10``"
+msgstr ""
+
+#: ../../assembly_language.rst:399
+msgid "-10 (stored as 246 in 8-bit)"
+msgstr ""
+
+#: ../../assembly_language.rst:400
+msgid "Hexadecimal (0x)"
+msgstr ""
+
+#: ../../assembly_language.rst:401
+msgid "``0xFF``"
+msgstr ""
+
+#: ../../assembly_language.rst:402 ../../assembly_language.rst:405
+#: ../../assembly_language.rst:408
+msgid "255"
+msgstr ""
+
+#: ../../assembly_language.rst:403
+msgid "Hexadecimal ($)"
+msgstr ""
+
+#: ../../assembly_language.rst:404
+msgid "``$FF``"
+msgstr ""
+
+#: ../../assembly_language.rst:406
+msgid "Binary"
+msgstr ""
+
+#: ../../assembly_language.rst:407
+msgid "``0b11111111``"
+msgstr ""
+
+#: ../../assembly_language.rst:411
+msgid "Error Handling"
+msgstr ""
+
+#: ../../assembly_language.rst:413
+msgid "The assembler will report errors for:"
+msgstr ""
+
+#: ../../assembly_language.rst:415
+msgid "Invalid instruction mnemonics"
+msgstr ""
+
+#: ../../assembly_language.rst:416
+msgid "Wrong number of operands"
+msgstr ""
+
+#: ../../assembly_language.rst:417
+msgid "Invalid register numbers (< 0 or > 31)"
+msgstr ""
+
+#: ../../assembly_language.rst:418
+msgid "Undefined label references"
+msgstr ""
+
+#: ../../assembly_language.rst:419
+msgid "Invalid number formats"
+msgstr ""
+
+#: ../../assembly_language.rst:422
+msgid "Best Practices"
+msgstr ""
+
+#: ../../assembly_language.rst:425
+msgid "Code Organization"
+msgstr ""
+
+#: ../../assembly_language.rst:427
+msgid "**Use meaningful labels**: ``calculate_sum`` not ``label1``"
+msgstr ""
+
+#: ../../assembly_language.rst:428
+msgid "**Comment liberally**: Explain what and why, not just how"
+msgstr ""
+
+#: ../../assembly_language.rst:429
+msgid "**Group related code**: Keep subroutines together"
+msgstr ""
+
+#: ../../assembly_language.rst:430
+msgid "**Use blank lines**: Separate logical sections"
+msgstr ""
+
+#: ../../assembly_language.rst:448
+msgid "Naming Conventions"
+msgstr ""
+
+#: ../../assembly_language.rst:450
+msgid "**Labels**: Use ``snake_case`` or ``CamelCase`` consistently"
+msgstr ""
+
+#: ../../assembly_language.rst:451
+msgid "**Constants**: Use ``UPPER_CASE`` for important constants"
+msgstr ""
+
+#: ../../assembly_language.rst:452
+msgid "**Temporary values**: Use lower registers (R0-R15)"
+msgstr ""
+
+#: ../../assembly_language.rst:453
+msgid "**Important data**: Use upper registers (R16-R31)"
+msgstr ""
+
+#: ../../assembly_language.rst:456
+msgid "Register Allocation"
+msgstr ""
+
+#: ../../assembly_language.rst:458
+msgid "Plan your register usage:"
+msgstr ""
+
+#: ../../assembly_language.rst:469
+msgid "Value Ranges"
+msgstr ""
+
+#: ../../assembly_language.rst:471
+msgid "Remember that Tiny8 uses 8-bit values:"
+msgstr ""
+
+#: ../../assembly_language.rst:473
+msgid "Unsigned range: 0 to 255"
+msgstr ""
+
+#: ../../assembly_language.rst:474
+msgid "Signed range: -128 to +127"
+msgstr ""
+
+#: ../../assembly_language.rst:475
+msgid "Overflow wraps around"
+msgstr ""
+
+#: ../../assembly_language.rst:486
+msgid "Common Patterns"
+msgstr ""
+
+#: ../../assembly_language.rst:488
+msgid ""
+"See the :doc:`getting_started` guide for common assembly patterns like "
+"loops, conditionals, and memory operations."
+msgstr ""
+
+#: ../../assembly_language.rst:491
+msgid "Instruction Set Reference"
+msgstr ""
+
+#: ../../assembly_language.rst:493
+msgid ""
+"The Tiny8 instruction set strictly follows the **Microchip AVR® "
+"Instruction Set Manual (DS40002198A)**. All mnemonics and register "
+"identifiers are case-insensitive. Immediates can be specified in decimal,"
+" hexadecimal (``$FF`` or ``0xFF``), or binary (``0b11111111``)."
+msgstr ""
+
+#: ../../assembly_language.rst:496
+msgid "Arithmetic and Logic Instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:502 ../../assembly_language.rst:606
+#: ../../assembly_language.rst:694 ../../assembly_language.rst:746
+#: ../../assembly_language.rst:806
+msgid "Mnemonic & Operands"
+msgstr ""
+
+#: ../../assembly_language.rst:503 ../../assembly_language.rst:607
+#: ../../assembly_language.rst:695 ../../assembly_language.rst:747
+#: ../../assembly_language.rst:807
+msgid "Description (DS40002198A)"
+msgstr ""
+
+#: ../../assembly_language.rst:504 ../../assembly_language.rst:608
+#: ../../assembly_language.rst:696 ../../assembly_language.rst:748
+#: ../../assembly_language.rst:808
+msgid "Operation"
+msgstr ""
+
+#: ../../assembly_language.rst:505 ../../assembly_language.rst:609
+#: ../../assembly_language.rst:697 ../../assembly_language.rst:749
+#: ../../assembly_language.rst:809
+msgid "Flags"
+msgstr ""
+
+#: ../../assembly_language.rst:506
+msgid "``ADD Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:507
+msgid "Add without Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:508
+msgid ":math:`Rd \\leftarrow Rd + Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:509 ../../assembly_language.rst:513
+#: ../../assembly_language.rst:521 ../../assembly_language.rst:525
+#: ../../assembly_language.rst:529 ../../assembly_language.rst:533
+#: ../../assembly_language.rst:565 ../../assembly_language.rst:641
+#: ../../assembly_language.rst:645 ../../assembly_language.rst:761
+#: ../../assembly_language.rst:773
+msgid "H, S, V, N, Z, C"
+msgstr ""
+
+#: ../../assembly_language.rst:510
+msgid "``ADC Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:511
+msgid "Add with Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:512
+msgid ":math:`Rd \\leftarrow Rd + Rr + C`"
+msgstr ""
+
+#: ../../assembly_language.rst:514
+msgid "``ADIW Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:515
+msgid "Add Immediate to Word"
+msgstr ""
+
+#: ../../assembly_language.rst:516
+msgid ":math:`Rd+1:Rd \\leftarrow Rd+1:Rd + K`"
+msgstr ""
+
+#: ../../assembly_language.rst:517 ../../assembly_language.rst:537
+#: ../../assembly_language.rst:765 ../../assembly_language.rst:769
+#: ../../assembly_language.rst:777
+msgid "S, V, N, Z, C"
+msgstr ""
+
+#: ../../assembly_language.rst:518
+msgid "``SUB Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:519
+msgid "Subtract without Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:520
+msgid ":math:`Rd \\leftarrow Rd - Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:522
+msgid "``SUBI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:523
+msgid "Subtract Immediate"
+msgstr ""
+
+#: ../../assembly_language.rst:524
+msgid ":math:`Rd \\leftarrow Rd - K`"
+msgstr ""
+
+#: ../../assembly_language.rst:526
+msgid "``SBC Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:527
+msgid "Subtract with Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:528
+msgid ":math:`Rd \\leftarrow Rd - Rr - C`"
+msgstr ""
+
+#: ../../assembly_language.rst:530
+msgid "``SBCI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:531
+msgid "Subtract Immediate with Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:532
+msgid ":math:`Rd \\leftarrow Rd - K - C`"
+msgstr ""
+
+#: ../../assembly_language.rst:534
+msgid "``SBIW Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:535
+msgid "Subtract Immediate from Word"
+msgstr ""
+
+#: ../../assembly_language.rst:536
+msgid ":math:`Rd+1:Rd \\leftarrow Rd+1:Rd - K`"
+msgstr ""
+
+#: ../../assembly_language.rst:538
+msgid "``AND Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:539
+msgid "Logical AND"
+msgstr ""
+
+#: ../../assembly_language.rst:540
+msgid ":math:`Rd \\leftarrow Rd \\cdot Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:541 ../../assembly_language.rst:545
+#: ../../assembly_language.rst:549 ../../assembly_language.rst:553
+#: ../../assembly_language.rst:557 ../../assembly_language.rst:577
+msgid "S, V=0, N, Z"
+msgstr ""
+
+#: ../../assembly_language.rst:542
+msgid "``ANDI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:543
+msgid "Logical AND with Immediate"
+msgstr ""
+
+#: ../../assembly_language.rst:544
+msgid ":math:`Rd \\leftarrow Rd \\cdot K`"
+msgstr ""
+
+#: ../../assembly_language.rst:546
+msgid "``OR Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:547
+msgid "Logical OR"
+msgstr ""
+
+#: ../../assembly_language.rst:548
+msgid ":math:`Rd \\leftarrow Rd \\lor Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:550
+msgid "``ORI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:551
+msgid "Logical OR with Immediate"
+msgstr ""
+
+#: ../../assembly_language.rst:552
+msgid ":math:`Rd \\leftarrow Rd \\lor K`"
+msgstr ""
+
+#: ../../assembly_language.rst:554
+msgid "``EOR Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:555
+msgid "Exclusive OR"
+msgstr ""
+
+#: ../../assembly_language.rst:556
+msgid ":math:`Rd \\leftarrow Rd \\oplus Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:558
+msgid "``COM Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:559
+msgid "One's Complement"
+msgstr ""
+
+#: ../../assembly_language.rst:560
+msgid ":math:`Rd \\leftarrow \\$FF - Rd`"
+msgstr ""
+
+#: ../../assembly_language.rst:561
+msgid "S, V=0, N, Z, C=1"
+msgstr ""
+
+#: ../../assembly_language.rst:562
+msgid "``NEG Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:563
+msgid "Two's Complement Negation"
+msgstr ""
+
+#: ../../assembly_language.rst:564
+msgid ":math:`Rd \\leftarrow \\$00 - Rd`"
+msgstr ""
+
+#: ../../assembly_language.rst:566
+msgid "``INC Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:567
+msgid "Increment"
+msgstr ""
+
+#: ../../assembly_language.rst:568
+msgid ":math:`Rd \\leftarrow Rd + 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:569 ../../assembly_language.rst:573
+msgid "S, V, N, Z"
+msgstr ""
+
+#: ../../assembly_language.rst:570
+msgid "``DEC Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:571
+msgid "Decrement"
+msgstr ""
+
+#: ../../assembly_language.rst:572
+msgid ":math:`Rd \\leftarrow Rd - 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:574
+msgid "``TST Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:575
+msgid "Test for Zero or Minus"
+msgstr ""
+
+#: ../../assembly_language.rst:576
+msgid ":math:`Rd \\leftarrow Rd \\cdot Rd` (alias for AND)"
+msgstr ""
+
+#: ../../assembly_language.rst:578
+msgid "``CLR Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:579
+msgid "Clear Register"
+msgstr ""
+
+#: ../../assembly_language.rst:580
+msgid ":math:`Rd \\leftarrow Rd \\oplus Rd` (alias for EOR)"
+msgstr ""
+
+#: ../../assembly_language.rst:581
+msgid "S=0, V=0, N=0, Z=1"
+msgstr ""
+
+#: ../../assembly_language.rst:582
+msgid "``SER Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:583
+msgid "Set Register"
+msgstr ""
+
+#: ../../assembly_language.rst:584
+msgid ":math:`Rd \\leftarrow \\$FF` (alias for LDI)"
+msgstr ""
+
+#: ../../assembly_language.rst:585 ../../assembly_language.rst:613
+#: ../../assembly_language.rst:617 ../../assembly_language.rst:621
+#: ../../assembly_language.rst:625 ../../assembly_language.rst:629
+#: ../../assembly_language.rst:637 ../../assembly_language.rst:649
+#: ../../assembly_language.rst:653 ../../assembly_language.rst:657
+#: ../../assembly_language.rst:661 ../../assembly_language.rst:665
+#: ../../assembly_language.rst:669 ../../assembly_language.rst:673
+#: ../../assembly_language.rst:677 ../../assembly_language.rst:681
+#: ../../assembly_language.rst:685 ../../assembly_language.rst:701
+#: ../../assembly_language.rst:705 ../../assembly_language.rst:709
+#: ../../assembly_language.rst:713 ../../assembly_language.rst:717
+#: ../../assembly_language.rst:721 ../../assembly_language.rst:725
+#: ../../assembly_language.rst:729 ../../assembly_language.rst:733
+#: ../../assembly_language.rst:737 ../../assembly_language.rst:753
+#: ../../assembly_language.rst:757 ../../assembly_language.rst:781
+#: ../../assembly_language.rst:785 ../../assembly_language.rst:789
+#: ../../assembly_language.rst:793 ../../assembly_language.rst:797
+#: ../../assembly_language.rst:813
+msgid "None"
+msgstr ""
+
+#: ../../assembly_language.rst:586
+msgid "``MUL Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:587
+msgid "Multiply Unsigned"
+msgstr ""
+
+#: ../../assembly_language.rst:588
+msgid ":math:`R1:R0 \\leftarrow Rd \\times Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:589 ../../assembly_language.rst:593
+#: ../../assembly_language.rst:597
+msgid "Z, C"
+msgstr ""
+
+#: ../../assembly_language.rst:590
+msgid "``MULS Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:591
+msgid "Multiply Signed"
+msgstr ""
+
+#: ../../assembly_language.rst:592
+msgid ":math:`R1:R0 \\leftarrow Rd \\times Rr` (signed)"
+msgstr ""
+
+#: ../../assembly_language.rst:594
+msgid "``MULSU Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:595
+msgid "Multiply Signed with Unsigned"
+msgstr ""
+
+#: ../../assembly_language.rst:596
+msgid ""
+":math:`R1:R0 \\leftarrow Rd \\times Rr` (:math:`Rd` signed, :math:`Rr` "
+"unsigned)"
+msgstr ""
+
+#: ../../assembly_language.rst:600
+msgid "Branch Instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:610
+msgid "``JMP target``"
+msgstr ""
+
+#: ../../assembly_language.rst:611
+msgid "Jump"
+msgstr ""
+
+#: ../../assembly_language.rst:612
+msgid ":math:`PC \\leftarrow target`"
+msgstr ""
+
+#: ../../assembly_language.rst:614
+msgid "``RJMP offset``"
+msgstr ""
+
+#: ../../assembly_language.rst:615
+msgid "Relative Jump"
+msgstr ""
+
+#: ../../assembly_language.rst:616
+msgid ":math:`PC \\leftarrow PC + offset + 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:618
+msgid "``CALL target``"
+msgstr ""
+
+#: ../../assembly_language.rst:619
+msgid "Long Call to Subroutine"
+msgstr ""
+
+#: ../../assembly_language.rst:620
+msgid ":math:`STACK \\leftarrow PC + 1, PC \\leftarrow target`"
+msgstr ""
+
+#: ../../assembly_language.rst:622
+msgid "``RCALL offset``"
+msgstr ""
+
+#: ../../assembly_language.rst:623
+msgid "Relative Call to Subroutine"
+msgstr ""
+
+#: ../../assembly_language.rst:624
+msgid ":math:`STACK \\leftarrow PC + 1, PC \\leftarrow PC + offset + 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:626
+msgid "``RET``"
+msgstr ""
+
+#: ../../assembly_language.rst:627
+msgid "Return from Subroutine"
+msgstr ""
+
+#: ../../assembly_language.rst:628
+msgid ":math:`PC \\leftarrow STACK`"
+msgstr ""
+
+#: ../../assembly_language.rst:630
+msgid "``RETI``"
+msgstr ""
+
+#: ../../assembly_language.rst:631
+msgid "Return from Interrupt"
+msgstr ""
+
+#: ../../assembly_language.rst:632
+msgid ":math:`PC \\leftarrow STACK, I \\leftarrow 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:633 ../../assembly_language.rst:817
+#: ../../assembly_language.rst:821
+msgid "I"
+msgstr ""
+
+#: ../../assembly_language.rst:634
+msgid "``CPSE Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:635
+msgid "Compare Skip if Equal"
+msgstr ""
+
+#: ../../assembly_language.rst:636
+msgid "If :math:`Rd = Rr` then skip next instruction"
+msgstr ""
+
+#: ../../assembly_language.rst:638
+msgid "``CP Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:639
+msgid "Compare"
+msgstr ""
+
+#: ../../assembly_language.rst:640
+msgid ":math:`Rd - Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:642
+msgid "``CPI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:643
+msgid "Compare with Immediate"
+msgstr ""
+
+#: ../../assembly_language.rst:644
+msgid ":math:`Rd - K`"
+msgstr ""
+
+#: ../../assembly_language.rst:646
+msgid "``BREQ label``"
+msgstr ""
+
+#: ../../assembly_language.rst:647
+msgid "Branch if Equal"
+msgstr ""
+
+#: ../../assembly_language.rst:648
+msgid "If :math:`Z = 1` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:650
+msgid "``BRNE label``"
+msgstr ""
+
+#: ../../assembly_language.rst:651
+msgid "Branch if Not Equal"
+msgstr ""
+
+#: ../../assembly_language.rst:652
+msgid "If :math:`Z = 0` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:654
+msgid "``BRCS label``"
+msgstr ""
+
+#: ../../assembly_language.rst:655
+msgid "Branch if Carry Set"
+msgstr ""
+
+#: ../../assembly_language.rst:656
+msgid "If :math:`C = 1` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:658
+msgid "``BRCC label``"
+msgstr ""
+
+#: ../../assembly_language.rst:659
+msgid "Branch if Carry Clear"
+msgstr ""
+
+#: ../../assembly_language.rst:660
+msgid "If :math:`C = 0` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:662
+msgid "``BRLO label``"
+msgstr ""
+
+#: ../../assembly_language.rst:663
+msgid "Branch if Lower (Unsigned)"
+msgstr ""
+
+#: ../../assembly_language.rst:664
+msgid "If :math:`C = 1` then :math:`PC \\leftarrow label` (alias for BRCS)"
+msgstr ""
+
+#: ../../assembly_language.rst:666
+msgid "``BRSH label``"
+msgstr ""
+
+#: ../../assembly_language.rst:667
+msgid "Branch if Same or Higher"
+msgstr ""
+
+#: ../../assembly_language.rst:668
+msgid "If :math:`C = 0` then :math:`PC \\leftarrow label` (alias for BRCC)"
+msgstr ""
+
+#: ../../assembly_language.rst:670
+msgid "``BRGE label``"
+msgstr ""
+
+#: ../../assembly_language.rst:671
+msgid "Branch if Greater or Equal (Signed)"
+msgstr ""
+
+#: ../../assembly_language.rst:672
+msgid ""
+"If :math:`S = 0` (:math:`N \\oplus V = 0`) then :math:`PC \\leftarrow "
+"label`"
+msgstr ""
+
+#: ../../assembly_language.rst:674
+msgid "``BRLT label``"
+msgstr ""
+
+#: ../../assembly_language.rst:675
+msgid "Branch if Less Than (Signed)"
+msgstr ""
+
+#: ../../assembly_language.rst:676
+msgid ""
+"If :math:`S = 1` (:math:`N \\oplus V = 1`) then :math:`PC \\leftarrow "
+"label`"
+msgstr ""
+
+#: ../../assembly_language.rst:678
+msgid "``BRMI label``"
+msgstr ""
+
+#: ../../assembly_language.rst:679
+msgid "Branch if Minus"
+msgstr ""
+
+#: ../../assembly_language.rst:680
+msgid "If :math:`N = 1` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:682
+msgid "``BRPL label``"
+msgstr ""
+
+#: ../../assembly_language.rst:683
+msgid "Branch if Plus"
+msgstr ""
+
+#: ../../assembly_language.rst:684
+msgid "If :math:`N = 0` then :math:`PC \\leftarrow label`"
+msgstr ""
+
+#: ../../assembly_language.rst:688
+msgid "Data Transfer Instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:698
+msgid "``MOV Rd, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:699
+msgid "Copy Register"
+msgstr ""
+
+#: ../../assembly_language.rst:700
+msgid ":math:`Rd \\leftarrow Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:702
+msgid "``LDI Rd, K``"
+msgstr ""
+
+#: ../../assembly_language.rst:703
+msgid "Load Immediate"
+msgstr ""
+
+#: ../../assembly_language.rst:704
+msgid ":math:`Rd \\leftarrow K` (:math:`16 \\le d \\le 31`)"
+msgstr ""
+
+#: ../../assembly_language.rst:706
+msgid "``LD Rd, addr_reg``"
+msgstr ""
+
+#: ../../assembly_language.rst:707
+msgid "Load Indirect from Data Space"
+msgstr ""
+
+#: ../../assembly_language.rst:708
+msgid ":math:`Rd \\leftarrow (addr\\_reg)`"
+msgstr ""
+
+#: ../../assembly_language.rst:710
+msgid "``ST addr_reg, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:711
+msgid "Store Indirect to Data Space"
+msgstr ""
+
+#: ../../assembly_language.rst:712
+msgid ":math:`(addr\\_reg) \\leftarrow Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:714
+msgid "``LDS Rd, addr``"
+msgstr ""
+
+#: ../../assembly_language.rst:715
+msgid "Load Direct from Data Space"
+msgstr ""
+
+#: ../../assembly_language.rst:716
+msgid ":math:`Rd \\leftarrow (addr)`"
+msgstr ""
+
+#: ../../assembly_language.rst:718
+msgid "``STS addr, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:719
+msgid "Store Direct to Data Space"
+msgstr ""
+
+#: ../../assembly_language.rst:720
+msgid ":math:`(addr) \\leftarrow Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:722
+msgid "``IN Rd, port``"
+msgstr ""
+
+#: ../../assembly_language.rst:723
+msgid "Load an I/O Location to Register"
+msgstr ""
+
+#: ../../assembly_language.rst:724
+msgid ":math:`Rd \\leftarrow P`"
+msgstr ""
+
+#: ../../assembly_language.rst:726
+msgid "``OUT port, Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:727
+msgid "Store Register to an I/O Location"
+msgstr ""
+
+#: ../../assembly_language.rst:728
+msgid ":math:`P \\leftarrow Rr`"
+msgstr ""
+
+#: ../../assembly_language.rst:730
+msgid "``PUSH Rr``"
+msgstr ""
+
+#: ../../assembly_language.rst:731
+msgid "Push Register on Stack"
+msgstr ""
+
+#: ../../assembly_language.rst:732
+msgid ":math:`STACK \\leftarrow Rr, SP \\leftarrow SP - 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:734
+msgid "``POP Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:735
+msgid "Pop Register from Stack"
+msgstr ""
+
+#: ../../assembly_language.rst:736
+msgid ":math:`SP \\leftarrow SP + 1, Rd \\leftarrow STACK`"
+msgstr ""
+
+#: ../../assembly_language.rst:740
+msgid "Bit and Bit-Test Instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:750
+msgid "``SBI port, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:751
+msgid "Set Bit in I/O Register"
+msgstr ""
+
+#: ../../assembly_language.rst:752
+msgid ":math:`I/O(P, bit) \\leftarrow 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:754
+msgid "``CBI port, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:755
+msgid "Clear Bit in I/O Register"
+msgstr ""
+
+#: ../../assembly_language.rst:756
+msgid ":math:`I/O(P, bit) \\leftarrow 0`"
+msgstr ""
+
+#: ../../assembly_language.rst:758
+msgid "``LSL Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:759
+msgid "Logical Shift Left"
+msgstr ""
+
+#: ../../assembly_language.rst:760
+msgid ":math:`Rd \\leftarrow Rd \\ll 1` (alias for ADD Rd, Rd)"
+msgstr ""
+
+#: ../../assembly_language.rst:762
+msgid "``LSR Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:763
+msgid "Logical Shift Right"
+msgstr ""
+
+#: ../../assembly_language.rst:764
+msgid ":math:`0 \\rightarrow Rd7 \\dots Rd0 \\rightarrow C`"
+msgstr ""
+
+#: ../../assembly_language.rst:766
+msgid "``ASR Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:767
+msgid "Arithmetic Shift Right"
+msgstr ""
+
+#: ../../assembly_language.rst:768
+msgid ":math:`Rd7 \\rightarrow Rd7 \\dots Rd0 \\rightarrow C`"
+msgstr ""
+
+#: ../../assembly_language.rst:770
+msgid "``ROL Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:771
+msgid "Rotate Left through Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:772
+msgid ":math:`C \\leftarrow Rd7 \\dots Rd0 \\leftarrow C` (alias for ADC Rd, Rd)"
+msgstr ""
+
+#: ../../assembly_language.rst:774
+msgid "``ROR Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:775
+msgid "Rotate Right through Carry"
+msgstr ""
+
+#: ../../assembly_language.rst:776
+msgid ":math:`C \\rightarrow Rd7 \\dots Rd0 \\rightarrow C`"
+msgstr ""
+
+#: ../../assembly_language.rst:778
+msgid "``SWAP Rd``"
+msgstr ""
+
+#: ../../assembly_language.rst:779
+msgid "Swap Nibbles"
+msgstr ""
+
+#: ../../assembly_language.rst:780
+msgid ":math:`Rd(7..4) \\leftrightarrow Rd(3..0)`"
+msgstr ""
+
+#: ../../assembly_language.rst:782
+msgid "``SBRS Rd, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:783
+msgid "Skip if Bit in Register is Set"
+msgstr ""
+
+#: ../../assembly_language.rst:784
+msgid "If :math:`Rd(bit) = 1` then skip next instruction"
+msgstr ""
+
+#: ../../assembly_language.rst:786
+msgid "``SBRC Rd, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:787
+msgid "Skip if Bit in Register is Cleared"
+msgstr ""
+
+#: ../../assembly_language.rst:788
+msgid "If :math:`Rd(bit) = 0` then skip next instruction"
+msgstr ""
+
+#: ../../assembly_language.rst:790
+msgid "``SBIS port, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:791
+msgid "Skip if Bit in I/O Register is Set"
+msgstr ""
+
+#: ../../assembly_language.rst:792
+msgid "If :math:`I/O(P, bit) = 1` then skip next instruction"
+msgstr ""
+
+#: ../../assembly_language.rst:794
+msgid "``SBIC port, bit``"
+msgstr ""
+
+#: ../../assembly_language.rst:795
+msgid "Skip if Bit in I/O Register is Cleared"
+msgstr ""
+
+#: ../../assembly_language.rst:796
+msgid "If :math:`I/O(P, bit) = 0` then skip next instruction"
+msgstr ""
+
+#: ../../assembly_language.rst:800
+msgid "MCU Control Instructions"
+msgstr ""
+
+#: ../../assembly_language.rst:810
+msgid "``NOP``"
+msgstr ""
+
+#: ../../assembly_language.rst:811
+msgid "No Operation"
+msgstr ""
+
+#: ../../assembly_language.rst:812
+msgid "No operation performed"
+msgstr ""
+
+#: ../../assembly_language.rst:814
+msgid "``SEI``"
+msgstr ""
+
+#: ../../assembly_language.rst:815
+msgid "Set Global Interrupt Flag"
+msgstr ""
+
+#: ../../assembly_language.rst:816
+msgid ":math:`I \\leftarrow 1`"
+msgstr ""
+
+#: ../../assembly_language.rst:818
+msgid "``CLI``"
+msgstr ""
+
+#: ../../assembly_language.rst:819
+msgid "Clear Global Interrupt Flag"
+msgstr ""
+
+#: ../../assembly_language.rst:820
+msgid ":math:`I \\leftarrow 0`"
+msgstr ""
+
+#~ msgid "``EORI Rd, K``"
+#~ msgstr ""
+
+#~ msgid "Exclusive OR with Immediate"
+#~ msgstr ""
+
+#~ msgid ":math:`Rd \\leftarrow Rd \\oplus K`"
+#~ msgstr ""
+

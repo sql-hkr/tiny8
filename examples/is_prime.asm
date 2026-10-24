@@ -14,30 +14,35 @@ start:
     cpi r17, 2
     breq is_prime
     
-    ; test divisibility: check divisors from 2 to n/2
-    ldi r18, 2        ; divisor = 2 (start with smallest prime)
+    ; test divisibility: check divisors from 2 upwards
+    ldi r18, 2        ; divisor = 2
 
 check_loop:
-    ; optimization: if divisor * 2 > n, no need to continue
-    mov r19, r18
-    ldi r20, 2
-    mul r19, r20      ; r19 = divisor * 2
-    cp r19, r17       ; compare with n
-    brge is_prime     ; if divisor * 2 > n, number is prime
-    
     ; check if n is divisible by current divisor: n % divisor == 0
     mov r19, r17
-    div r19, r18      ; r19 = n / divisor (quotient)
-    mul r19, r18      ; r19 = quotient * divisor
-    mov r20, r17
-    sub r20, r19      ; r20 = n - (quotient * divisor) = remainder
-    
-    ; if remainder == 0, n is divisible (not prime)
-    cpi r20, 0
+
+mod_loop:
+    cp r19, r18
+    brlt mod_done
+    sub r19, r18
+    jmp mod_loop
+
+mod_done:
+    ; if remainder in r19 == 0, n is divisible (not prime)
+    cpi r19, 0
     breq not_prime
     
     ; try next divisor
-    inc r18           ; divisor++
+    inc r18
+    
+    ; optimization: if divisor * 2 > n, no need to continue (number is prime)
+    mov r19, r18
+    ldi r20, 2
+    mul r19, r20      ; product in R1:R0 per AVR specification
+    mov r19, r0       ; r19 = divisor * 2
+    cp r17, r19       ; compare n with divisor * 2
+    brlt is_prime     ; if n < divisor * 2, number is prime
+    
     jmp check_loop
 
 is_prime:

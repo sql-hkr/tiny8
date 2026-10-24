@@ -3,53 +3,41 @@
 Tiny8 Documentation
 ===================
 
-**An educational 8-bit CPU simulator with interactive visualization**
+**From bare-metal computer architecture to Generative AI — an educational 8-bit AVR RISC CPU simulator with real-time interactive visualization**
 
-Tiny8 is a lightweight and educational toolkit for exploring the fundamentals of computer architecture through hands-on assembly programming and real-time visualization. Designed for learning and experimentation, it features an AVR-inspired 8-bit CPU with 32 registers, a rich instruction set, and powerful debugging tools — all with zero heavy dependencies.
+Tiny8 is a lightweight educational toolkit that bridges bare-metal computer architecture and modern Generative AI. Designed for hands-on learning and experimentation, it guides you through the full stack of computing — from 32 general-purpose registers, ALU operations, stack frames, and C compilation up to executing an iterative reverse-diffusion model synthesizing 28x28 MNIST digits directly on an AVR 8-bit RISC processor. With an interactive Vim-inspired terminal debugger, time-travel reverse execution, and a 32x32 TrueColor memory heatmap, Tiny8 lets you see, step through, and understand computation at every level.
 
-.. image:: https://github.com/user-attachments/assets/6d4f07ba-21b3-483f-a5d4-7603334c40f4
-   :alt: Animated bubble sort visualization
+.. figure:: https://github.com/user-attachments/assets/bd3e88da-9bcb-4a41-bb9e-57d9d4e39bc6
+   :alt: Real-time generative reverse-diffusion synthesis (MNIST 8) at x5,000 speed in Tiny8 TUI (Viridis Palette, HEX init -> PIXEL denoising)
    :align: center
-   :width: 600px
+   :width: 100%
 
-.. centered:: *Real-time visualization of a bubble sort algorithm executing on Tiny8*
+   *Real-time generative reverse-diffusion synthesis (MNIST digit 8) executing at x5,000 speed in Tiny8 TUI (HEX mode for weight/LFSR init &rarr; PIXEL mode for reverse denoising trajectory)*
 
 Features
 --------
 
-🎯 Interactive Terminal Debugger
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. image:: https://github.com/user-attachments/assets/5317ebcd-53d5-4966-84be-be94b7830899
-   :alt: CLI visualizer screenshot
-   :align: center
-   :width: 600px
+Interactive Terminal Debugger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * **Vim-style navigation**: Step through execution with intuitive keyboard controls
 * **Change highlighting**: See exactly what changed at each step (registers, flags, memory)
-* **Advanced search**: Find instructions, track register/memory changes, locate PC addresses
-* **Marks and bookmarks**: Set and jump to important execution points
-* **Vertical scrolling**: Handle programs with large memory footprints
+* **Time-travel debugging**: Step forward and backward with sparse checkpoint restoration
+* **32x32 TrueColor Heatmap**: VRAM memory matrix with Viridis/Grayscale visualization
+* **Built-in Vim Editor**: Launch full-screen modal editor anytime with ``e``
 
-🎬 Graphical Animation
-~~~~~~~~~~~~~~~~~~~~~~~
-
-* Generate high-quality GIF/MP4 videos of program execution
-* Visualize register evolution, memory access patterns, and flag changes
-* Perfect for presentations, documentation, and learning materials
-
-🏗️ Complete 8-bit Architecture
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Complete 8-bit Architecture
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * **32 general-purpose registers** (R0-R31)
 * **8-bit ALU** with arithmetic, logical, and bit manipulation operations
 * **Status register (SREG)** with 8 condition flags
-* **2KB address space** for unified memory and I/O
+* **64KB address space** for unified memory and I/O
 * **Stack operations** with dedicated stack pointer
-* **AVR-inspired instruction set** with 60+ instructions
+* **AVR instruction set** with 67 instructions compliant with Microchip DS40002198A
 
-📚 Educational Focus
-~~~~~~~~~~~~~~~~~~~~
+Educational Focus
+~~~~~~~~~~~~~~~~~
 
 * Clean, readable Python implementation
 * Comprehensive examples (Fibonacci, bubble sort, factorial, and more)
@@ -98,12 +86,6 @@ Run it with the interactive debugger:
 .. code-block:: bash
 
    tiny8 fibonacci.asm
-
-Or generate an animation:
-
-.. code-block:: bash
-
-   tiny8 fibonacci.asm -m ani -o fibonacci.gif
 
 Using the Python API
 ~~~~~~~~~~~~~~~~~~~~

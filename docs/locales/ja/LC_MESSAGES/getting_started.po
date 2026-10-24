@@ -1,0 +1,306 @@
+# Japanese translation for Tiny8 getting_started documentation.
+# Copyright (C) 2025-2026, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 22:30+0900\n"
+"PO-Revision-Date: 2026-10-24 22:22+0900\n"
+"Last-Translator: sql-hkr <sql.hkr@gmail.com>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../getting_started.rst:2
+msgid "Getting Started"
+msgstr "はじめに"
+
+#: ../../getting_started.rst:4
+msgid ""
+"This guide will help you get started with Tiny8, from installation to "
+"running your first programs."
+msgstr "このガイドでは、Tiny8のインストールから最初のプログラムの実行までの手順を解説します。"
+
+#: ../../getting_started.rst:7
+msgid "Installation"
+msgstr "インストール"
+
+#: ../../getting_started.rst:10
+msgid "Requirements"
+msgstr "システム要件"
+
+#: ../../getting_started.rst:12
+msgid "Tiny8 requires Python 3.11 or later. Check your Python version:"
+msgstr "Tiny8の動作にはPython 3.11以上が必要です。Pythonのバージョンを確認してください:"
+
+#: ../../getting_started.rst:19
+msgid "Installing Tiny8"
+msgstr "Tiny8のインストール"
+
+#: ../../getting_started.rst:21
+msgid "Install Tiny8 using pip:"
+msgstr "pipを使用してTiny8をインストール:"
+
+#: ../../getting_started.rst:27
+msgid ""
+"This will install the ``tiny8`` command-line tool and make the Python API"
+" available for import."
+msgstr "これによりコマンドラインツール ``tiny8`` がインストールされ、Python APIが利用可能になります。"
+
+#: ../../getting_started.rst:30
+msgid "Verifying Installation"
+msgstr "インストールの確認"
+
+#: ../../getting_started.rst:32
+msgid "Verify that Tiny8 is installed correctly:"
+msgstr "Tiny8が正しくインストールされたか確認します:"
+
+#: ../../getting_started.rst:38
+msgid "You should see the version number printed to the terminal."
+msgstr "ターミナルにバージョン番号が表示されます。"
+
+#: ../../getting_started.rst:41
+msgid "Your First Program"
+msgstr "最初のプログラム"
+
+#: ../../getting_started.rst:43
+msgid "Let's write a simple program that adds two numbers."
+msgstr "2つの数値を加算する簡単なプログラムを作成してみましょう。"
+
+#: ../../getting_started.rst:46
+msgid "Create the Assembly File"
+msgstr "アセンブリファイルの作成"
+
+#: ../../getting_started.rst:48
+msgid "Create a new file called ``add.asm`` with the following content:"
+msgstr "以下の内容で ``add.asm`` というファイルを作成します:"
+
+#: ../../getting_started.rst:63
+msgid "Understanding the Code"
+msgstr "コードの解説"
+
+#: ../../getting_started.rst:65
+msgid "Let's break down what each line does:"
+msgstr "各行の処理内容を詳しく見ていきます:"
+
+#: ../../getting_started.rst:67
+msgid ""
+"``ldi r16, 5`` - **L** oa **d** **I** mmediate: Loads the value 5 "
+"directly into register 16"
+msgstr "``ldi r16, 5`` - 即値ロード: レジスタ16に数値5を直接格納します"
+
+#: ../../getting_started.rst:68
+msgid "``ldi r17, 3`` - Loads the value 3 into register 17"
+msgstr "``ldi r17, 3`` - レジスタ17に数値3を直接格納します"
+
+#: ../../getting_started.rst:69
+msgid ""
+"``add r16, r17`` - Adds the contents of R17 to R16, storing the result in"
+" R16"
+msgstr "``add r16, r17`` - R17の値をR16に加算し、結果をR16に格納します"
+
+#: ../../getting_started.rst:70
+msgid "``jmp done`` - Jumps to the label ``done``, creating an infinite loop"
+msgstr "``jmp done`` - ``done`` ラベルにジャンプし、無限ループを形成して停止します"
+
+#: ../../getting_started.rst:73
+msgid "Lines starting with ``;`` are comments and are ignored by the assembler."
+msgstr "``;`` で始まる行はコメントであり、アセンブラによって無視されます。"
+
+#: ../../getting_started.rst:76
+msgid "Running with the Interactive Debugger"
+msgstr "インタラクティブデバッガでの実行"
+
+#: ../../getting_started.rst:78
+msgid "Run your program using the Tiny8 interactive debugger:"
+msgstr "Tiny8のインタラクティブデバッガでプログラムを実行します:"
+
+#: ../../getting_started.rst:84
+msgid "You'll see a terminal-based interface showing:"
+msgstr "ターミナル画面上に以下の要素が表示されます:"
+
+#: ../../getting_started.rst:86
+msgid ""
+"**Source code** - Your assembly program with the current instruction "
+"highlighted"
+msgstr "**ソースコード** - 現在実行中の命令がハイライトされたアセンブリコード"
+
+#: ../../getting_started.rst:87
+msgid "**Registers** - The 32 general-purpose registers (R0-R31)"
+msgstr "**レジスタ** - 32本の汎用レジスタ (R0-R31)"
+
+#: ../../getting_started.rst:88
+msgid "**Status flags** - The SREG flags (I, T, H, S, V, N, Z, C)"
+msgstr "**ステータスフラグ** - SREGフラグ (I, T, H, S, V, N, Z, C)"
+
+#: ../../getting_started.rst:89
+msgid "**Memory** - RAM contents"
+msgstr "**メモリ** - RAMのメモリダンプ"
+
+#: ../../getting_started.rst:90
+msgid ""
+"**Control information** - Program counter (PC), stack pointer (SP), and "
+"step count"
+msgstr "**制御情報** - プログラムカウンタ (PC)、スタックポインタ (SP)、ステップ数"
+
+#: ../../getting_started.rst:93
+msgid "Debugger Controls"
+msgstr "デバッガの操作方法"
+
+#: ../../getting_started.rst:95
+msgid "Use these keyboard shortcuts to control execution:"
+msgstr "以下のキーボードショートカットで実行を制御できます:"
+
+#: ../../getting_started.rst:97
+msgid "**Execution:**"
+msgstr "**実行操作:**"
+
+#: ../../getting_started.rst:99
+msgid "``Space`` - Play / pause automatic continuous execution"
+msgstr "``Space`` - 自動連続実行の再生 / 一時停止"
+
+#: ../../getting_started.rst:100
+msgid "``Shift+Space`` - Reverse playback execution"
+msgstr "``Shift+Space`` - 逆再生実行"
+
+#: ../../getting_started.rst:101
+msgid "``n`` - Step forward 1 instruction (+1 step)"
+msgstr "``n`` - 1命令進む (+1ステップ)"
+
+#: ../../getting_started.rst:102
+msgid "``p`` - Step backward 1 instruction (-1 step, time-travel)"
+msgstr "``p`` - 1命令戻る (-1ステップ, タイムトラベル)"
+
+#: ../../getting_started.rst:103
+msgid "``c`` - Continue forward to next breakpoint"
+msgstr "``c`` - 次のブレークポイントまで前方継続実行"
+
+#: ../../getting_started.rst:104
+msgid "``C`` (``Shift+c``) - Reverse continue backward to previous breakpoint"
+msgstr "``C`` (``Shift+c``) - 前のブレークポイントまで逆方向継続実行"
+
+#: ../../getting_started.rst:105
+msgid "``b`` - Toggle breakpoint at current PC"
+msgstr "``b`` - 現在のPC位置でブレークポイントを設定/解除"
+
+#: ../../getting_started.rst:106
+msgid "``+`` / ``-`` - Increase / decrease playback speed"
+msgstr "``+`` / ``-`` - 再生速度の加速 / 減速"
+
+#: ../../getting_started.rst:107
+msgid "``r`` - Reset execution back to Step 0"
+msgstr "``r`` - ステップ0にリセット"
+
+#: ../../getting_started.rst:109
+msgid "**Display & Navigation:**"
+msgstr "**表示 & ナビゲーション:**"
+
+#: ../../getting_started.rst:111
+msgid "``j`` / ``k`` - Scroll memory view down / up by 32 bytes (1 row)"
+msgstr "``j`` / ``k`` - メモリビューを32バイト (1行) 下/上にスクロール"
+
+#: ../../getting_started.rst:112
+msgid "``J`` / ``K`` - Fast scroll memory view down / up by 128 bytes (4 rows)"
+msgstr "``J`` / ``K`` - メモリビューを128バイト (4行) 高速スクロール"
+
+#: ../../getting_started.rst:113
+msgid "``g`` - Toggle Grayscale / Viridis color palette"
+msgstr "``g`` - グレースケール / Viridisカラーパレット切替"
+
+#: ../../getting_started.rst:114
+msgid "``x`` - Toggle Hexadecimal (02X) / Graphic Pixel blocks"
+msgstr "``x`` - 16進数 (02X) / グラフィックピクセルブロック切替"
+
+#: ../../getting_started.rst:115
+msgid "``m`` - Cycle view modes"
+msgstr "``m`` - 表示モードの巡回切替"
+
+#: ../../getting_started.rst:116
+msgid "``i`` - Inspect details of currently executing instruction"
+msgstr "``i`` - 現在実行中の命令の詳細情報を表示"
+
+#: ../../getting_started.rst:117
+msgid "``h`` or ``?`` - Open full help and keyboard guide modal"
+msgstr "``h`` または ``?`` - ヘルプ＆キーボードガイドモーダルを開く"
+
+#: ../../getting_started.rst:118
+msgid "``e`` - Open built-in Vim modal editor"
+msgstr "``e`` - 内蔵Vimモーダルエディタを開く"
+
+#: ../../getting_started.rst:120
+msgid "**Command Bar Prompt:**"
+msgstr "**コマンドバープロンプト:**"
+
+#: ../../getting_started.rst:122
+msgid "``:`` - Enter command prompt (e.g. ``:goto <step>``, ``:b <pc>``, ``:q``)"
+msgstr ""
+"``:`` - コマンドプロンプトを開く (例: ``:goto <step>``, ``:b <pc>``, ``:q``)"
+
+#: ../../getting_started.rst:124
+msgid "**Exit:**"
+msgstr "**終了:**"
+
+#: ../../getting_started.rst:126
+msgid "``q`` - Quit debugger"
+msgstr "``q`` - デバッガを終了"
+
+#: ../../getting_started.rst:128
+msgid ""
+"Try stepping through your program with ``n`` and watch how the registers "
+"change!"
+msgstr "``n`` キーでプログラムを1ステップずつ進め、レジスタの値の変化を観察してみましょう。"
+
+#: ../../getting_started.rst:131
+msgid "Running from Python"
+msgstr "Pythonからの実行"
+
+#: ../../getting_started.rst:133
+msgid "You can also run Tiny8 programs from Python code."
+msgstr "Tiny8のプログラムはPythonコード内からも実行できます。"
+
+#: ../../getting_started.rst:136
+msgid "Basic Execution"
+msgstr "基本的な実行"
+
+#: ../../getting_started.rst:158
+msgid "Step-by-Step Execution"
+msgstr "ステップごとの実行"
+
+#: ../../getting_started.rst:160
+msgid "For more control, you can step through the program manually:"
+msgstr "より詳細に制御する場合は、手動で1ステップずつ進めることができます:"
+
+#: ../../getting_started.rst:188
+msgid "Inspecting CPU State"
+msgstr "CPU状態の検査"
+
+#: ../../getting_started.rst:190
+msgid "You can inspect various aspects of the CPU state:"
+msgstr "CPUの各種状態を取得・検査できます:"
+
+#: ../../getting_started.rst:209
+msgid "Common Assembly Patterns"
+msgstr "一般的なアセンブリパターン"
+
+#: ../../getting_started.rst:212
+msgid "Loading Immediate Values"
+msgstr "即値のロード"
+
+#: ../../getting_started.rst:221
+msgid "Working with Memory"
+msgstr "メモリ操作"
+
+#: ../../getting_started.rst:233
+msgid "Loops"
+msgstr "ループ処理"
+
+#: ../../getting_started.rst:247
+msgid "Conditional Branching"
+msgstr "条件分岐"
+

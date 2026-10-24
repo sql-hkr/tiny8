@@ -1,0 +1,343 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 00:49+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../visualization.rst:2
+msgid "Visualization & Debugger"
+msgstr ""
+
+#: ../../visualization.rst:4
+msgid "Tiny8 features a modern, real-time terminal visualizer and visual debugger powered by `Textual <https://textual.textualize.io/>`_. It provides interactive execution controls, sparse checkpoint time-travel, a 32x32 TrueColor memory heatmap, and a full-screen built-in modal editor."
+msgstr ""
+
+#: ../../visualization.rst:7
+msgid "Launching the TUI"
+msgstr ""
+
+#: ../../visualization.rst:9
+msgid "To run any assembly or C program with the interactive debugger:"
+msgstr ""
+
+#: ../../visualization.rst:16
+msgid "You can also specify options such as step limits or editor launch:"
+msgstr ""
+
+#: ../../visualization.rst:30
+msgid "Interface Overview"
+msgstr ""
+
+#: ../../visualization.rst:32
+msgid "Real-time generative reverse-diffusion synthesis (MNIST 8) at x5,000 speed in Tiny8 TUI (Viridis Palette, Forward Pixel + Reverse Hex)"
+msgstr ""
+
+#: ../../visualization.rst:37
+msgid "*Real-time generative reverse-diffusion synthesis (MNIST 8) executing at x5,000 speed in Tiny8 TUI (Viridis Palette: Forward Pixel + Reverse Hex)*"
+msgstr ""
+
+#: ../../visualization.rst:39
+msgid "Real-time generative reverse-diffusion synthesis (MNIST 8) at x5,000 speed in Tiny8 TUI (Grayscale Palette, Forward Pixel + Reverse Hex)"
+msgstr ""
+
+#: ../../visualization.rst:44
+msgid "*Real-time generative reverse-diffusion synthesis (MNIST 8) executing at x5,000 speed in Tiny8 TUI (Grayscale Palette: Forward Pixel + Reverse Hex)*"
+msgstr ""
+
+#: ../../visualization.rst:46
+msgid "The debugger interface provides real-time reactive panels:"
+msgstr ""
+
+#: ../../visualization.rst:66
+msgid "Interactive Controls"
+msgstr ""
+
+#: ../../visualization.rst:69
+msgid "Execution & Time-Travel"
+msgstr ""
+
+#: ../../visualization.rst:75
+#: ../../visualization.rst:105
+msgid "Key"
+msgstr ""
+
+#: ../../visualization.rst:76
+#: ../../visualization.rst:106
+msgid "Action"
+msgstr ""
+
+#: ../../visualization.rst:77
+msgid "``Space``"
+msgstr ""
+
+#: ../../visualization.rst:78
+msgid "Play / pause automatic continuous execution"
+msgstr ""
+
+#: ../../visualization.rst:79
+msgid "``Shift+Space``"
+msgstr ""
+
+#: ../../visualization.rst:80
+msgid "Reverse playback automatic continuous execution"
+msgstr ""
+
+#: ../../visualization.rst:81
+msgid "``n``"
+msgstr ""
+
+#: ../../visualization.rst:82
+msgid "Step forward 1 instruction (+1 step)"
+msgstr ""
+
+#: ../../visualization.rst:83
+msgid "``p``"
+msgstr ""
+
+#: ../../visualization.rst:84
+msgid "Step backward 1 instruction (-1 step, Time-Travel debug)"
+msgstr ""
+
+#: ../../visualization.rst:85
+msgid "``c``"
+msgstr ""
+
+#: ../../visualization.rst:86
+msgid "Continue forward until next breakpoint or program halt"
+msgstr ""
+
+#: ../../visualization.rst:87
+msgid "``C`` (``Shift+c``)"
+msgstr ""
+
+#: ../../visualization.rst:88
+msgid "Reverse continue backward until previous breakpoint or start"
+msgstr ""
+
+#: ../../visualization.rst:89
+msgid "``b``"
+msgstr ""
+
+#: ../../visualization.rst:90
+msgid "Toggle breakpoint at current PC"
+msgstr ""
+
+#: ../../visualization.rst:91
+msgid "``+`` / ``-``"
+msgstr ""
+
+#: ../../visualization.rst:92
+msgid "Increase / decrease automatic playback execution speed"
+msgstr ""
+
+#: ../../visualization.rst:93
+msgid "``r``"
+msgstr ""
+
+#: ../../visualization.rst:94
+msgid "Reset execution back to Step 0"
+msgstr ""
+
+#: ../../visualization.rst:95
+msgid "``q``"
+msgstr ""
+
+#: ../../visualization.rst:96
+msgid "Quit Tiny8 application"
+msgstr ""
+
+#: ../../visualization.rst:99
+msgid "View & Display Controls"
+msgstr ""
+
+#: ../../visualization.rst:107
+msgid "``j`` / ``k``"
+msgstr ""
+
+#: ../../visualization.rst:108
+msgid "Scroll memory viewport down / up by 32 bytes (1 row)"
+msgstr ""
+
+#: ../../visualization.rst:109
+msgid "``J`` / ``K``"
+msgstr ""
+
+#: ../../visualization.rst:110
+msgid "Fast scroll memory viewport down / up by 128 bytes (4 rows)"
+msgstr ""
+
+#: ../../visualization.rst:111
+msgid "``g``"
+msgstr ""
+
+#: ../../visualization.rst:112
+msgid "Toggle between Viridis and Grayscale color palettes"
+msgstr ""
+
+#: ../../visualization.rst:113
+msgid "``x``"
+msgstr ""
+
+#: ../../visualization.rst:114
+msgid "Toggle between Hexadecimal digits (02X) and Graphic Pixel blocks"
+msgstr ""
+
+#: ../../visualization.rst:115
+msgid "``m``"
+msgstr ""
+
+#: ../../visualization.rst:116
+msgid "Cycle view modes (Viridis+Hex -> Viridis+Pixel -> Grayscale+Pixel -> Grayscale+Hex)"
+msgstr ""
+
+#: ../../visualization.rst:117
+msgid "``i``"
+msgstr ""
+
+#: ../../visualization.rst:118
+msgid "Inspect details of the currently executing instruction"
+msgstr ""
+
+#: ../../visualization.rst:119
+msgid "``h`` or ``?``"
+msgstr ""
+
+#: ../../visualization.rst:120
+msgid "Open full TUI Application Usage & Keyboard Guide"
+msgstr ""
+
+#: ../../visualization.rst:121
+msgid "``e``"
+msgstr ""
+
+#: ../../visualization.rst:122
+msgid "Launch the built-in full-screen Vim-style modal editor"
+msgstr ""
+
+#: ../../visualization.rst:125
+msgid "Command Bar Prompt (:)"
+msgstr ""
+
+#: ../../visualization.rst:127
+msgid "Press ``:`` anytime from the debugger to enter commands:"
+msgstr ""
+
+#: ../../visualization.rst:133
+msgid "Command"
+msgstr ""
+
+#: ../../visualization.rst:134
+msgid "Description"
+msgstr ""
+
+#: ../../visualization.rst:135
+msgid "``:goto <step>``"
+msgstr ""
+
+#: ../../visualization.rst:136
+msgid "Seek directly to an execution step (e.g., ``:goto 500``)"
+msgstr ""
+
+#: ../../visualization.rst:137
+msgid "``:b <pc> [if expr]``"
+msgstr ""
+
+#: ../../visualization.rst:138
+msgid "Set conditional breakpoint (e.g., ``:b 0x0010 if R16 > 10``)"
+msgstr ""
+
+#: ../../visualization.rst:139
+msgid "``:watch <target>``"
+msgstr ""
+
+#: ../../visualization.rst:140
+msgid "Set watchpoint on register or memory address"
+msgstr ""
+
+#: ../../visualization.rst:141
+msgid "``:set <reg> <val>``"
+msgstr ""
+
+#: ../../visualization.rst:142
+msgid "Modify register value dynamically (e.g., ``:set R16 42``)"
+msgstr ""
+
+#: ../../visualization.rst:143
+msgid "``:poke <addr> <val>``"
+msgstr ""
+
+#: ../../visualization.rst:144
+msgid "Modify RAM byte value dynamically (e.g., ``:poke 0x0200 255``)"
+msgstr ""
+
+#: ../../visualization.rst:145
+msgid "``:exec <asm>``"
+msgstr ""
+
+#: ../../visualization.rst:146
+msgid "Execute an assembly instruction immediately (e.g., ``:exec LDI R16, 5``)"
+msgstr ""
+
+#: ../../visualization.rst:147
+msgid "``:speed <ms>``"
+msgstr ""
+
+#: ../../visualization.rst:148
+msgid "Set playback speed interval in milliseconds"
+msgstr ""
+
+#: ../../visualization.rst:149
+msgid "``:m <addr>``"
+msgstr ""
+
+#: ../../visualization.rst:150
+msgid "Jump memory viewport to specified address"
+msgstr ""
+
+#: ../../visualization.rst:151
+msgid "``:q`` / ``:quit``"
+msgstr ""
+
+#: ../../visualization.rst:152
+msgid "Exit debugger"
+msgstr ""
+
+#: ../../visualization.rst:155
+msgid "Built-in Vim Modal Editor"
+msgstr ""
+
+#: ../../visualization.rst:157
+msgid "Press ``e`` anytime or pass ``--edit`` on the command line to enter the full-screen Vim editor:"
+msgstr ""
+
+#: ../../visualization.rst:159
+msgid "**NORMAL Mode**: Full cursor navigation with ``h``/``j``/``k``/``l``, word jump ``w``/``b``, line bounds ``0``/``$``, file bounds ``gg``/``G``, delete character ``x``, delete line ``dd``, copy line ``yy``, paste ``p``, undo ``u``, redo ``Ctrl+r``."
+msgstr ""
+
+#: ../../visualization.rst:160
+msgid "**INSERT Mode**: Press ``i``, ``a``, or ``o`` to write code freely. Press ``Esc`` to return to NORMAL mode."
+msgstr ""
+
+#: ../../visualization.rst:161
+msgid "**COMMAND Mode**: Press ``:`` to enter commands: * ``:w`` - Save code to file * ``:wq`` or ``:x`` - Save and return to debugger * ``:run`` - Compile/assemble code and restart debugging immediately * ``:q`` or ``:q!`` - Exit editor back to debugger"
+msgstr ""
+
+#: ../../visualization.rst:168
+msgid "Documentation Internationalization (i18n)"
+msgstr ""
+
+#: ../../visualization.rst:170
+msgid "Tiny8 documentation supports English (en) and Japanese (ja) localization via Sphinx gettext:"
+msgstr ""

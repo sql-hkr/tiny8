@@ -1,0 +1,229 @@
+# Japanese translation for Tiny8 documentation.
+# Copyright (C) 2025-2026, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 01:27+0900\n"
+"PO-Revision-Date: 2026-10-24 22:20+0900\n"
+"Last-Translator: sql-hkr <sql.hkr@gmail.com>\n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../index.rst:117
+msgid "User Guide"
+msgstr "ユーザーガイド"
+
+#: ../../index.rst:126
+msgid "Examples"
+msgstr "サンプルプログラム"
+
+#: ../../index.rst:132
+msgid "API Reference"
+msgstr "API リファレンス"
+
+#: ../../index.rst:4
+msgid "Tiny8 Documentation"
+msgstr "Tiny8 ドキュメント"
+
+#: ../../index.rst:6
+msgid ""
+"**From bare-metal computer architecture to Generative AI — an educational"
+" 8-bit AVR RISC CPU simulator with real-time interactive visualization**"
+msgstr ""
+"**低レイヤのコンピュータアーキテクチャから生成AI（拡散モデル）までを繋ぐ、教育用8ビットAVR "
+"CPUシミュレータ＆インタラクティブビジュアライザ**"
+
+#: ../../index.rst:8
+msgid ""
+"Tiny8 is a lightweight educational toolkit that bridges bare-metal "
+"computer architecture and modern Generative AI. Designed for hands-on "
+"learning and experimentation, it guides you through the full stack of "
+"computing — from 32 general-purpose registers, ALU operations, stack "
+"frames, and C compilation up to executing an iterative reverse-diffusion "
+"model synthesizing 28x28 MNIST digits directly on an AVR 8-bit RISC "
+"processor. With an interactive Vim-inspired terminal debugger, time-"
+"travel reverse execution, and a 32x32 TrueColor memory heatmap, Tiny8 "
+"lets you see, step through, and understand computation at every level."
+msgstr ""
+"Tiny8は、低レイヤのコンピュータアーキテクチャから現代の生成AIまでを一気通貫で学べる教育用ツールキットです。32個の汎用レジスタ、ALU演算、スタックフレーム、ポインタ操作、C言語コンパイルといったハードウェア基礎から、8ビットAVR"
+" RISCプロセッサ上で直接動作する反復逆拡散モデル（Diffusion Model）による28x28 "
+"MNIST数字生成までを、リアルタイムなインタラクティブTUIデバッガ、タイムトラベル逆実行、32x32 "
+"TrueColorメモリヒートマップを通じて直感的に探索・プログラミング・視覚化できます。"
+
+#: ../../index.rst:10
+msgid "Animated bubble sort visualization"
+msgstr "バブルソートの可視化アニメーション"
+
+#: ../../index.rst:16
+msgid "Real-time visualization of a bubble sort algorithm executing on Tiny8"
+msgstr "Tiny8上で実行されるバブルソートアルゴリズムのリアルタイム可視化"
+
+#: ../../index.rst:18
+msgid "Features"
+msgstr "主な特徴"
+
+#: ../../index.rst:21
+msgid "Interactive Terminal Debugger"
+msgstr "インタラクティブなターミナルデバッガ"
+
+#: ../../index.rst:23
+msgid "CLI visualizer screenshot"
+msgstr "CLIビジュアライザのスクリーンショット"
+
+#: ../../index.rst:28
+msgid ""
+"**Vim-style navigation**: Step through execution with intuitive keyboard "
+"controls"
+msgstr "**Vim風ナビゲーション**: 直感的なキーボード操作で実行を1ステップずつ追跡"
+
+#: ../../index.rst:29
+msgid ""
+"**Change highlighting**: See exactly what changed at each step "
+"(registers, flags, memory)"
+msgstr "**変更箇所の強調表示**: 各ステップで変更されたレジスタ、フラグ、メモリをリアルタイムに強調"
+
+#: ../../index.rst:30
+msgid ""
+"**Time-travel debugging**: Step forward and backward with sparse "
+"checkpoint restoration"
+msgstr "**タイムトラベルデバッグ**: スパースチェックポイント復元による前進・後退ステップ実行"
+
+#: ../../index.rst:31
+msgid ""
+"**32x32 TrueColor Heatmap**: VRAM memory matrix with Viridis/Grayscale "
+"visualization"
+msgstr "**32x32 TrueColorヒートマップ**: Viridis/グレースケールによるVRAMメモリマトリックス可視化"
+
+#: ../../index.rst:32
+msgid ""
+"**Built-in Vim Editor**: Launch full-screen modal editor anytime with "
+"``e``"
+msgstr "**内蔵Vimエディタ**: ``e`` キーでいつでも全画面モーダルエディタを起動可能"
+
+#: ../../index.rst:33
+msgid ""
+"**Internationalization**: English (en) and Japanese (ja) localization "
+"support"
+msgstr "**国際化対応 (i18n)**: 英語 (en) および日本語 (ja) のローカライゼーション対応"
+
+#: ../../index.rst:36
+msgid "Complete 8-bit Architecture"
+msgstr "完全な8ビットアーキテクチャ"
+
+#: ../../index.rst:38
+msgid "**32 general-purpose registers** (R0-R31)"
+msgstr "**32本の汎用レジスタ** (R0-R31)"
+
+#: ../../index.rst:39
+msgid "**8-bit ALU** with arithmetic, logical, and bit manipulation operations"
+msgstr "算術・論理・ビット操作をサポートする **8ビットALU**"
+
+#: ../../index.rst:40
+msgid "**Status register (SREG)** with 8 condition flags"
+msgstr "8個の条件フラグを持つ **ステータスレジスタ (SREG)**"
+
+#: ../../index.rst:41
+msgid "**64KB address space** for unified memory and I/O"
+msgstr "統合メモリおよびI/O用の **64KBアドレス空間**"
+
+#: ../../index.rst:42
+msgid "**Stack operations** with dedicated stack pointer"
+msgstr "専用スタックポインタによる **スタック操作**"
+
+#: ../../index.rst:43
+msgid ""
+"**AVR instruction set** with 67 instructions compliant with Microchip "
+"DS40002198A"
+msgstr "Microchip DS40002198Aに準拠した67命令を備えた **AVR命令セット**"
+
+#: ../../index.rst:46
+msgid "Educational Focus"
+msgstr "教育重視の設計"
+
+#: ../../index.rst:48
+msgid "Clean, readable Python implementation"
+msgstr "クリーンで読みやすいPython実装"
+
+#: ../../index.rst:49
+msgid "Comprehensive examples (Fibonacci, bubble sort, factorial, and more)"
+msgstr "充実したサンプルプログラム (フィボナッチ、バブルソート、階乗など)"
+
+#: ../../index.rst:50
+msgid "Step-by-step execution traces for debugging"
+msgstr "デバッグ用の詳細なステップ実行トレース"
+
+#: ../../index.rst:51
+msgid "Full API documentation and instruction set reference"
+msgstr "完全なAPIドキュメントおよび命令セットリファレンス"
+
+#: ../../index.rst:54
+msgid "Quick Start"
+msgstr "クイックスタート"
+
+#: ../../index.rst:57
+msgid "Installation"
+msgstr "インストール"
+
+#: ../../index.rst:59
+msgid "Install Tiny8 using pip:"
+msgstr "pipを使用してTiny8をインストール:"
+
+#: ../../index.rst:66
+msgid "Your First Program"
+msgstr "最初のプログラム"
+
+#: ../../index.rst:68
+msgid "Create a file called ``fibonacci.asm``:"
+msgstr "``fibonacci.asm`` というファイルを作成:"
+
+#: ../../index.rst:90
+msgid "Run it with the interactive debugger:"
+msgstr "インタラクティブデバッガで実行:"
+
+#: ../../index.rst:97
+msgid "Using the Python API"
+msgstr "Python APIの使用"
+
+#: ../../index.rst:115
+msgid "Documentation Contents"
+msgstr "ドキュメント目次"
+
+#: ../../index.rst:139
+msgid "Indices and Tables"
+msgstr "索引とテーブル"
+
+#: ../../index.rst:141
+msgid ":ref:`genindex`"
+msgstr ":ref:`genindex`"
+
+#: ../../index.rst:142
+msgid ":ref:`modindex`"
+msgstr ":ref:`modindex`"
+
+#: ../../index.rst:143
+msgid ":ref:`search`"
+msgstr ":ref:`search`"
+
+#~ msgid ""
+#~ "Tiny8 is a lightweight and educational"
+#~ " toolkit for exploring the fundamentals "
+#~ "of computer architecture through hands-"
+#~ "on assembly programming and real-time"
+#~ " visualization. Designed for learning and"
+#~ " experimentation, it features an AVR "
+#~ "8-bit RISC CPU architecture with 32 "
+#~ "registers, a standard-compliant instruction"
+#~ " set, and powerful debugging tools —"
+#~ " all with zero heavy dependencies."
+#~ msgstr ""
+#~ "Tiny8は、実践的なアセンブリプログラミングとリアルタイム可視化を通じてコンピュータアーキテクチャの基礎を探求するための、軽量な教育用ツールキットです。学習と実験のために設計されており、32個のレジスタを持つAVR"
+#~ " 8ビットRISC CPUアーキテクチャ、規格準拠の命令セット、強力なデバッグツールを、重い外部依存関係なしで提供します。"
+

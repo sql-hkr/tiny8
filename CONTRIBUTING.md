@@ -4,36 +4,36 @@ Thank you for your interest in contributing to Tiny8! This guide will help you g
 
 Whether you're fixing a bug, adding a feature, improving documentation, or creating new assembly examples, your contributions are welcome and appreciated.
 
-## 🌟 Ways to Contribute
+## Ways to Contribute
 
-### 🐛 Bug Reports
+### Bug Reports
 - Search [existing issues](https://github.com/sql-hkr/tiny8/issues) first
 - Provide a clear description and minimal reproduction steps
 - Include your Python version and operating system
 - Add relevant code snippets or assembly programs
 
-### 💡 Feature Requests
+### Feature Requests
 - Open an issue describing the feature and its use case
 - Discuss design decisions before implementing large changes
 - Consider backward compatibility and educational value
 
-### 📝 Documentation
+### Documentation
 - Fix typos and improve clarity
 - Add more code examples
 - Enhance API documentation
 - Create tutorials or guides
 
-### 🎓 Assembly Examples
+### Assembly Examples
 - Create educational assembly programs
 - Document algorithms and implementation details
 - Add visualizations demonstrating key concepts
 
-### 🧪 Testing
+### Testing
 - Improve test coverage
 - Add edge case tests
 - Test on different platforms
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -87,7 +87,7 @@ Whether you're fixing a bug, adding a feature, improving documentation, or creat
    tiny8 examples/fibonacci.asm
    ```
 
-## 🧪 Testing
+## Testing
 
 ### Running Tests
 
@@ -135,7 +135,7 @@ def test_feature_name():
     assert cpu.read_reg(16) == expected_value
 ```
 
-## 🎨 Code Style
+## Code Style
 
 ### Linting and Formatting
 
@@ -183,7 +183,7 @@ def execute_instruction(self, opcode: int, operands: list[int]) -> None:
     # Implementation
 ```
 
-## 📚 Documentation
+## Documentation
 
 ### Building Documentation
 
@@ -211,7 +211,7 @@ start _build/html/index.html  # Windows
 - Update `docs/index.rst` for significant features
 - Include code examples in docstrings when helpful
 
-## 🎯 Assembly Examples
+## Assembly Examples
 
 ### Creating Examples
 
@@ -251,7 +251,7 @@ done:
 - **Test coverage**: Add corresponding unit tests
 - **Documentation**: Reference in README or docs if significant
 
-## 🔄 Pull Request Process
+## Pull Request Process
 
 ### Before Submitting
 
@@ -300,14 +300,14 @@ Before submitting your PR, ensure:
 - [ ] Branch is up-to-date with main
 - [ ] No unrelated changes included
 
-## 🔍 Code Review Process
+## Code Review Process
 
 - Maintainers will review PRs within a few days
 - Address feedback constructively
 - Push additional commits to the same branch
 - Request re-review after addressing comments
 
-## 🌐 Community Guidelines
+## Community Guidelines
 
 ### Code of Conduct
 
@@ -323,7 +323,7 @@ Before submitting your PR, ensure:
 - **Discussions**: Use GitHub Discussions for questions and ideas
 - **Email**: For security issues only (see below)
 
-## 🔒 Security Issues
+## Security Issues
 
 If you discover a security vulnerability:
 
@@ -332,21 +332,21 @@ If you discover a security vulnerability:
 3. Provide detailed information about the vulnerability
 4. Allow time for a fix before public disclosure
 
-## 📄 License
+## License
 
 By contributing to Tiny8, you agree that your contributions will be licensed under the [MIT License](LICENSE).
 
 Your contributions will be attributed in the project's commit history and release notes.
 
-## ❓ Questions?
+## Questions?
 
 - Check the [documentation](https://sql-hkr.github.io/tiny8/)
 - Search [existing issues](https://github.com/sql-hkr/tiny8/issues)
 - Open a new issue for discussion
 - Join [GitHub Discussions](https://github.com/sql-hkr/tiny8/discussions)
 
-## 🙏 Thank You!
+## Thank You!
 
 Thank you for taking the time to contribute to Tiny8! Your efforts help make this project a better learning tool for everyone exploring computer architecture.
 
-Every contribution, no matter how small, makes a difference. We appreciate your support! ⭐
+Every contribution, no matter how small, makes a difference. We appreciate your support!

@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-25 01:27+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../index.rst:117
+msgid "User Guide"
+msgstr ""
+
+#: ../../index.rst:126
+msgid "Examples"
+msgstr ""
+
+#: ../../index.rst:132
+msgid "API Reference"
+msgstr ""
+
+#: ../../index.rst:4
+msgid "Tiny8 Documentation"
+msgstr ""
+
+#: ../../index.rst:6
+msgid "**From bare-metal computer architecture to Generative AI — an educational 8-bit AVR RISC CPU simulator with real-time interactive visualization**"
+msgstr ""
+
+#: ../../index.rst:8
+msgid "Tiny8 is a lightweight educational toolkit that bridges bare-metal computer architecture and modern Generative AI. Designed for hands-on learning and experimentation, it guides you through the full stack of computing — from 32 general-purpose registers, ALU operations, stack frames, and C compilation up to executing an iterative reverse-diffusion model synthesizing 28x28 MNIST digits directly on an AVR 8-bit RISC processor. With an interactive Vim-inspired terminal debugger, time-travel reverse execution, and a 32x32 TrueColor memory heatmap, Tiny8 lets you see, step through, and understand computation at every level."
+msgstr ""
+
+#: ../../index.rst:10
+msgid "Animated bubble sort visualization"
+msgstr ""
+
+#: ../../index.rst:16
+msgid "Real-time visualization of a bubble sort algorithm executing on Tiny8"
+msgstr ""
+
+#: ../../index.rst:18
+msgid "Features"
+msgstr ""
+
+#: ../../index.rst:21
+msgid "Interactive Terminal Debugger"
+msgstr ""
+
+#: ../../index.rst:23
+msgid "CLI visualizer screenshot"
+msgstr ""
+
+#: ../../index.rst:28
+msgid "**Vim-style navigation**: Step through execution with intuitive keyboard controls"
+msgstr ""
+
+#: ../../index.rst:29
+msgid "**Change highlighting**: See exactly what changed at each step (registers, flags, memory)"
+msgstr ""
+
+#: ../../index.rst:30
+msgid "**Time-travel debugging**: Step forward and backward with sparse checkpoint restoration"
+msgstr ""
+
+#: ../../index.rst:31
+msgid "**32x32 TrueColor Heatmap**: VRAM memory matrix with Viridis/Grayscale visualization"
+msgstr ""
+
+#: ../../index.rst:32
+msgid "**Built-in Vim Editor**: Launch full-screen modal editor anytime with ``e``"
+msgstr ""
+
+#: ../../index.rst:33
+msgid "**Internationalization**: English (en) and Japanese (ja) localization support"
+msgstr ""
+
+#: ../../index.rst:36
+msgid "Complete 8-bit Architecture"
+msgstr ""
+
+#: ../../index.rst:38
+msgid "**32 general-purpose registers** (R0-R31)"
+msgstr ""
+
+#: ../../index.rst:39
+msgid "**8-bit ALU** with arithmetic, logical, and bit manipulation operations"
+msgstr ""
+
+#: ../../index.rst:40
+msgid "**Status register (SREG)** with 8 condition flags"
+msgstr ""
+
+#: ../../index.rst:41
+msgid "**64KB address space** for unified memory and I/O"
+msgstr ""
+
+#: ../../index.rst:42
+msgid "**Stack operations** with dedicated stack pointer"
+msgstr ""
+
+#: ../../index.rst:43
+msgid "**AVR instruction set** with 67 instructions compliant with Microchip DS40002198A"
+msgstr ""
+
+#: ../../index.rst:46
+msgid "Educational Focus"
+msgstr ""
+
+#: ../../index.rst:48
+msgid "Clean, readable Python implementation"
+msgstr ""
+
+#: ../../index.rst:49
+msgid "Comprehensive examples (Fibonacci, bubble sort, factorial, and more)"
+msgstr ""
+
+#: ../../index.rst:50
+msgid "Step-by-step execution traces for debugging"
+msgstr ""
+
+#: ../../index.rst:51
+msgid "Full API documentation and instruction set reference"
+msgstr ""
+
+#: ../../index.rst:54
+msgid "Quick Start"
+msgstr ""
+
+#: ../../index.rst:57
+msgid "Installation"
+msgstr ""
+
+#: ../../index.rst:59
+msgid "Install Tiny8 using pip:"
+msgstr ""
+
+#: ../../index.rst:66
+msgid "Your First Program"
+msgstr ""
+
+#: ../../index.rst:68
+msgid "Create a file called ``fibonacci.asm``:"
+msgstr ""
+
+#: ../../index.rst:90
+msgid "Run it with the interactive debugger:"
+msgstr ""
+
+#: ../../index.rst:97
+msgid "Using the Python API"
+msgstr ""
+
+#: ../../index.rst:115
+msgid "Documentation Contents"
+msgstr ""
+
+#: ../../index.rst:139
+msgid "Indices and Tables"
+msgstr ""
+
+#: ../../index.rst:141
+msgid ":ref:`genindex`"
+msgstr ""
+
+#: ../../index.rst:142
+msgid ":ref:`modindex`"
+msgstr ""
+
+#: ../../index.rst:143
+msgid ":ref:`search`"
+msgstr ""

@@ -1,0 +1,369 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 22:30+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../examples/index.rst:2
+msgid "Examples"
+msgstr ""
+
+#: ../../examples/index.rst:4
+msgid "This section contains detailed walkthroughs of example programs that demonstrate Tiny8's capabilities and teach assembly programming concepts."
+msgstr ""
+
+#: ../../examples/index.rst:7
+msgid "Overview"
+msgstr ""
+
+#: ../../examples/index.rst:9
+msgid "The examples are organized by complexity and concept:"
+msgstr ""
+
+#: ../../examples/index.rst:11
+msgid "**Basic Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:12
+msgid "Simple programs demonstrating fundamental operations"
+msgstr ""
+
+#: ../../examples/index.rst:14
+msgid "**Intermediate Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:15
+msgid "Programs using loops, conditionals, and memory operations"
+msgstr ""
+
+#: ../../examples/index.rst:17
+msgid "**Advanced Examples**"
+msgstr ""
+
+#: ../../examples/index.rst:18
+msgid "Complex algorithms including sorting and mathematical computations"
+msgstr ""
+
+#: ../../examples/index.rst:20
+msgid "All examples are available in the ``examples/`` directory of the Tiny8 repository."
+msgstr ""
+
+#: ../../examples/index.rst:23
+msgid "Running Examples"
+msgstr ""
+
+#: ../../examples/index.rst:25
+msgid "You can run any example with the interactive debugger:"
+msgstr ""
+
+#: ../../examples/index.rst:31
+msgid "Or use the Python API:"
+msgstr ""
+
+#: ../../examples/index.rst:42
+msgid "Example Programs"
+msgstr ""
+
+#: ../../examples/index.rst:45
+msgid "Basic Examples"
+msgstr ""
+
+#: ../../examples/index.rst:55
+msgid "Intermediate Examples"
+msgstr ""
+
+#: ../../examples/index.rst:67
+msgid "Advanced Examples"
+msgstr ""
+
+#: ../../examples/index.rst:81
+msgid "C Language Programs & Interactive Demos"
+msgstr ""
+
+#: ../../examples/index.rst:83
+msgid "Tiny8 includes an embedded C subset compiler capable of compiling and running C programs directly on the simulated CPU:"
+msgstr ""
+
+#: ../../examples/index.rst:85
+msgid "**factorial.c**: Recursive factorial calculation demonstration."
+msgstr ""
+
+#: ../../examples/index.rst:86
+msgid "**mnist_heatmap.c**: 28x28 MNIST real digit heatmap transfer to 32x32 VRAM."
+msgstr ""
+
+#: ../../examples/index.rst:89
+msgid "Quick Reference"
+msgstr ""
+
+#: ../../examples/index.rst:91
+msgid "Example Summary"
+msgstr ""
+
+#: ../../examples/index.rst:95
+msgid "Program"
+msgstr ""
+
+#: ../../examples/index.rst:96
+msgid "Concept"
+msgstr ""
+
+#: ../../examples/index.rst:97
+msgid "Key Instructions / Language"
+msgstr ""
+
+#: ../../examples/index.rst:98
+msgid "Hello World"
+msgstr ""
+
+#: ../../examples/index.rst:99
+msgid "Basic memory writing"
+msgstr ""
+
+#: ../../examples/index.rst:100
+msgid "LDI, ST, INC, JMP"
+msgstr ""
+
+#: ../../examples/index.rst:101
+msgid "Fibonacci"
+msgstr ""
+
+#: ../../examples/index.rst:102
+msgid "Iterative sequence"
+msgstr ""
+
+#: ../../examples/index.rst:103
+msgid "ADD, MOV, DEC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:104
+msgid "Factorial (ASM)"
+msgstr ""
+
+#: ../../examples/index.rst:105
+msgid "Iterative multiplication"
+msgstr ""
+
+#: ../../examples/index.rst:106
+msgid "MUL, DEC, CPI, BRGE"
+msgstr ""
+
+#: ../../examples/index.rst:107
+msgid "Factorial (C)"
+msgstr ""
+
+#: ../../examples/index.rst:108
+msgid "Recursive function calls"
+msgstr ""
+
+#: ../../examples/index.rst:109
+msgid "C Compiler (CALL, RET, PUSH, POP)"
+msgstr ""
+
+#: ../../examples/index.rst:110
+msgid "Sum 1 to N"
+msgstr ""
+
+#: ../../examples/index.rst:111
+msgid "Loop accumulation"
+msgstr ""
+
+#: ../../examples/index.rst:112
+msgid "ADD, INC, CP, BRLT, BREQ"
+msgstr ""
+
+#: ../../examples/index.rst:113
+msgid "Array Sum"
+msgstr ""
+
+#: ../../examples/index.rst:114
+msgid "Pointer iteration"
+msgstr ""
+
+#: ../../examples/index.rst:115
+msgid "LD, ST, ADD, INC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:116
+msgid "Find Max"
+msgstr ""
+
+#: ../../examples/index.rst:117
+msgid "Array scanning & comparison"
+msgstr ""
+
+#: ../../examples/index.rst:118
+msgid "LD, ST, CP, BRGE, MOV"
+msgstr ""
+
+#: ../../examples/index.rst:119
+msgid "Linear Search"
+msgstr ""
+
+#: ../../examples/index.rst:120
+msgid "Target search & sentinel"
+msgstr ""
+
+#: ../../examples/index.rst:121
+msgid "LD, ST, CP, BREQ, INC"
+msgstr ""
+
+#: ../../examples/index.rst:122
+msgid "Memory Copy"
+msgstr ""
+
+#: ../../examples/index.rst:123
+msgid "Block memory transfer"
+msgstr ""
+
+#: ../../examples/index.rst:124
+msgid "LD, ST, INC, DEC, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:125
+msgid "Bubble Sort"
+msgstr ""
+
+#: ../../examples/index.rst:126
+msgid "PRNG & in-place sort"
+msgstr ""
+
+#: ../../examples/index.rst:127
+msgid "MUL, LD, ST, CP, BRCS"
+msgstr ""
+
+#: ../../examples/index.rst:128
+msgid "GCD"
+msgstr ""
+
+#: ../../examples/index.rst:129
+msgid "Euclidean algorithm"
+msgstr ""
+
+#: ../../examples/index.rst:130
+msgid "DIV, MOV, CPI, BREQ"
+msgstr ""
+
+#: ../../examples/index.rst:131
+msgid "Power"
+msgstr ""
+
+#: ../../examples/index.rst:132
+msgid "Exponentiation"
+msgstr ""
+
+#: ../../examples/index.rst:133
+msgid "MUL, INC, CP, BRLT"
+msgstr ""
+
+#: ../../examples/index.rst:134
+msgid "Multiply by Shift"
+msgstr ""
+
+#: ../../examples/index.rst:135
+msgid "Binary shift multiplication"
+msgstr ""
+
+#: ../../examples/index.rst:136
+msgid "LSL, LSR, ANDI, ADD"
+msgstr ""
+
+#: ../../examples/index.rst:137
+msgid "Count Bits"
+msgstr ""
+
+#: ../../examples/index.rst:138
+msgid "Bit testing & division"
+msgstr ""
+
+#: ../../examples/index.rst:139
+msgid "AND, DIV, CPI, BRNE"
+msgstr ""
+
+#: ../../examples/index.rst:140
+msgid "Is Prime"
+msgstr ""
+
+#: ../../examples/index.rst:141
+msgid "Trial division"
+msgstr ""
+
+#: ../../examples/index.rst:142
+msgid "DIV, MUL, CP, BRGE, BRLT"
+msgstr ""
+
+#: ../../examples/index.rst:143
+msgid "Reverse Array"
+msgstr ""
+
+#: ../../examples/index.rst:144
+msgid "Two-pointer array reverse"
+msgstr ""
+
+#: ../../examples/index.rst:145
+msgid "LD, ST, CP, BRGE, INC, DEC"
+msgstr ""
+
+#: ../../examples/index.rst:146
+msgid "MNIST Heatmap (C)"
+msgstr ""
+
+#: ../../examples/index.rst:147
+msgid "28x28 digit VRAM heatmap"
+msgstr ""
+
+#: ../../examples/index.rst:148
+msgid "C (VRAM 0x0200..0x05FF)"
+msgstr ""
+
+#: ../../examples/index.rst:149
+msgid "MNIST Diffusion (ASM)"
+msgstr ""
+
+#: ../../examples/index.rst:150
+msgid "Iterative reverse-diffusion synthesis"
+msgstr ""
+
+#: ../../examples/index.rst:151
+msgid "ASM (diffusion_mnist8.asm)"
+msgstr ""
+
+#: ../../examples/index.rst:154
+msgid "Learning Path"
+msgstr ""
+
+#: ../../examples/index.rst:156
+msgid "Recommended order for learning:"
+msgstr ""
+
+#: ../../examples/index.rst:158
+msgid "**Start with basics**: hello_world, fibonacci, factorial"
+msgstr ""
+
+#: ../../examples/index.rst:159
+msgid "**Learn memory**: array_sum, memory_copy, find_max"
+msgstr ""
+
+#: ../../examples/index.rst:160
+msgid "**Master control flow**: linear_search, gcd"
+msgstr ""
+
+#: ../../examples/index.rst:161
+msgid "**Tackle algorithms**: bubblesort, power, is_prime"
+msgstr ""
+
+#: ../../examples/index.rst:162
+msgid "**Explore bit operations**: multiply_by_shift, count_bits"
+msgstr ""

@@ -1,0 +1,525 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025, sql-hkr
+# This file is distributed under the same license as the Tiny8 package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Tiny8 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-24 22:30+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../examples/bubblesort.rst:2
+#: ../../examples/bubblesort.rst:351
+msgid "Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:4
+msgid "This advanced example demonstrates bubble sort: a classic sorting algorithm that sorts an array in memory."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:7
+msgid "Overview"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:9
+msgid "**Difficulty**: Advanced"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:11
+msgid "**Concepts**: Nested loops, memory operations, array manipulation, pseudo-random number generation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:13
+msgid "**Output**: Sorted array at RAM[0x60..0x7F] (32 bytes in ascending order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:16
+msgid "The Program"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:23
+msgid "Algorithm Overview"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:25
+msgid "The program has two main phases:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:27
+msgid "**Initialization**: Generate 32 pseudo-random values and store them in RAM"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:28
+msgid "**Bubble Sort**: Sort the array using the bubble sort algorithm"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:31
+msgid "Phase 1: Array Initialization"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:34
+msgid "Pseudo-Random Number Generator"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:36
+msgid "The program uses a simple linear congruential generator (LCG):"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:42
+msgid "This generates a sequence of pseudo-random 8-bit values."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:56
+msgid "After 32 iterations, RAM[0x60..0x7F] contains pseudo-random values."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:59
+msgid "Phase 2: Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:62
+msgid "Algorithm Explanation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:64
+msgid "Bubble sort works by repeatedly stepping through the array, comparing adjacent elements, and swapping them if they're in the wrong order."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:74
+msgid "Outer Loop"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:87
+msgid "Runs 31 times (i = 0 to 30)."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:90
+msgid "Inner Loop"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:119
+msgid "For each j:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:121
+msgid "Load adjacent elements (j and j+1)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:122
+msgid "Compare them"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:123
+msgid "Swap if first > second (for ascending order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:124
+msgid "Advance to next pair"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:127
+msgid "Register Usage"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:129
+msgid "Register Allocation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:133
+msgid "Register"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:134
+msgid "Purpose"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:135
+msgid "R16"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:136
+msgid "Memory address pointer / base address"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:137
+msgid "R17"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:138
+msgid "Array index during initialization"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:139
+msgid "R18"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:140
+msgid "PRNG seed / outer loop counter (i)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:141
+msgid "R19"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:142
+msgid "Inner loop counter (j)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:143
+msgid "R20"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:144
+msgid "Address of element A"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:145
+msgid "R21"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:146
+msgid "Value of element A"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:147
+msgid "R22"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:148
+msgid "Address of element B"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:149
+msgid "R23"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:150
+msgid "Temporary comparison value"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:151
+msgid "R24"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:152
+msgid "Value of element B"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:153
+msgid "R25"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:154
+msgid "PRNG multiplier constant (75)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:157
+msgid "Memory Layout"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:174
+msgid "Execution Example"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:177
+msgid "Initial Array (pseudo-random)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:184
+msgid "After Bubble Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:190
+msgid "Bubble sort compares and swaps adjacent elements until the entire array is sorted."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:193
+msgid "Running the Example"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:196
+msgid "Interactive Debugger"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:202
+msgid "Watch the sorting process step-by-step. Set marks at the beginning of inner_loop to track passes."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:205
+msgid "Animation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:212
+msgid "Creates a visualization showing:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:214
+msgid "Memory heatmap of the array being sorted"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:215
+msgid "Register changes during comparisons"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:216
+msgid "Visual pattern of values moving to their correct positions"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:219
+msgid "Python API"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:239
+msgid "Performance Analysis"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:242
+#: ../../examples/bubblesort.rst:348
+msgid "Time Complexity"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:244
+msgid "**Best case**: O(n²) - 31 × 31 = 961 comparisons"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:245
+msgid "**Worst case**: O(n²) - Same as best (this implementation doesn't optimize)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:246
+msgid "**Average case**: O(n²)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:248
+msgid "For 32 elements:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:250
+msgid "Outer loop: 31 iterations"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:251
+msgid "Inner loop: 31 iterations per outer"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:252
+msgid "Total comparisons: ~961"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:253
+msgid "Total swaps: Variable (depends on initial order)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:256
+msgid "Instruction Count"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:258
+msgid "Each comparison involves approximately:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:260
+msgid "10 instructions to load addresses and values"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:261
+msgid "5 instructions for comparison and potential swap"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:262
+msgid "3 instructions for loop control"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:264
+msgid "Total: ~15,000+ instructions for a complete sort."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:267
+msgid "Key Concepts"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:270
+msgid "Nested Loops"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:272
+msgid "Two loop counters working together:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:286
+msgid "Address Calculation"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:288
+msgid "Computing memory addresses dynamically:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:297
+msgid "Conditional Swapping"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:308
+msgid "Exercises"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:310
+msgid "**Count swaps**: Add a counter to track number of swaps"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:311
+msgid "**Optimize**: Add early exit if no swaps occurred in a pass"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:312
+msgid "**Different sizes**: Sort 16 or 64 elements instead"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:313
+msgid "**Descending order**: Modify to sort in descending order"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:314
+msgid "**Different algorithm**: Implement selection sort or insertion sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:317
+msgid "Solutions Hints"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:319
+msgid "**Count swaps**: Add ``inc r26`` in the swap section, initialize R26 to 0."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:321
+msgid "**Optimize**: Set a flag when swapping, check it at end of outer loop."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:323
+msgid "**Descending order**: Change ``brcs no_swap`` to ``brcc no_swap``."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:326
+msgid "Visualization Tips"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:328
+msgid "When viewing the animation:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:330
+msgid "**Memory panel**: Watch values \"bubble\" to their positions"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:331
+msgid "**Register panel**: R19 (j) cycles 0-30 repeatedly"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:332
+msgid "**Register panel**: R18 (i) increments slowly"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:334
+msgid "Look for:"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:336
+msgid "Large values moving right (higher addresses)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:337
+msgid "Small values moving left (lower addresses)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:338
+msgid "Progressively fewer changes as array becomes sorted"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:341
+msgid "Comparison with Other Sorts"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:343
+msgid "Sorting Algorithm Comparison"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:347
+msgid "Algorithm"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:349
+msgid "Space"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:350
+msgid "Stability"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:352
+#: ../../examples/bubblesort.rst:356
+#: ../../examples/bubblesort.rst:360
+msgid "O(n²)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:353
+#: ../../examples/bubblesort.rst:357
+#: ../../examples/bubblesort.rst:361
+msgid "O(1)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:354
+#: ../../examples/bubblesort.rst:362
+msgid "Yes"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:355
+msgid "Selection Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:358
+#: ../../examples/bubblesort.rst:366
+msgid "No"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:359
+msgid "Insertion Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:363
+msgid "Quick Sort"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:364
+msgid "O(n log n)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:365
+msgid "O(log n)"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:368
+msgid "Bubble sort is chosen for this example because it's conceptually simple and demonstrates memory operations clearly."
+msgstr ""
+
+#: ../../examples/bubblesort.rst:371
+msgid "Related Examples"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:373
+msgid ":doc:`linear_search` - Sequential array access"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:374
+msgid ":doc:`find_max` - Array comparison operations"
+msgstr ""
+
+#: ../../examples/bubblesort.rst:375
+msgid ":doc:`reverse` - Array manipulation"
+msgstr ""

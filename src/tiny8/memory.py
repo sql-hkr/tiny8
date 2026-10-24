@@ -1,140 +1,161 @@
-"""Memory model for tiny8 - simple RAM and ROM with change tracking."""
+"""Memory model for tiny8 providing RAM and ROM with change tracking."""
+
+from collections import deque
 
 
 class Memory:
-    """Memory class for a simple byte-addressable RAM/ROM model.
+    """Byte-addressable RAM/ROM memory subsystem.
 
-    This class provides a minimal memory subsystem with separate RAM and ROM
-    regions, change-logging for writes/loads, and convenience snapshot
-    methods. All stored values are maintained as 8-bit unsigned bytes (0-255).
+    Maintains separate RAM and ROM buffers as 8-bit unsigned bytes (0-255)
+    and logs modifications for tracing and visualization.
 
     Args:
-        ram_size: Number of bytes in RAM (default 2048).
-        rom_size: Number of bytes in ROM (default 2048).
+        ram_size: Number of bytes in RAM. Defaults to 65536.
+        rom_size: Number of bytes in ROM. Defaults to 2048.
 
     Attributes:
-        ram: Mutable list representing RAM contents (each element 0-255).
-        rom: Mutable list representing ROM contents (each element 0-255).
-        ram_changes: Change log for RAM writes. Each entry is a tuple
-            (addr, old_value, new_value, step) appended only when a write
-            changes the stored byte.
-        rom_changes: Change log for ROM loads. Each entry is a tuple
-            (addr, old_value, new_value, step) appended when load_rom
-            changes bytes.
-
-    Note:
-        - All write/load operations mask values with 0xFF so stored values are
-          always in the range 0..255.
-        - ram_changes and rom_changes record only actual changes (old != new).
-        - read_* methods perform bounds checking and raise IndexError for
-          invalid addresses.
-        - load_rom accepts an iterable of integers and raises ValueError if
-          the input is larger than the configured ROM size.
+        ram_size: Size of RAM in bytes.
+        rom_size: Size of ROM in bytes.
+        ram: Bytearray representing RAM contents.
+        rom: Bytearray representing ROM contents.
+        ram_changes: Log of RAM writes as (addr, old_val, new_val, step) tuples.
+        rom_changes: Log of ROM writes as (addr, old_val, new_val, step) tuples.
     """
 
-    def __init__(self, ram_size: int = 2048, rom_size: int = 2048):
+    __slots__ = (
+        "ram_size",
+        "rom_size",
+        "max_changes",
+        "track_changes",
+        "ram",
+        "rom",
+        "nonzero_ram",
+        "ram_changes",
+        "rom_changes",
+    )
+
+    def __init__(
+        self,
+        ram_size: int = 65536,
+        rom_size: int = 2048,
+        max_changes: int = 2000,
+        track_changes: bool = True,
+    ) -> None:
         self.ram_size = ram_size
         self.rom_size = rom_size
-        self.ram = [0] * ram_size
-        self.rom = [0] * rom_size
-        self.ram_changes: list[tuple[int, int, int, int]] = []
-        self.rom_changes: list[tuple[int, int, int, int]] = []
+        self.max_changes = max_changes
+        self.track_changes = track_changes
+        self.ram = bytearray(ram_size)
+        self.rom = bytearray(rom_size)
+        self.nonzero_ram: dict[int, int] = {}
+        self.ram_changes: deque[tuple[int, int, int, int]] = deque(maxlen=max_changes)
+        self.rom_changes: deque[tuple[int, int, int, int]] = deque(maxlen=max_changes)
 
     def read_ram(self, addr: int) -> int:
-        """Read and return the value stored in RAM at the specified address.
+        """Read a byte from RAM.
 
         Args:
-            addr: The RAM address to read. Must be within the valid range
-                0 <= addr < self.ram_size.
+            addr: Memory address in the range [0, ram_size).
 
         Returns:
-            The integer value stored at the given RAM address.
+            The byte value stored at the address.
 
         Raises:
-            IndexError: If the provided addr is negative or not less than
-                self.ram_size.
+            IndexError: If addr is outside valid RAM boundaries.
         """
-        if addr < 0 or addr >= self.ram_size:
+        if not (0 <= addr < self.ram_size):
             raise IndexError("RAM address out of range")
         return self.ram[addr]
 
     def write_ram(self, addr: int, value: int, step: int = 0) -> None:
-        """Write a byte to RAM at the specified address.
+        """Write a byte to RAM and log change if value changed.
 
         Args:
-            addr: Target RAM address. Must be in the range [0, self.ram_size).
-            value: Value to write; only the low 8 bits are stored (value & 0xFF).
-            step: Optional step/timestamp associated with this write; defaults to 0.
+            addr: Memory address in the range [0, ram_size).
+            value: Byte value to store (masked to 8-bit).
+            step: Step index associated with this write. Defaults to 0.
 
         Raises:
-            IndexError: If addr is out of the valid RAM range.
-
-        Note:
-            The provided value is masked to a single byte before storing. If
-            the stored byte changes, a record (addr, old_value, new_value,
-            step) is appended to self.ram_changes to track the modification.
+            IndexError: If addr is outside valid RAM boundaries.
         """
-        if addr < 0 or addr >= self.ram_size:
+        if not (0 <= addr < self.ram_size):
             raise IndexError("RAM address out of range")
         old = self.ram[addr]
-        self.ram[addr] = value & 0xFF
-        if old != self.ram[addr]:
-            self.ram_changes.append((addr, old, self.ram[addr], step))
+        new = value & 0xFF
+        if old == new:
+            return
+        self.ram[addr] = new
+        if self.track_changes:
+            self.ram_changes.append((addr, old, new, step))
+        if new != 0:
+            self.nonzero_ram[addr] = new
+        elif old != 0:
+            self.nonzero_ram.pop(addr, None)
+
+    def clear_changes(self) -> None:
+        """Clear memory modification history to free memory."""
+        self.ram_changes.clear()
+        self.rom_changes.clear()
+
+    def restore_ram(self, mem_dict: dict[int, int]) -> None:
+        """Restore RAM contents from a dictionary of non-zero entries."""
+        for addr in list(self.nonzero_ram.keys()):
+            self.ram[addr] = 0
+        self.nonzero_ram = dict(mem_dict)
+        for addr, val in self.nonzero_ram.items():
+            if 0 <= addr < self.ram_size:
+                self.ram[addr] = val & 0xFF
 
     def load_rom(self, data: list[int]) -> None:
-        """Load a ROM image into the emulator's ROM buffer.
+        """Load byte sequence into ROM and record changes.
 
         Args:
-            data: Sequence of integer byte values (expected 0-255) comprising
-                the ROM image. Values outside 0-255 will be truncated to 8 bits.
+            data: Sequence of byte values to load into ROM.
 
         Raises:
-            ValueError: If len(data) is greater than self.rom_size.
-
-        Note:
-            Overwrites self.rom[i] for i in range(len(data)) with
-            (data[i] & 0xFF). Appends (index, old_value, new_value, 0) to
-            self.rom_changes for each address where the value actually changed.
+            ValueError: If data length exceeds configured rom_size.
         """
         if len(data) > self.rom_size:
             raise ValueError("ROM image too large")
-        for i, v in enumerate(data):
-            old = self.rom[i]
-            self.rom[i] = v & 0xFF
-            if old != self.rom[i]:
-                self.rom_changes.append((i, old, self.rom[i], 0))
+        if self.track_changes:
+            for i, v in enumerate(data):
+                old = self.rom[i]
+                new = v & 0xFF
+                self.rom[i] = new
+                if old != new:
+                    self.rom_changes.append((i, old, new, 0))
+        else:
+            for i, v in enumerate(data):
+                self.rom[i] = v & 0xFF
 
     def read_rom(self, addr: int) -> int:
-        """Read a value from the ROM at the specified address.
+        """Read a byte from ROM.
 
         Args:
-            addr: Zero-based address within ROM to read.
+            addr: ROM address in the range [0, rom_size).
 
         Returns:
-            The value stored at the given ROM address.
+            The byte value stored at the address.
 
         Raises:
-            IndexError: If ``addr`` is negative or greater than or equal to
-                ``self.rom_size``.
+            IndexError: If addr is outside valid ROM boundaries.
         """
-        if addr < 0 or addr >= self.rom_size:
+        if not (0 <= addr < self.rom_size):
             raise IndexError("ROM address out of range")
         return self.rom[addr]
 
     def snapshot_ram(self) -> list[int]:
-        """Return a snapshot copy of the emulator's RAM.
+        """Return a shallow copy of RAM contents.
 
         Returns:
-            A new list containing the current contents of RAM. Each element
-            represents a byte (0-255). Modifying the returned list will not
-            affect the emulator's internal state.
+            List of integers representing current RAM.
         """
         return list(self.ram)
 
     def snapshot_rom(self) -> list[int]:
-        """Return a snapshot copy of the ROM contents.
+        """Return a shallow copy of ROM contents.
 
         Returns:
-            A list of integers representing the ROM data at the time of the call.
+            List of integers representing current ROM.
         """
         return list(self.rom)

@@ -1,6 +1,6 @@
 """Test suite for arithmetic instructions.
 
-Covers: ADD, ADC, SUB, SUBI, SBC, SBCI, INC, DEC, MUL, DIV, NEG, ADIW, SBIW
+Covers: ADD, ADC, SUB, SUBI, SBC, SBCI, INC, DEC, MUL, NEG, ADIW, SBIW
 """
 
 import pytest
@@ -291,9 +291,9 @@ class TestMUL:
             ldi r3, 100
             mul r2, r3
         """)
-        # 200 * 100 = 20000 = 0x4E20
-        helper.assert_register(cpu, 2, 0x20)  # Low byte
-        helper.assert_register(cpu, 3, 0x4E)  # High byte
+        # 200 * 100 = 20000 = 0x4E20 -> R1:R0 = 0x4E:0x20 per AVR DS40002198A
+        helper.assert_register(cpu, 0, 0x20)  # R0: Low byte
+        helper.assert_register(cpu, 1, 0x4E)  # R1: High byte
 
     def test_mul_zero(self, cpu_with_program, helper):
         """Test multiplication by zero."""
@@ -302,8 +302,8 @@ class TestMUL:
             ldi r5, 0
             mul r4, r5
         """)
-        helper.assert_register(cpu, 4, 0)
-        helper.assert_register(cpu, 5, 0)
+        helper.assert_register(cpu, 0, 0)
+        helper.assert_register(cpu, 1, 0)
         helper.assert_flag(cpu, SREG_Z, True, "Z")
 
     @pytest.mark.parametrize(
@@ -319,68 +319,12 @@ class TestMUL:
     def test_mul_parametrized(self, cpu_with_program, helper, a, b, low, high):
         """Test MUL with various input combinations."""
         cpu = cpu_with_program(f"""
-            ldi r0, {a}
-            ldi r1, {b}
-            mul r0, r1
+            ldi r2, {a}
+            ldi r3, {b}
+            mul r2, r3
         """)
         helper.assert_register(cpu, 0, low)
         helper.assert_register(cpu, 1, high)
-
-
-class TestDIV:
-    """Test DIV (Division) instruction."""
-
-    def test_div_basic(self, cpu_with_program, helper):
-        """Test basic division."""
-        cpu = cpu_with_program("""
-            ldi r0, 42
-            ldi r1, 7
-            div r0, r1
-        """)
-        helper.assert_register(cpu, 0, 6)  # Quotient
-        helper.assert_register(cpu, 1, 0)  # Remainder
-
-    def test_div_with_remainder(self, cpu_with_program, helper):
-        """Test division with remainder."""
-        cpu = cpu_with_program("""
-            ldi r2, 100
-            ldi r3, 7
-            div r2, r3
-        """)
-        helper.assert_register(cpu, 2, 14)  # 100 // 7 = 14
-        helper.assert_register(cpu, 3, 2)  # 100 % 7 = 2
-
-    def test_div_by_one(self, cpu_with_program, helper):
-        """Test division by 1."""
-        cpu = cpu_with_program("""
-            ldi r4, 123
-            ldi r5, 1
-            div r4, r5
-        """)
-        helper.assert_register(cpu, 4, 123)
-        helper.assert_register(cpu, 5, 0)
-
-    @pytest.mark.parametrize(
-        "dividend,divisor,quotient,remainder",
-        [
-            (10, 3, 3, 1),
-            (20, 4, 5, 0),
-            (255, 16, 15, 15),
-            (100, 100, 1, 0),
-            (7, 10, 0, 7),
-        ],
-    )
-    def test_div_parametrized(
-        self, cpu_with_program, helper, dividend, divisor, quotient, remainder
-    ):
-        """Test DIV with various input combinations."""
-        cpu = cpu_with_program(f"""
-            ldi r0, {dividend}
-            ldi r1, {divisor}
-            div r0, r1
-        """)
-        helper.assert_register(cpu, 0, quotient)
-        helper.assert_register(cpu, 1, remainder)
 
 
 class TestNEG:
@@ -436,3 +380,33 @@ class TestWordOperations:
         """)
         helper.assert_register(cpu, 24, 0x02)
         helper.assert_register(cpu, 25, 0x00)
+
+    def test_adiw_preserves_h_flag(self, cpu_with_program, helper):
+        """Test ADIW preserves H flag per AVR DS40002198A."""
+        cpu = cpu_with_program("""
+            ldi r24, 0xFF
+            ldi r25, 0x00
+            adiw r24, 1
+        """)
+        cpu.set_flag(SREG_H, True)
+        cpu.step()  # ldi
+        cpu.step()  # ldi
+        cpu.step()  # adiw
+        helper.assert_flag(cpu, SREG_H, True, "H")
+        helper.assert_register(cpu, 24, 0x00)
+        helper.assert_register(cpu, 25, 0x01)
+        helper.assert_flag(cpu, SREG_Z, False, "Z")
+
+    def test_sbiw_preserves_h_flag(self, cpu_with_program, helper):
+        """Test SBIW preserves H flag per AVR DS40002198A."""
+        cpu = cpu_with_program("""
+            ldi r24, 0x01
+            ldi r25, 0x00
+            sbiw r24, 1
+        """)
+        cpu.set_flag(SREG_H, True)
+        cpu.step()  # ldi
+        cpu.step()  # ldi
+        cpu.step()  # sbiw
+        helper.assert_flag(cpu, SREG_H, True, "H")
+        helper.assert_flag(cpu, SREG_Z, True, "Z")
