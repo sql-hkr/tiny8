@@ -1,6 +1,6 @@
 [project]
 name = "tiny8"
-version = "0.2.0"
+version = "0.3.0"
 description = "From bare metal to Generative AI: educational 8-bit AVR RISC CPU simulator with interactive visualization"
 readme = "README.md"
 authors = [{ name = "sql-hkr", email = "sql.hkr@gmail.com" }]
