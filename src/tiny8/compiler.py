@@ -38,7 +38,7 @@ class Lexer:
             r"\b(int|char|void|if|else|while|for|break|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
-        ("OP", r"==|!=|<=|>=|&&|\|\||[+\-*/%&|^=!<>]"),
+        ("OP", r"<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^=!<>]"),
         ("PUNCT", r"[;,\(\)\{\}\[\]]"),
         ("WS", r"\s+"),
     ]
@@ -249,6 +249,10 @@ def _fold_binary(op: str, left: ASTNode, right: ASTNode) -> ASTNode:
             return Literal((lv | rv) & 0xFF)
         if op == "^":
             return Literal((lv ^ rv) & 0xFF)
+        if op == "<<":
+            return Literal((lv << rv) & 0xFF)
+        if op == ">>":
+            return Literal((lv >> rv) & 0xFF)
         if op == "==":
             return Literal(1 if lv == rv else 0)
         if op == "!=":
@@ -588,16 +592,27 @@ class Parser:
         return node
 
     def parse_relational(self) -> ASTNode:
-        node = self.parse_additive()
+        node = self.parse_shift()
         while True:
             if self.match("<"):
-                node = _fold_binary("<", node, self.parse_additive())
+                node = _fold_binary("<", node, self.parse_shift())
             elif self.match("<="):
-                node = _fold_binary("<=", node, self.parse_additive())
+                node = _fold_binary("<=", node, self.parse_shift())
             elif self.match(">"):
-                node = _fold_binary(">", node, self.parse_additive())
+                node = _fold_binary(">", node, self.parse_shift())
             elif self.match(">="):
-                node = _fold_binary(">=", node, self.parse_additive())
+                node = _fold_binary(">=", node, self.parse_shift())
+            else:
+                break
+        return node
+
+    def parse_shift(self) -> ASTNode:
+        node = self.parse_additive()
+        while True:
+            if self.match("<<"):
+                node = _fold_binary("<<", node, self.parse_additive())
+            elif self.match(">>"):
+                node = _fold_binary(">>", node, self.parse_additive())
             else:
                 break
         return node
@@ -1058,6 +1073,21 @@ class CodeGenerator:
                 self.emit("LDI R16, 1")
                 self.emit_label(lbl_end)
 
+        elif (
+            isinstance(expr, BinaryOp)
+            and expr.op in ("<<", ">>")
+            and isinstance(expr.right, Literal)
+        ):
+            # Constant shift count: unroll into LSL/LSR. Shifting an 8-bit
+            # value by 8 or more clears it.
+            self.gen_expr(expr.left)
+            if expr.right.value >= 8:
+                self.emit("LDI R16, 0")
+            else:
+                instr = "LSL" if expr.op == "<<" else "LSR"
+                for _ in range(expr.right.value):
+                    self.emit(f"{instr} R16")
+
         elif isinstance(expr, BinaryOp):
             self.gen_expr(expr.left)
             self.emit("PUSH R16")
@@ -1099,6 +1129,18 @@ class CodeGenerator:
                 self.emit("OR R16, R17")
             elif expr.op == "^":
                 self.emit("EOR R16, R17")
+            elif expr.op in ("<<", ">>"):
+                # Variable shift count: shift once per iteration until R17 is 0.
+                instr = "LSL" if expr.op == "<<" else "LSR"
+                lbl_loop = self.new_label("shift_loop")
+                lbl_end = self.new_label("shift_end")
+                self.emit_label(lbl_loop)
+                self.emit("CPI R17, 0")
+                self.emit(f"BREQ {lbl_end}")
+                self.emit(f"{instr} R16")
+                self.emit("DEC R17")
+                self.emit(f"JMP {lbl_loop}")
+                self.emit_label(lbl_end)
             elif expr.op == "&&":
                 lbl_false = self.new_label("and_false")
                 lbl_end = self.new_label("and_end")
