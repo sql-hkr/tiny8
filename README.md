@@ -39,7 +39,7 @@ Tiny8 is a lightweight educational toolkit that bridges bare-metal computer arch
 
 ### **Built-in C Compiler & Extensions**
 - **Compile and run C programs directly**: Write C code (`.c`) and execute on Tiny8 (`tiny8 program.c`)
-- **Enhanced C features**: Character literals (`'A'`, `'#'`), string literals, fixed-size arrays (`int arr[4];`), `for` loops, `break;`, logical `&&` and `||`, function calls, `peek()`/`poke()`, and VRAM helpers (`vram_set`, `vram_get`, `vram_puts`, `vram_clear`)
+- **Enhanced C features**: Character literals (`'A'`, `'#'`), string literals, fixed-size arrays (`int arr[4];`), `for` loops, `break;`, logical `&&` and `||`, bit shifts `<<` and `>>`, function calls, `peek()`/`poke()`, and VRAM helpers (`vram_set`, `vram_get`, `vram_puts`, `vram_clear`)
 - **Compile-to-assembly inspection**: Generate and inspect clean Tiny8 assembly with `-c` flag
 
 ### **Optimized AVR Instruction Set**

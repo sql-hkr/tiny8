@@ -219,6 +219,111 @@ def test_compiler_array_initializer():
     assert cpu.read_ram(0x72) == 50
 
 
+def _run_c(c_code: str, max_steps: int = 2000) -> CPU:
+    cpu = CPU()
+    cpu.load_program(assemble(compile_c(c_code)))
+    cpu.run(max_steps=max_steps, show_progress=False)
+    return cpu
+
+
+def test_compiler_shift_by_literal():
+    cpu = _run_c(
+        """
+    int main() {
+        int x = 3;
+        int y = 200;
+        int z = 0x81;
+        poke(0xC0, x << 3);
+        poke(0xC1, y >> 2);
+        poke(0xC2, z << 1);
+        poke(0xC3, z >> 7);
+        poke(0xC4, x << 0);
+        poke(0xC5, y >> 8);
+        poke(0xC6, y << 9);
+        return 0;
+    }
+    """
+    )
+    assert cpu.read_ram(0xC0) == 24
+    assert cpu.read_ram(0xC1) == 50
+    assert cpu.read_ram(0xC2) == 0x02  # bit 7 shifted out of the 8-bit value
+    assert cpu.read_ram(0xC3) == 1  # logical shift: no sign extension
+    assert cpu.read_ram(0xC4) == 3
+    assert cpu.read_ram(0xC5) == 0
+    assert cpu.read_ram(0xC6) == 0
+
+
+def test_compiler_shift_by_variable():
+    cpu = _run_c(
+        """
+    int main() {
+        int a = 5;
+        int b = 0xF0;
+        int n = 3;
+        int zero = 0;
+        poke(0xC0, a << n);
+        poke(0xC1, b >> n);
+        poke(0xC2, a << zero);
+        poke(0xC3, b >> zero);
+        n = 8;
+        poke(0xC4, b >> n);
+        return 0;
+    }
+    """
+    )
+    assert cpu.read_ram(0xC0) == 40
+    assert cpu.read_ram(0xC1) == 30
+    assert cpu.read_ram(0xC2) == 5
+    assert cpu.read_ram(0xC3) == 0xF0
+    assert cpu.read_ram(0xC4) == 0
+
+
+def test_compiler_shift_precedence():
+    cpu = _run_c(
+        """
+    int main() {
+        int x = 1;
+        int y = 3;
+        poke(0xC0, x << 2 + 1);
+        poke(0xC1, y << 1 < 7);
+        poke(0xC2, y << 1 > 7);
+        poke(0xC3, 64 >> 2 >> 1);
+        return 0;
+    }
+    """
+    )
+    assert cpu.read_ram(0xC0) == 8  # x << (2 + 1)
+    assert cpu.read_ram(0xC1) == 1  # (y << 1) < 7
+    assert cpu.read_ram(0xC2) == 0  # (y << 1) > 7
+    assert cpu.read_ram(0xC3) == 8  # left-associative: (64 >> 2) >> 1
+
+
+def test_compiler_shift_by_literal_is_unrolled():
+    asm = compile_c(
+        """
+    int main() {
+        int x = 3;
+        return x << 3;
+    }
+    """
+    )
+    assert asm.count("LSL R16") == 3
+    assert "shift_loop" not in asm
+
+
+def test_compiler_shift_by_eight_or_more_is_zero_without_unrolling():
+    asm = compile_c(
+        """
+    int main() {
+        int x = 3;
+        return x << 200;
+    }
+    """
+    )
+    assert "LSL" not in asm
+    assert "shift_loop" not in asm
+
+
 class TestCompilerOptimization:
     """Unit tests for compiler peephole optimization and constant folding."""
 
@@ -249,6 +354,24 @@ class TestCompilerOptimization:
         asm = compile_c(src, optimize=True)
         assert "LDI R16, 15" in asm  # 0xFF & 0x0F = 15
         assert "LDI R16, 1" in asm  # 5 > 2 = 1, !0 = 1
+
+    def test_constant_folding_shifts(self):
+        """Verify shifts on literals are folded to 8-bit results."""
+        src = """
+        int main() {
+            int a = 1 << 7;
+            int b = 0xF0 >> 4;
+            int c = 0x81 << 1;
+            return a + b + c;
+        }
+        """
+        asm = compile_c(src, optimize=True)
+        assert "LDI R16, 128" in asm
+        assert "LDI R16, 15" in asm
+        assert "LDI R16, 2" in asm
+        assert "LSL" not in asm
+        assert "LSR" not in asm
+        assert "shift_loop" not in asm
 
     def test_peephole_remove_redundant_mov(self):
         """Verify that MOV Rx, Rx is eliminated."""
