@@ -298,3 +298,106 @@ class TestCompilerOptimization:
         ]
         opt = optimize_assembly(lines)
         assert opt == ["loop:", "    NOP"]
+
+
+def _run_compound_program(c_code, max_steps=5000):
+    cpu = CPU()
+    cpu.load_program(assemble(compile_c(c_code)))
+    cpu.run(max_steps=max_steps, show_progress=False)
+    return cpu
+
+
+def test_compiler_compound_assign_scalar_operators():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int a = 10;
+            a += 5;
+            poke(0x80, a);
+            a -= 3;
+            poke(0x81, a);
+            a *= 2;
+            poke(0x82, a);
+            a /= 5;
+            poke(0x83, a);
+            a %= 3;
+            poke(0x84, a);
+            a |= 6;
+            poke(0x85, a);
+            a &= 5;
+            poke(0x86, a);
+            a ^= 3;
+            poke(0x87, a);
+            return 0;
+        }
+        """
+    )
+    assert [cpu.read_ram(0x80 + i) for i in range(8)] == [15, 12, 24, 4, 1, 7, 5, 6]
+
+
+def test_compiler_compound_assign_uses_whole_right_hand_side():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int a = 3;
+            int b = 4;
+            a += b * 2;
+            poke(0x80, a);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 11
+
+
+def test_compiler_compound_assign_in_for_loop_step():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int sum = 0;
+            int i = 0;
+            for (i = 0; i < 10; i += 2) {
+                sum += i;
+            }
+            poke(0x80, sum);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 20
+
+
+def test_compiler_compound_assign_array_elements():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int arr[3] = {1, 2, 3};
+            arr[1] += 10;
+            arr[2] *= 4;
+            poke(0x80, arr[0]);
+            poke(0x81, arr[1]);
+            poke(0x82, arr[2]);
+            return 0;
+        }
+        """
+    )
+    assert [cpu.read_ram(0x80 + i) for i in range(3)] == [1, 12, 12]
+
+
+def test_compiler_compound_assign_array_index_evaluated_once():
+    # The index expression writes to RAM as a side effect, so evaluating it twice
+    # would read one element and write another.
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int arr[2] = {5, 7};
+            arr[poke(0x90, peek(0x90) + 1) - 1] += 10;
+            poke(0x80, arr[0]);
+            poke(0x81, arr[1]);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x90) == 1
+    assert cpu.read_ram(0x80) == 15
+    assert cpu.read_ram(0x81) == 7
