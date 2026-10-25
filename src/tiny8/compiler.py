@@ -2,6 +2,7 @@
 
 Features:
 - Variable declarations and assignments (int/char)
+- Compound assignment operators (+=, -=, *=, /=, %=, &=, |=, ^=)
 - Arithmetic (+, -, *, /, %), bitwise (&, |, ^, ~), logical (!), and relational (<, <=, >, >=, ==, !=)
 - Control structures: if / else, while, return
 - Functions with register-based parameter passing (R16..R19) and return value in R16
@@ -38,7 +39,7 @@ class Lexer:
             r"\b(int|char|void|if|else|while|for|break|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
-        ("OP", r"<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^=!<>]"),
+        ("OP", r"<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
         ("PUNCT", r"[;,\(\)\{\}\[\]]"),
         ("WS", r"\s+"),
     ]
@@ -133,6 +134,25 @@ class Assign(ASTNode):
     """Assignment statement."""
 
     name: str
+    expr: ASTNode
+
+
+@dataclass
+class CompoundAssign(ASTNode):
+    """Compound assignment statement: name op= expr."""
+
+    name: str
+    op: str
+    expr: ASTNode
+
+
+@dataclass
+class ArrayCompoundAssign(ASTNode):
+    """Array element compound assignment: name[index] op= expr."""
+
+    name: str
+    index: ASTNode
+    op: str
     expr: ASTNode
 
 
@@ -285,6 +305,9 @@ def _fold_unary(op: str, operand: ASTNode) -> ASTNode:
     return UnaryOp(op, operand)
 
 
+COMPOUND_ASSIGN_OPS = frozenset({"+=", "-=", "*=", "/=", "%=", "&=", "|=", "^="})
+
+
 class Parser:
     """Recursive descent parser."""
 
@@ -395,6 +418,12 @@ class Parser:
             next_tok = (
                 self.tokens[self.pos + 1] if self.pos + 1 < len(self.tokens) else None
             )
+            if next_tok and next_tok.value in COMPOUND_ASSIGN_OPS:
+                name = self.consume().value
+                op = self.consume().value[:-1]
+                expr = self.parse_expr()
+                self.consume(";")
+                return CompoundAssign(name, op, expr)
             if next_tok and next_tok.value == "=":
                 name = self.consume().value
                 self.consume("=")
@@ -411,6 +440,11 @@ class Parser:
             next_tok = (
                 self.tokens[self.pos + 1] if self.pos + 1 < len(self.tokens) else None
             )
+            if next_tok and next_tok.value in COMPOUND_ASSIGN_OPS:
+                name = self.consume().value
+                op = self.consume().value[:-1]
+                expr = self.parse_expr()
+                return CompoundAssign(name, op, expr)
             if next_tok and next_tok.value == "=":
                 name = self.consume().value
                 self.consume("=")
@@ -537,10 +571,22 @@ class Parser:
                 self.consume("[")
                 idx_expr = self.parse_expr()
                 self.consume("]")
+                op_tok = self.peek()
+                if op_tok and op_tok.value in COMPOUND_ASSIGN_OPS:
+                    self.consume()
+                    expr = self.parse_expr()
+                    self.consume(";")
+                    return ArrayCompoundAssign(name, idx_expr, op_tok.value[:-1], expr)
                 self.consume("=")
                 expr = self.parse_expr()
                 self.consume(";")
                 return ArrayAssign(name, idx_expr, expr)
+            if next_tok and next_tok.value in COMPOUND_ASSIGN_OPS:
+                name = self.consume().value
+                op = self.consume().value[:-1]
+                expr = self.parse_expr()
+                self.consume(";")
+                return CompoundAssign(name, op, expr)
             if next_tok and next_tok.value == "=":
                 name = self.consume().value
                 self.consume("=")
@@ -959,6 +1005,32 @@ class CodeGenerator:
             if addr >= 256:
                 self.emit(f"LDI R31, {addr >> 8}")
             self.emit("ST R30, R16")
+
+        elif isinstance(stmt, CompoundAssign):
+            self.gen_stmt(
+                Assign(
+                    stmt.name,
+                    BinaryOp(op=stmt.op, left=Var(stmt.name), right=stmt.expr),
+                )
+            )
+
+        elif isinstance(stmt, ArrayCompoundAssign):
+            # Evaluate the index once into a hidden slot so side effects in the
+            # index expression are not repeated by the read-modify-write.
+            tmp = self.new_label("__cidx")
+            self.gen_stmt(Assign(tmp, stmt.index))
+            idx = Var(tmp)
+            self.gen_stmt(
+                ArrayAssign(
+                    stmt.name,
+                    idx,
+                    BinaryOp(
+                        op=stmt.op,
+                        left=ArrayAccess(stmt.name, idx),
+                        right=stmt.expr,
+                    ),
+                )
+            )
 
         elif isinstance(stmt, ForStmt):
             if stmt.init:
