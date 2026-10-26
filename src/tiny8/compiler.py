@@ -3,6 +3,7 @@
 Features:
 - Variable declarations and assignments (int/char)
 - Compound assignment operators (+=, -=, *=, /=, %=, &=, |=, ^=)
+- Increment and decrement operators (++, --)
 - Arithmetic (+, -, *, /, %), bitwise (&, |, ^, ~), logical (!), and relational (<, <=, >, >=, ==, !=)
 - Control structures: if / else, while, return
 - Functions with register-based parameter passing (R16..R19) and return value in R16
@@ -39,7 +40,7 @@ class Lexer:
             r"\b(int|char|void|if|else|while|for|break|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
-        ("OP", r"<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
+        ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
         ("PUNCT", r"[;,\(\)\{\}\[\]]"),
         ("WS", r"\s+"),
     ]
@@ -154,6 +155,15 @@ class ArrayCompoundAssign(ASTNode):
     index: ASTNode
     op: str
     expr: ASTNode
+
+
+@dataclass
+class IncDec(ASTNode):
+    """Increment or decrement expression: ++x, --x, x++, x--."""
+
+    expr: ASTNode
+    is_inc: bool
+    is_prefix: bool
 
 
 @dataclass
@@ -436,10 +446,18 @@ class Parser:
 
     def parse_inline_post(self) -> ASTNode:
         tok = self.peek()
+        if tok and tok.value in ("++", "--"):
+            op = self.consume().value
+            expr = self.parse_unary()
+            return IncDec(expr, is_inc=(op == "++"), is_prefix=True)
         if tok and tok.type == "ID":
             next_tok = (
                 self.tokens[self.pos + 1] if self.pos + 1 < len(self.tokens) else None
             )
+            if next_tok and next_tok.value in ("++", "--"):
+                name = self.consume().value
+                op = self.consume().value
+                return IncDec(Var(name), is_inc=(op == "++"), is_prefix=False)
             if next_tok and next_tok.value in COMPOUND_ASSIGN_OPS:
                 name = self.consume().value
                 op = self.consume().value[:-1]
@@ -577,6 +595,16 @@ class Parser:
                     expr = self.parse_expr()
                     self.consume(";")
                     return ArrayCompoundAssign(name, idx_expr, op_tok.value[:-1], expr)
+                if op_tok and op_tok.value in ("++", "--"):
+                    self.consume()
+                    self.consume(";")
+                    return ExprStmt(
+                        IncDec(
+                            ArrayAccess(name, idx_expr),
+                            is_inc=(op_tok.value == "++"),
+                            is_prefix=False,
+                        )
+                    )
                 self.consume("=")
                 expr = self.parse_expr()
                 self.consume(";")
@@ -689,10 +717,24 @@ class Parser:
 
     def parse_unary(self) -> ASTNode:
         tok = self.peek()
+        if tok and tok.value in ("++", "--"):
+            op = self.consume().value
+            return IncDec(self.parse_unary(), is_inc=(op == "++"), is_prefix=True)
         if tok and tok.value in ("-", "!", "~"):
             op = self.consume().value
             return _fold_unary(op, self.parse_unary())
-        return self.parse_primary()
+        return self.parse_postfix()
+
+    def parse_postfix(self) -> ASTNode:
+        node = self.parse_primary()
+        while True:
+            tok = self.peek()
+            if tok and tok.value in ("++", "--"):
+                op = self.consume().value
+                node = IncDec(node, is_inc=(op == "++"), is_prefix=False)
+            else:
+                break
+        return node
 
     def parse_primary(self) -> ASTNode:
         tok = self.consume()
@@ -1098,6 +1140,9 @@ class CodeGenerator:
         elif isinstance(stmt, ExprStmt):
             self.gen_expr(stmt.expr)
 
+        elif isinstance(stmt, IncDec):
+            self.gen_expr(stmt)
+
     def gen_block(self, block: Block) -> None:
         for s in block.statements:
             self.gen_stmt(s)
@@ -1144,6 +1189,45 @@ class CodeGenerator:
                 self.emit_label(lbl_true)
                 self.emit("LDI R16, 1")
                 self.emit_label(lbl_end)
+
+        elif isinstance(expr, IncDec):
+            instr = "INC" if expr.is_inc else "DEC"
+            if isinstance(expr.expr, Var):
+                addr = self.allocate_var(expr.expr.name)
+                self.emit(f"LDI R30, {addr & 0xFF}")
+                if addr >= 256:
+                    self.emit(f"LDI R31, {addr >> 8}")
+                self.emit("LD R16, R30")
+                if expr.is_prefix:
+                    self.emit(f"{instr} R16")
+                    self.emit("ST R30, R16")
+                else:
+                    self.emit("MOV R17, R16")
+                    self.emit(f"{instr} R17")
+                    self.emit("ST R30, R17")
+                if addr >= 256:
+                    self.emit("LDI R31, 0")
+
+            elif isinstance(expr.expr, ArrayAccess):
+                base_addr = self.allocate_var(expr.expr.name)
+                self.gen_expr(expr.expr.index)
+                self.emit(f"LDI R30, {base_addr & 0xFF}")
+                self.emit(f"LDI R31, {base_addr >> 8}")
+                self.emit("ADD R30, R16")
+                self.emit("LDI R17, 0")
+                self.emit("ADC R31, R17")
+                self.emit("LD R16, R30")
+                if expr.is_prefix:
+                    self.emit(f"{instr} R16")
+                    self.emit("ST R30, R16")
+                else:
+                    self.emit("MOV R17, R16")
+                    self.emit(f"{instr} R17")
+                    self.emit("ST R30, R17")
+                self.emit("LDI R31, 0")
+
+            else:
+                raise SyntaxError(f"Invalid lvalue for {'++' if expr.is_inc else '--'}")
 
         elif (
             isinstance(expr, BinaryOp)
