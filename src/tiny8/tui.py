@@ -71,13 +71,15 @@ class CheckpointManager:
 
     def record(self, step: int) -> None:
         """Store a CPU snapshot at the given step."""
-        if step not in self.snapshots and len(self.snapshots) < self.max_snapshots:
-            self.snapshots[step] = self.cpu.snapshot()
-            if not self.checkpoint_steps or step > self.checkpoint_steps[-1]:
-                self.checkpoint_steps.append(step)
+        snapshots = self.snapshots
+        if step not in snapshots and len(snapshots) < self.max_snapshots:
+            snapshots[step] = self.cpu.snapshot()
+            checkpoint_steps = self.checkpoint_steps
+            if not checkpoint_steps or step > checkpoint_steps[-1]:
+                checkpoint_steps.append(step)
             else:
-                idx = bisect.bisect_right(self.checkpoint_steps, step)
-                self.checkpoint_steps.insert(idx, step)
+                idx = bisect.bisect_right(checkpoint_steps, step)
+                checkpoint_steps.insert(idx, step)
 
     def record_if_interval(self, step: int) -> None:
         """Record snapshot if step is a multiple of interval."""
@@ -89,71 +91,78 @@ class CheckpointManager:
         if target_step < 0 or not self.checkpoint_steps:
             return False
 
+        cpu = self.cpu
+        checkpoint_steps = self.checkpoint_steps
+        snapshots = self.snapshots
+        detect_loop = self.detect_loop
+        step = cpu.step
+        record = self.record
+
         # If target_step is beyond currently recorded checkpoints, dynamically extend cache
-        if target_step > self.checkpoint_steps[-1] and not self.infinite_loop_detected:
-            latest_step = self.checkpoint_steps[-1]
-            self.cpu.restore_snapshot(self.snapshots[latest_step])
-            self.cpu.running = 0 <= self.cpu.pc < len(self.cpu.program)
-            old_trace = self.cpu.trace_enabled
-            self.cpu.trace_enabled = False
+        if target_step > checkpoint_steps[-1] and not self.infinite_loop_detected:
+            latest_step = checkpoint_steps[-1]
+            cpu.restore_snapshot(snapshots[latest_step])
+            cpu.running = 0 <= cpu.pc < len(cpu.program)
+            old_trace = cpu.trace_enabled
+            cpu.trace_enabled = False
             try:
-                while self.cpu.running and self.cpu.step_count < target_step:
-                    if self.detect_loop():
-                        self.cpu.running = False
+                while cpu.running and cpu.step_count < target_step:
+                    if detect_loop():
+                        cpu.running = False
                         break
-                    if not self.cpu.step(record_trace=False):
-                        self.cpu.running = False
+                    if not step(record_trace=False):
+                        cpu.running = False
                         break
-                    if self.cpu.step_count % self.interval == 0:
-                        self.record(self.cpu.step_count)
-                if self.cpu.step_count not in self.snapshots:
-                    self.record(self.cpu.step_count)
+                    if cpu.step_count % self.interval == 0:
+                        record(cpu.step_count)
+                if cpu.step_count not in snapshots:
+                    record(cpu.step_count)
             finally:
-                self.cpu.trace_enabled = old_trace
+                cpu.trace_enabled = old_trace
 
         # Find closest checkpoint <= target_step
-        idx = bisect.bisect_right(self.checkpoint_steps, target_step) - 1
+        idx = bisect.bisect_right(checkpoint_steps, target_step) - 1
         if idx < 0:
-            base_step = self.checkpoint_steps[0]
+            base_step = checkpoint_steps[0]
         else:
-            base_step = self.checkpoint_steps[idx]
+            base_step = checkpoint_steps[idx]
 
-        self.cpu.restore_snapshot(self.snapshots[base_step])
-        self.cpu.running = 0 <= self.cpu.pc < len(self.cpu.program)
+        cpu.restore_snapshot(snapshots[base_step])
+        cpu.running = 0 <= cpu.pc < len(cpu.program)
         self.infinite_loop_detected = False
         self.loop_reason = ""
-        if self.detect_loop():
-            self.cpu.running = False
-        self.cpu.step_trace.clear()
+        if detect_loop():
+            cpu.running = False
+        cpu.step_trace.clear()
 
         # Step forward remaining steps (at most self.interval - 1 steps)
-        steps_to_advance = max(0, target_step - base_step) if self.cpu.running else 0
+        steps_to_advance = max(0, target_step - base_step) if cpu.running else 0
         for _ in range(steps_to_advance):
-            if self.detect_loop():
-                self.cpu.running = False
+            if detect_loop():
+                cpu.running = False
                 break
-            if not self.cpu.step():
-                self.cpu.running = False
+            if not step():
+                cpu.running = False
                 break
 
         # Ensure step_trace has at least the current step representation
-        if not self.cpu.step_trace:
+        if not cpu.step_trace:
             cur_instr = ""
-            if 0 <= self.cpu.pc < len(self.cpu.program):
-                instr, ops = self.cpu.program[self.cpu.pc]
+            if 0 <= cpu.pc < len(cpu.program):
+                instr, ops = cpu.program[cpu.pc]
                 cur_instr = (
                     f"{instr} " + ", ".join(str(o) for o in ops) if ops else instr
                 )
-            self.cpu.step_trace.append(
+            cpu.step_trace.append(
                 {
-                    "step": self.cpu.step_count,
-                    "pc": self.cpu.pc,
+                    "step": cpu.step_count,
+                    "pc": cpu.pc,
                     "instr": cur_instr,
-                    "regs": list(self.cpu.regs),
-                    "mem": dict(self.cpu.mem.nonzero_ram),
-                    "sreg": self.cpu.sreg,
-                    "sp": self.cpu.sp,
-                    "source_line": self.cpu.pc_to_line.get(self.cpu.pc, -1),
+                    "regs": list(cpu.regs),
+                    "mem": dict(cpu.mem.nonzero_ram),
+                    "sreg": cpu.sreg,
+                    "sp": cpu.sp,
+                    "source_line": cpu.pc_to_line.get(cpu.pc, -1),
                 }
             )
         return True
@@ -170,14 +179,16 @@ class CheckpointManager:
 
     def detect_loop(self, window_size: int = 256) -> bool:
         """Detect infinite loop (e.g. self-jump HALT or cycling registers/PC)."""
-        cur_pc = self.cpu.pc
-        if 0 <= cur_pc < len(self.cpu.program):
-            instr, operands = self.cpu.program[cur_pc]
+        cpu = self.cpu
+        cur_pc = cpu.pc
+        program = cpu.program
+        if 0 <= cur_pc < len(program):
+            instr, operands = program[cur_pc]
             if instr in ("RJMP", "JMP") and operands:
                 op = operands[0]
                 target_pc: int | None = None
                 if isinstance(op, str):
-                    target_pc = self.cpu.labels.get(op)
+                    target_pc = cpu.labels.get(op)
                 elif isinstance(op, int):
                     if instr == "RJMP":
                         if op in (-1, 0):
@@ -188,24 +199,25 @@ class CheckpointManager:
                         target_pc = op
                 if target_pc == cur_pc:
                     self.infinite_loop_detected = True
-                    self.loop_reason = f"HALT spin loop detected at PC=0x{cur_pc:04X} (step {self.cpu.step_count})"
+                    self.loop_reason = f"HALT spin loop detected at PC=0x{cur_pc:04X} (step {cpu.step_count})"
                     return True
             elif instr in ("HLT", "BREAK"):
                 self.infinite_loop_detected = True
                 self.loop_reason = f"HALT instruction encountered at PC=0x{cur_pc:04X}"
                 return True
 
-        sig = (cur_pc, self.cpu.sreg, tuple(self.cpu.regs))
-        if sig in self._history_signatures:
-            prev_step = self._history_signatures[sig]
-            diff = self.cpu.step_count - prev_step
+        sig = (cur_pc, cpu.sreg, tuple(cpu.regs))
+        history = self._history_signatures
+        prev_step = history.get(sig)
+        if prev_step is not None:
+            diff = cpu.step_count - prev_step
             if 0 < diff <= window_size:
                 self.infinite_loop_detected = True
                 self.loop_reason = f"Cycle loop detected: repeats every {diff} steps at PC=0x{cur_pc:04X}"
                 return True
-        self._history_signatures[sig] = self.cpu.step_count
-        if len(self._history_signatures) > 3000:
-            self._history_signatures.clear()
+        history[sig] = cpu.step_count
+        if len(history) > 3000:
+            history.clear()
         return False
 
     def precompute(
