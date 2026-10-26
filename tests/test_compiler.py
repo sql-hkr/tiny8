@@ -1,5 +1,7 @@
 """Unit tests for Tiny8 C compiler."""
 
+import pytest
+
 from tiny8 import CPU, assemble
 from tiny8.compiler import compile_c, optimize_assembly
 
@@ -524,3 +526,252 @@ def test_compiler_compound_assign_array_index_evaluated_once():
     assert cpu.read_ram(0x90) == 1
     assert cpu.read_ram(0x80) == 15
     assert cpu.read_ram(0x81) == 7
+
+
+def test_compiler_inc_dec_scalars():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int a = 10;
+            int b = a++;
+            poke(0x80, a);
+            poke(0x81, b);
+
+            int c = ++a;
+            poke(0x82, a);
+            poke(0x83, c);
+
+            int d = a--;
+            poke(0x84, a);
+            poke(0x85, d);
+
+            int e = --a;
+            poke(0x86, a);
+            poke(0x87, e);
+            return 0;
+        }
+        """
+    )
+    # a was 10. b = a++ -> a becomes 11, b is 10.
+    assert cpu.read_ram(0x80) == 11
+    assert cpu.read_ram(0x81) == 10
+
+    # a was 11. c = ++a -> a becomes 12, c is 12.
+    assert cpu.read_ram(0x82) == 12
+    assert cpu.read_ram(0x83) == 12
+
+    # a was 12. d = a-- -> a becomes 11, d is 12.
+    assert cpu.read_ram(0x84) == 11
+    assert cpu.read_ram(0x85) == 12
+
+    # a was 11. e = --a -> a becomes 10, e is 10.
+    assert cpu.read_ram(0x86) == 10
+    assert cpu.read_ram(0x87) == 10
+
+
+def test_compiler_inc_dec_standalone_statements():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int x = 5;
+            x++;
+            poke(0x80, x);
+            ++x;
+            poke(0x81, x);
+            x--;
+            poke(0x82, x);
+            --x;
+            poke(0x83, x);
+            return 0;
+        }
+        """
+    )
+    assert [cpu.read_ram(0x80 + i) for i in range(4)] == [6, 7, 6, 5]
+
+
+def test_compiler_inc_dec_for_loop():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int sum = 0;
+            int i = 0;
+            for (i = 0; i < 5; i++) {
+                sum += i;
+            }
+            poke(0x80, sum);
+            poke(0x81, i);
+
+            int count = 0;
+            for (i = 5; i > 0; --i) {
+                count += 1;
+            }
+            poke(0x82, count);
+            poke(0x83, i);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 10
+    assert cpu.read_ram(0x81) == 5
+    assert cpu.read_ram(0x82) == 5
+    assert cpu.read_ram(0x83) == 0
+
+
+def test_compiler_inc_dec_while_loop_issue_example():
+    # Example from Issue #36
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int i = 0;
+            while (i++ < 5) {
+                poke(0x80, i);
+            }
+            poke(0x81, i);
+            return 0;
+        }
+        """
+    )
+    # The last value poked inside the loop should be 5
+    assert cpu.read_ram(0x80) == 5
+    # When loop terminates (5 < 5 is False), i has been incremented to 6
+    assert cpu.read_ram(0x81) == 6
+
+
+def test_compiler_inc_dec_while_countdown():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int n = 4;
+            int count = 0;
+            while (n--) {
+                count++;
+            }
+            poke(0x80, count);
+            return 0;
+        }
+        """
+    )
+    # Runs for n = 4, 3, 2, 1 (4 times)
+    assert cpu.read_ram(0x80) == 4
+
+
+def test_compiler_inc_dec_array_elements():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int arr[3] = {10, 20, 30};
+            int a = arr[0]++;
+            poke(0x80, a);
+            poke(0x81, arr[0]);
+
+            int b = ++arr[1];
+            poke(0x82, b);
+            poke(0x83, arr[1]);
+
+            int c = arr[2]--;
+            poke(0x84, c);
+            poke(0x85, arr[2]);
+
+            int d = --arr[2];
+            poke(0x86, d);
+            poke(0x87, arr[2]);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 10
+    assert cpu.read_ram(0x81) == 11
+    assert cpu.read_ram(0x82) == 21
+    assert cpu.read_ram(0x83) == 21
+    assert cpu.read_ram(0x84) == 30
+    assert cpu.read_ram(0x85) == 29
+    assert cpu.read_ram(0x86) == 28
+    assert cpu.read_ram(0x87) == 28
+
+
+def test_compiler_inc_dec_array_statement():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int arr[2] = {100, 200};
+            arr[0]++;
+            arr[1]--;
+            poke(0x80, arr[0]);
+            poke(0x81, arr[1]);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 101
+    assert cpu.read_ram(0x81) == 199
+
+
+def test_compiler_inc_dec_array_index_evaluated_once():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int arr[2] = {5, 7};
+            arr[poke(0x90, peek(0x90) + 1) - 1]++;
+            poke(0x80, arr[0]);
+            poke(0x81, arr[1]);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x90) == 1
+    assert cpu.read_ram(0x80) == 6
+    assert cpu.read_ram(0x81) == 7
+
+
+def test_compiler_inc_dec_in_expressions():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int x = 5;
+            int y = x++ + 10;
+            poke(0x80, x);
+            poke(0x81, y);
+
+            int z = ++x * 2;
+            poke(0x82, x);
+            poke(0x83, z);
+            return 0;
+        }
+        """
+    )
+    # x was 5. y = 5 + 10 = 15. x becomes 6.
+    assert cpu.read_ram(0x80) == 6
+    assert cpu.read_ram(0x81) == 15
+    # x was 6. ++x -> x is 7. z = 7 * 2 = 14.
+    assert cpu.read_ram(0x82) == 7
+    assert cpu.read_ram(0x83) == 14
+
+
+def test_compiler_inc_dec_overflow_underflow():
+    cpu = _run_compound_program(
+        """
+        int main() {
+            int a = 255;
+            a++;
+            poke(0x80, a);
+
+            int b = 0;
+            b--;
+            poke(0x81, b);
+            return 0;
+        }
+        """
+    )
+    assert cpu.read_ram(0x80) == 0
+    assert cpu.read_ram(0x81) == 255
+
+
+def test_compiler_inc_dec_invalid_lvalue_raises():
+    with pytest.raises(SyntaxError):
+        compile_c("int main() { 5++; return 0; }")
+
+    with pytest.raises(SyntaxError):
+        compile_c("int main() { ++5; return 0; }")
+
+    with pytest.raises(SyntaxError):
+        compile_c("int main() { (1 + 2)++; return 0; }")
