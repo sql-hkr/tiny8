@@ -3,7 +3,15 @@
 import pytest
 
 from tiny8 import CPU, assemble
-from tiny8.compiler import ContinueStmt, Lexer, Parser, compile_c, optimize_assembly
+from tiny8.compiler import (
+    ContinueStmt,
+    DoWhileStmt,
+    Lexer,
+    Literal,
+    Parser,
+    compile_c,
+    optimize_assembly,
+)
 
 
 def test_compiler_variable_and_arithmetic():
@@ -47,6 +55,113 @@ def test_compiler_while_loop():
 
     # 5 + 4 + 3 + 2 + 1 = 15
     assert cpu.read_ram(0x81) == 15
+
+
+def test_compiler_do_while_basic():
+    c_code = """
+    int main() {
+        int sum = 0;
+        int i = 1;
+        do {
+            sum = sum + i;
+            i = i + 1;
+        } while (i <= 5);
+        poke(0x81, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    # 1 + 2 + 3 + 4 + 5 = 15
+    assert cpu.read_ram(0x81) == 15
+
+
+def test_compiler_do_while_false_condition_executes_once():
+    c_code = """
+    int main() {
+        int x = 10;
+        do {
+            x = x + 5;
+        } while (0);
+        poke(0x82, x);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=100, show_progress=False)
+
+    # Executed exactly once: 10 + 5 = 15
+    assert cpu.read_ram(0x82) == 15
+
+
+def test_compiler_do_while_break_and_continue():
+    c_code = """
+    int main() {
+        int sum = 0;
+        int i = 0;
+        do {
+            i = i + 1;
+            if (i == 2) {
+                continue;
+            }
+            if (i == 4) {
+                break;
+            }
+            sum = sum + i;
+        } while (i < 5);
+        poke(0x83, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    # i=1: sum = 1
+    # i=2: continue (sum not added)
+    # i=3: sum = 1 + 3 = 4
+    # i=4: break (loop terminates)
+    assert cpu.read_ram(0x83) == 4
+
+
+def test_compiler_do_while_single_statement():
+    c_code = """
+    int main() {
+        int x = 0;
+        do x = x + 1; while (x < 3);
+        poke(0x84, x);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=200, show_progress=False)
+
+    assert cpu.read_ram(0x84) == 3
+
+
+def test_compiler_do_while_ast_and_lexer():
+    tokens = Lexer("do { x = 1; } while (x < 10);").tokenize()
+    assert tokens[0].type == "KEYWORD"
+    assert tokens[0].value == "do"
+
+    prog = Parser(Lexer("void main() { do { x = 1; } while (1); }").tokenize()).parse()
+    stmt = prog.functions[0].body.statements[0]
+    assert isinstance(stmt, DoWhileStmt)
+    assert len(stmt.body.statements) == 1
+    assert isinstance(stmt.condition, Literal)
+    assert stmt.condition.value == 1
 
 
 def test_compiler_if_else():

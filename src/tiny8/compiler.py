@@ -5,7 +5,7 @@ Features:
 - Compound assignment operators (+=, -=, *=, /=, %=, &=, |=, ^=)
 - Increment and decrement operators (++, --)
 - Arithmetic (+, -, *, /, %), bitwise (&, |, ^, ~), logical (!), and relational (<, <=, >, >=, ==, !=)
-- Control structures: if / else, while, return
+- Control structures: if / else, while, do-while, for, break, continue, return
 - Functions with register-based parameter passing (R16..R19) and return value in R16
 - Hardware builtins: peek(addr), poke(addr, val), in(port), out(port, val)
 """
@@ -37,7 +37,7 @@ class Lexer:
         ("STRING", r'"([^"\\]|\\.)*"'),
         (
             "KEYWORD",
-            r"\b(int|char|void|if|else|while|for|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
+            r"\b(int|char|void|if|else|while|for|do|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
         ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
@@ -181,6 +181,14 @@ class WhileStmt(ASTNode):
 
     condition: ASTNode
     body: Block
+
+
+@dataclass
+class DoWhileStmt(ASTNode):
+    """Do-while loop."""
+
+    body: Block
+    condition: ASTNode
 
 
 @dataclass
@@ -581,6 +589,20 @@ class Parser:
                 else Block([self.parse_stmt()])
             )
             return WhileStmt(cond, body)
+
+        if tok.value == "do":
+            self.consume("do")
+            body = (
+                self.parse_block()
+                if self.peek() and self.peek().value == "{"
+                else Block([self.parse_stmt()])
+            )
+            self.consume("while")
+            self.consume("(")
+            cond = self.parse_expr()
+            self.consume(")")
+            self.consume(";")
+            return DoWhileStmt(body, cond)
 
         if tok.value == "return":
             self.consume("return")
@@ -1148,6 +1170,25 @@ class CodeGenerator:
 
             self.emit(f"JMP {loop_lbl}")
             self.emit_label(end_lbl)
+            self.loop_continue_stack.pop()
+            self.loop_end_stack.pop()
+
+        elif isinstance(stmt, DoWhileStmt):
+            lbl_start = self.new_label("dowhile_start")
+            lbl_cond = self.new_label("dowhile_cond")
+            lbl_end = self.new_label("dowhile_end")
+            self.loop_end_stack.append(lbl_end)
+            self.loop_continue_stack.append(lbl_cond)
+
+            self.emit_label(lbl_start)
+            self.gen_block(stmt.body)
+
+            self.emit_label(lbl_cond)
+            self.gen_expr(stmt.condition)
+            self.emit("CPI R16, 0")
+            self.emit(f"BRNE {lbl_start}")
+
+            self.emit_label(lbl_end)
             self.loop_continue_stack.pop()
             self.loop_end_stack.pop()
 
