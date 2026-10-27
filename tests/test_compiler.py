@@ -4,12 +4,21 @@ import pytest
 
 from tiny8 import CPU, assemble
 from tiny8.compiler import (
+    BinaryOp,
+    Call,
+    CodeGenerator,
     ContinueStmt,
     DoWhileStmt,
     Lexer,
     Literal,
     Parser,
+    Token,
+    UnaryOp,
+    _fold_binary,
+    _fold_unary,
     compile_c,
+    compile_c_file,
+    compile_c_file_with_symbols,
     optimize_assembly,
 )
 
@@ -989,3 +998,316 @@ def test_compiler_inc_dec_invalid_lvalue_raises():
 
     with pytest.raises(SyntaxError):
         compile_c("int main() { (1 + 2)++; return 0; }")
+
+
+def test_constant_folding_all_operators():
+    # _fold_binary
+    assert _fold_binary("-", Literal(10), Literal(4)) == Literal(6)
+    assert _fold_binary("/", Literal(10), Literal(3)) == Literal(3)
+    assert _fold_binary("%", Literal(10), Literal(3)) == Literal(1)
+    assert _fold_binary("/", Literal(10), Literal(0)) == BinaryOp(
+        "/", Literal(10), Literal(0)
+    )
+    assert _fold_binary("%", Literal(10), Literal(0)) == BinaryOp(
+        "%", Literal(10), Literal(0)
+    )
+    assert _fold_binary("|", Literal(2), Literal(4)) == Literal(6)
+    assert _fold_binary("^", Literal(3), Literal(1)) == Literal(2)
+    assert _fold_binary("==", Literal(5), Literal(5)) == Literal(1)
+    assert _fold_binary("==", Literal(5), Literal(6)) == Literal(0)
+    assert _fold_binary("!=", Literal(5), Literal(6)) == Literal(1)
+    assert _fold_binary("!=", Literal(5), Literal(5)) == Literal(0)
+    assert _fold_binary("<", Literal(4), Literal(5)) == Literal(1)
+    assert _fold_binary("<", Literal(5), Literal(5)) == Literal(0)
+    assert _fold_binary("<=", Literal(5), Literal(5)) == Literal(1)
+    assert _fold_binary("<=", Literal(6), Literal(5)) == Literal(0)
+    assert _fold_binary(">=", Literal(5), Literal(5)) == Literal(1)
+    assert _fold_binary(">=", Literal(4), Literal(5)) == Literal(0)
+    assert _fold_binary("&&", Literal(1), Literal(2)) == Literal(1)
+    assert _fold_binary("&&", Literal(0), Literal(2)) == Literal(0)
+    assert _fold_binary("||", Literal(1), Literal(0)) == Literal(1)
+    assert _fold_binary("||", Literal(0), Literal(0)) == Literal(0)
+
+    # _fold_unary
+    assert _fold_unary("-", Literal(5)) == Literal((-5) & 0xFF)
+    assert _fold_unary("~", Literal(0)) == Literal(255)
+    assert _fold_unary("!", Literal(0)) == Literal(1)
+    assert _fold_unary("!", Literal(42)) == Literal(0)
+    assert _fold_unary("?", Literal(5)) == UnaryOp("?", Literal(5))
+
+
+def test_parser_consume_errors():
+    p = Parser([])
+    with pytest.raises(SyntaxError, match="Unexpected end of input"):
+        p.consume("int")
+
+    p2 = Parser([Token("KEYWORD", "char", 1)])
+    with pytest.raises(SyntaxError, match="Expected 'int', got 'char'"):
+        p2.consume("int")
+
+    p3 = Parser([])
+    with pytest.raises(SyntaxError, match="Unexpected end of statement"):
+        p3.parse_stmt()
+
+
+def test_global_variables_and_arrays():
+    c_code = """
+    int g_arr[] = {10, 20, 30};
+    int g_val = 42;
+    int g_uninit;
+    int g_hex[0x04];
+    int main() {
+        g_uninit = g_arr[1] + g_val;
+        g_hex[0] = 5;
+        poke(0x80, g_uninit);
+        poke(0x81, g_hex[0]);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+    assert cpu.read_ram(0x80) == 62
+    assert cpu.read_ram(0x81) == 5
+
+    # Global array missing size & initializer
+    with pytest.raises(SyntaxError, match="Array size missing"):
+        compile_c("int bad_arr[]; int main() { return 0; }")
+
+    # Local array missing size & initializer
+    with pytest.raises(SyntaxError, match="Array size missing"):
+        compile_c("int main() { int bad_arr[]; return 0; }")
+
+
+def test_for_loop_inline_variations():
+    c_code = """
+    void dummy() {}
+    int main() {
+        int sum = 0;
+        int i = 0;
+        for (; i < 1; i++) {
+            sum += 1;
+        }
+        for (i = 1; i < 2; i++) {
+            sum += 1;
+        }
+        for (int j = 0; j < 2; j += 1) {
+            sum += 1;
+        }
+        for (i += 0; i < 3; ++i) {
+            sum += 1;
+        }
+        for (dummy(); i < 4; dummy()) {
+            i++;
+            sum += 1;
+        }
+        poke(0x80, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=400, show_progress=False)
+    assert cpu.read_ram(0x80) == 6
+
+
+def test_char_literal_escapes_and_parser_errors():
+    c_code = r"""
+    int main() {
+        char n = '\n';
+        char t = '\t';
+        char z = '\0';
+        char bs = '\\';
+        char sq = '\'';
+        char unk = '\a';
+        poke(0x80, n);
+        poke(0x81, t);
+        poke(0x82, z);
+        poke(0x83, bs);
+        poke(0x84, sq);
+        poke(0x85, unk);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=200, show_progress=False)
+    assert cpu.read_ram(0x80) == 10
+    assert cpu.read_ram(0x81) == 9
+    assert cpu.read_ram(0x82) == 0
+    assert cpu.read_ram(0x83) == ord("\\")
+    assert cpu.read_ram(0x84) == ord("'")
+    assert cpu.read_ram(0x85) == ord("\\")
+
+    # Primary unexpected token
+    with pytest.raises(SyntaxError, match="Unexpected token ';'"):
+        compile_c("int main() { ; return 0; }")
+
+
+def test_runtime_operators_codegen():
+    c_code = """
+    int main() {
+        int a = 10;
+        int b = 20;
+        int c = 0;
+
+        int neg = -a;
+        int com = ~a;
+        int not1 = !a;
+        int not2 = !c;
+
+        int land1 = a && b;
+        int land2 = a && c;
+        int lor1 = a || c;
+        int lor2 = c || c;
+
+        int neq1 = a != b;
+        int neq2 = a != a;
+
+        int div = b / a;
+        int mod = 25 % a;
+
+        int bor = a | b;
+        int bxor = a ^ b;
+        int band = a & b;
+        int gte = b >= a;
+
+        poke(0x80, neg);
+        poke(0x81, com);
+        poke(0x82, not1);
+        poke(0x83, not2);
+        poke(0x84, land1);
+        poke(0x85, land2);
+        poke(0x86, lor1);
+        poke(0x87, lor2);
+        poke(0x88, neq1);
+        poke(0x89, neq2);
+        poke(0x8A, div);
+        poke(0x8B, mod);
+        poke(0x8C, bor);
+        poke(0x8D, bxor);
+        poke(0x8E, band);
+        poke(0x8F, gte);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=500, show_progress=False)
+    assert cpu.read_ram(0x80) == (-10) & 0xFF
+    assert cpu.read_ram(0x81) == (~10) & 0xFF
+    assert cpu.read_ram(0x82) == 0
+    assert cpu.read_ram(0x83) == 1
+    assert cpu.read_ram(0x84) == 1
+    assert cpu.read_ram(0x85) == 0
+    assert cpu.read_ram(0x86) == 1
+    assert cpu.read_ram(0x87) == 0
+    assert cpu.read_ram(0x88) == 1
+    assert cpu.read_ram(0x89) == 0
+    assert cpu.read_ram(0x8A) == 2
+    assert cpu.read_ram(0x8B) == 5
+    assert cpu.read_ram(0x8C) == (10 | 20)
+    assert cpu.read_ram(0x8D) == (10 ^ 20)
+    assert cpu.read_ram(0x8E) == (10 & 20)
+    assert cpu.read_ram(0x8F) == 1
+
+
+def test_peephole_rules_3_and_5():
+    # Rule 3: ST R30, R16 followed by LD R16, R30
+    lines = [
+        "ST R30, R16",
+        "LD R16, R30",
+    ]
+    opt = optimize_assembly(lines)
+    assert opt == ["ST R30, R16"]
+
+    # Rule 5: Consecutive duplicate LDI
+    lines2 = [
+        "LDI R16, 42",
+        "LDI R16, 42",
+    ]
+    opt2 = optimize_assembly(lines2)
+    assert opt2 == ["LDI R16, 42"]
+
+
+def test_builtins_vram_clear_in_out_and_many_args():
+    c_code = """
+    int main() {
+        out(0x10, 42);
+        int val = in(0x10);
+        poke(0x80, val);
+        vram_clear();
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=5000, show_progress=False)
+    assert cpu.read_ram(0x80) == 42
+    # Verify vram was cleared (0x200..0x600 should be 32 (space))
+    assert cpu.read_ram(0x0200) == 32
+
+    # Call with > 4 arguments generates POP R0
+    gen = CodeGenerator()
+    gen.gen_expr(Call("foo", [Literal(i) for i in range(5)]))
+    assert "POP R0" in "\n".join(gen.asm)
+
+
+def test_ram_allocation_boundary_and_high_addresses():
+    gen = CodeGenerator()
+    # Test allocate_var jumping over VRAM (0x0200..0x05FF)
+    gen.next_ram = 0x0200
+    addr = gen.allocate_var("v1")
+    assert addr == 0x0600
+
+    # Test allocate_array jumping over VRAM
+    gen.next_ram = 0x01FF
+    arr_addr = gen.allocate_array("a1", 10)
+    assert arr_addr == 0x0600
+
+    # Compilation with high RAM addresses (>= 256)
+    c_code = """
+    int pad[200];
+    int g_high[2] = {10, 20};
+    int g_single = 99;
+    int test_fn(int arg1) {
+        int loc = 1;
+        loc = loc;
+        int larr[2] = {5, 6};
+        loc++;
+        ++loc;
+        return loc + arg1 + g_high[0] + g_single + larr[0];
+    }
+    int main() {
+        return test_fn(2);
+    }
+    """
+    asm = compile_c(c_code)
+    assert "LDI R31," in asm
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+    # test_fn returns: loc(3) + arg1(2) + g_high[0](10) + g_single(99) + larr[0](5) = 119
+    assert cpu.read_reg(16) == 119
+
+
+def test_compile_c_files(tmp_path):
+    f = tmp_path / "test.c"
+    f.write_text("int main() { int x = 10; return x; }")
+    asm = compile_c_file(str(f))
+    assert "main:" in asm
+
+    asm_sym, syms = compile_c_file_with_symbols(str(f))
+    assert "main:" in asm_sym
+    assert "x" in syms

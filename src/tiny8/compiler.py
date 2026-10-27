@@ -40,7 +40,7 @@ class Lexer:
             r"\b(int|char|void|if|else|while|for|do|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
-        ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
+        ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<~>]"),
         ("PUNCT", r"[;,\(\)\{\}\[\]]"),
         ("WS", r"\s+"),
     ]
