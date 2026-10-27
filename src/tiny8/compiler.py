@@ -37,7 +37,7 @@ class Lexer:
         ("STRING", r'"([^"\\]|\\.)*"'),
         (
             "KEYWORD",
-            r"\b(int|char|void|if|else|while|for|break|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
+            r"\b(int|char|void|if|else|while|for|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
         ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<>]"),
@@ -196,6 +196,11 @@ class ForStmt(ASTNode):
 @dataclass
 class BreakStmt(ASTNode):
     """Break statement."""
+
+
+@dataclass
+class ContinueStmt(ASTNode):
+    """Continue statement."""
 
 
 @dataclass
@@ -515,6 +520,11 @@ class Parser:
             self.consume("break")
             self.consume(";")
             return BreakStmt()
+
+        if tok.value == "continue":
+            self.consume("continue")
+            self.consume(";")
+            return ContinueStmt()
 
         if tok.value == "for":
             self.consume("for")
@@ -895,6 +905,7 @@ class CodeGenerator:
         self.next_ram = 0x60
         self.current_func = ""
         self.loop_end_stack: list[str] = []
+        self.loop_continue_stack: list[str] = []
 
     def new_label(self, prefix: str = "L") -> str:
         self.label_counter += 1
@@ -939,6 +950,7 @@ class CodeGenerator:
         self.symbols = {}
         self.next_ram = 0x60
         self.loop_end_stack = []
+        self.loop_continue_stack = []
 
         for g in program.globals:
             if isinstance(g, ArrayDecl):
@@ -1078,22 +1090,30 @@ class CodeGenerator:
             if stmt.init:
                 self.gen_stmt(stmt.init)
             lbl_start = self.new_label("for_start")
+            lbl_post = self.new_label("for_post")
             lbl_end = self.new_label("for_end")
             self.loop_end_stack.append(lbl_end)
+            self.loop_continue_stack.append(lbl_post)
             self.emit_label(lbl_start)
             self.gen_expr(stmt.condition)
             self.emit("CPI R16, 0")
             self.emit(f"BREQ {lbl_end}")
             self.gen_block(stmt.body)
+            self.emit_label(lbl_post)
             if stmt.post:
                 self.gen_stmt(stmt.post)
             self.emit(f"JMP {lbl_start}")
             self.emit_label(lbl_end)
+            self.loop_continue_stack.pop()
             self.loop_end_stack.pop()
 
         elif isinstance(stmt, BreakStmt):
             if self.loop_end_stack:
                 self.emit(f"JMP {self.loop_end_stack[-1]}")
+
+        elif isinstance(stmt, ContinueStmt):
+            if self.loop_continue_stack:
+                self.emit(f"JMP {self.loop_continue_stack[-1]}")
 
         elif isinstance(stmt, IfStmt):
             else_lbl = self.new_label("else")
@@ -1117,6 +1137,7 @@ class CodeGenerator:
             loop_lbl = self.new_label("while_start")
             end_lbl = self.new_label("while_end")
             self.loop_end_stack.append(end_lbl)
+            self.loop_continue_stack.append(loop_lbl)
             self.emit_label(loop_lbl)
             self.gen_expr(stmt.condition)
             self.emit("CPI R16, 0")
@@ -1127,6 +1148,7 @@ class CodeGenerator:
 
             self.emit(f"JMP {loop_lbl}")
             self.emit_label(end_lbl)
+            self.loop_continue_stack.pop()
             self.loop_end_stack.pop()
 
         elif isinstance(stmt, ReturnStmt):
