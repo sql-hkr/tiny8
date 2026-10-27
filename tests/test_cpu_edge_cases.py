@@ -51,6 +51,24 @@ class TestCPUExceptions:
         with pytest.raises(KeyError, match="Label nonexistent_label not found"):
             cpu.step()
 
+    def test_run_rebuilds_predecoded_when_missing_or_mismatched(self):
+        """Test fast-path rebuilds predecoded list when missing or length mismatched."""
+        cpu = CPU(trace_enabled=False)
+        cpu.load_program([("NOP", ())])
+        cpu._predecoded = []
+        cpu.run(max_steps=10, show_progress=False)
+        assert cpu.step_count == 1
+        assert len(cpu._predecoded) == 1
+
+    def test_run_fast_path_not_implemented_instruction(self):
+        """Test fast-path raises NotImplementedError for unknown instructions."""
+        cpu = CPU(trace_enabled=False)
+        cpu.load_program([("UNKNOWN_OPCODE", ())])
+        with pytest.raises(
+            NotImplementedError, match="Instruction UNKNOWN_OPCODE not implemented"
+        ):
+            cpu.run(max_steps=10, show_progress=False)
+
 
 class TestCPUProgramLoading:
     """Test CPU program loading and execution edge cases."""
