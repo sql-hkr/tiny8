@@ -3,7 +3,7 @@
 import pytest
 
 from tiny8 import CPU, assemble
-from tiny8.compiler import compile_c, optimize_assembly
+from tiny8.compiler import ContinueStmt, Lexer, Parser, compile_c, optimize_assembly
 
 
 def test_compiler_variable_and_arithmetic():
@@ -117,6 +117,105 @@ def test_compiler_for_loop_and_break():
 
     # 0 + 1 + 2 + 3 = 6
     assert cpu.read_ram(0x84) == 6
+
+
+def test_compiler_while_loop_continue():
+    c_code = """
+    int main() {
+        int sum = 0;
+        int i = 0;
+        while (i < 6) {
+            i = i + 1;
+            if (i == 3) {
+                continue;
+            }
+            sum = sum + i;
+        }
+        poke(0x84, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    # 1 + 2 + 4 + 5 + 6 = 18
+    assert cpu.read_ram(0x84) == 18
+
+
+def test_compiler_for_loop_continue():
+    c_code = """
+    int main() {
+        int sum = 0;
+        int i = 0;
+        for (i = 0; i < 6; i = i + 1) {
+            if (i == 3) {
+                continue;
+            }
+            sum = sum + i;
+        }
+        poke(0x84, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    # 0 + 1 + 2 + 4 + 5 = 12
+    assert cpu.read_ram(0x84) == 12
+
+
+def test_compiler_nested_loops_continue_and_break():
+    c_code = """
+    int main() {
+        int sum = 0;
+        int i = 0;
+        int j = 0;
+        for (i = 0; i < 4; i = i + 1) {
+            if (i == 1) {
+                continue;
+            }
+            j = 0;
+            while (j < 4) {
+                j = j + 1;
+                if (j == 2) {
+                    continue;
+                }
+                if (j == 4) {
+                    break;
+                }
+                sum = sum + 1;
+            }
+        }
+        poke(0x84, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=1000, show_progress=False)
+
+    # i: 0, 2, 3 (i=1 skipped)
+    # for each i: j=1 -> sum++, j=2 -> continue, j=3 -> sum++, j=4 -> break
+    # sum = 3 * 2 = 6
+    assert cpu.read_ram(0x84) == 6
+
+
+def test_compiler_continue_ast_and_lexer():
+    tokens = Lexer("continue;").tokenize()
+    assert len(tokens) == 2
+    assert tokens[0].type == "KEYWORD"
+    assert tokens[0].value == "continue"
+
+    prog = Parser(Lexer("void main() { continue; }").tokenize()).parse()
+    assert isinstance(prog.functions[0].body.statements[0], ContinueStmt)
 
 
 def test_compiler_array():
