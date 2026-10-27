@@ -5,6 +5,8 @@ Covers: LDI, MOV, LD, ST, IN, OUT, PUSH, POP, LDS, STS
 
 import pytest
 
+from tiny8 import CPU
+
 
 class TestLDI:
     """Test LDI (Load Immediate) instruction."""
@@ -306,3 +308,21 @@ class TestLDSSTS:
         """)
         helper.assert_register(cpu, 17, 99)
         helper.assert_memory(cpu, 0x0210, 99)
+
+
+class TestSER:
+    """Test SER (Set Register) instruction."""
+
+    def test_ser_basic(self, cpu_with_program, helper):
+        """Test setting register to $FF (255)."""
+        cpu = cpu_with_program("""
+            ser r16
+            ser r25
+        """)
+        helper.assert_registers(cpu, {16: 0xFF, 25: 0xFF})
+
+    def test_ser_direct_call(self):
+        """Test op_ser method directly."""
+        cpu = CPU()
+        cpu.op_ser(17)
+        assert cpu.read_reg(17) == 0xFF
