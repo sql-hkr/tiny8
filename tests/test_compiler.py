@@ -6,12 +6,15 @@ from tiny8 import CPU, assemble
 from tiny8.compiler import (
     BinaryOp,
     Call,
+    CaseClause,
     CodeGenerator,
     ContinueStmt,
+    DefaultClause,
     DoWhileStmt,
     Lexer,
     Literal,
     Parser,
+    SwitchStmt,
     Token,
     UnaryOp,
     _fold_binary,
@@ -1311,3 +1314,272 @@ def test_compile_c_files(tmp_path):
     asm_sym, syms = compile_c_file_with_symbols(str(f))
     assert "main:" in asm_sym
     assert "x" in syms
+
+
+def test_compiler_switch_case_basic():
+    c_code = """
+    int run_switch(int x) {
+        int y = 0;
+        switch (x) {
+            case 1:
+                y = 10;
+                break;
+            case 2:
+                y = 20;
+                break;
+            default:
+                y = 30;
+                break;
+        }
+        return y;
+    }
+    int main() {
+        poke(0x80, run_switch(1));
+        poke(0x81, run_switch(2));
+        poke(0x82, run_switch(3));
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=500, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 10
+    assert cpu.read_ram(0x81) == 20
+    assert cpu.read_ram(0x82) == 30
+
+
+def test_compiler_switch_fall_through():
+    c_code = """
+    int main() {
+        int x = 1;
+        int y = 10;
+        switch (x) {
+            case 1:
+                y += 5;
+            case 2:
+                y += 7;
+                break;
+            default:
+                y = 99;
+        }
+        poke(0x80, y);
+
+        int z = 2;
+        int res = 0;
+        switch (z) {
+            case 1:
+            case 2:
+            case 3:
+                res = 42;
+                break;
+            default:
+                res = 0;
+        }
+        poke(0x81, res);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=500, show_progress=False)
+
+    # 10 + 5 + 7 = 22 (fell through case 1 -> case 2)
+    assert cpu.read_ram(0x80) == 22
+    # z=2 matched case 2, fell through to case 3 body -> 42
+    assert cpu.read_ram(0x81) == 42
+
+
+def test_compiler_switch_no_matching_case_no_default():
+    c_code = """
+    int main() {
+        int x = 5;
+        int y = 100;
+        switch (x) {
+            case 1:
+                y = 1;
+                break;
+            case 2:
+                y = 2;
+                break;
+        }
+        poke(0x80, y);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=200, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 100
+
+
+def test_compiler_switch_default_first():
+    c_code = """
+    int run_switch(int x) {
+        int y = 0;
+        switch (x) {
+            default:
+                y = 99;
+                break;
+            case 1:
+                y = 10;
+                break;
+        }
+        return y;
+    }
+    int main() {
+        poke(0x80, run_switch(1));
+        poke(0x81, run_switch(2));
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 10
+    assert cpu.read_ram(0x81) == 99
+
+
+def test_compiler_switch_with_expressions():
+    c_code = """
+    int main() {
+        int a = 2;
+        int b = 3;
+        int target = 5;
+        int y = 0;
+        switch (a + b) {
+            case target:
+                y = 42;
+                break;
+            default:
+                y = 10;
+                break;
+        }
+        poke(0x80, y);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=300, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 42
+
+
+def test_compiler_switch_inside_loop_break_and_continue():
+    c_code = """
+    int main() {
+        int sum = 0;
+        for (int i = 0; i < 5; i++) {
+            switch (i) {
+                case 1:
+                    continue;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+            sum += i;
+        }
+        poke(0x80, sum);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=500, show_progress=False)
+
+    # i=0: sum += 0 (0)
+    # i=1: continue skips sum += 1
+    # i=2: break exits switch -> sum += 2 (2)
+    # i=3: break exits switch -> sum += 3 (5)
+    # i=4: break exits switch -> sum += 4 (9)
+    assert cpu.read_ram(0x80) == 9
+
+
+def test_compiler_nested_switch():
+    c_code = """
+    int decode(int op, int sub) {
+        int res = 0;
+        switch (op) {
+            case 1:
+                switch (sub) {
+                    case 10:
+                        res = 11;
+                        break;
+                    default:
+                        res = 19;
+                        break;
+                }
+                break;
+            case 2:
+                res = 20;
+                break;
+            default:
+                res = 99;
+                break;
+        }
+        return res;
+    }
+    int main() {
+        poke(0x80, decode(1, 10));
+        poke(0x81, decode(1, 20));
+        poke(0x82, decode(2, 0));
+        poke(0x83, decode(3, 0));
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=600, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 11
+    assert cpu.read_ram(0x81) == 19
+    assert cpu.read_ram(0x82) == 20
+    assert cpu.read_ram(0x83) == 99
+
+
+def test_compiler_switch_ast_and_lexer():
+    # Test lexer tokens
+    tokens = Lexer("switch case default :").tokenize()
+    assert [t.type for t in tokens] == ["KEYWORD", "KEYWORD", "KEYWORD", "PUNCT"]
+    assert [t.value for t in tokens] == ["switch", "case", "default", ":"]
+
+    # Test syntax error when unexpected token is inside switch body
+    with pytest.raises(SyntaxError, match="Expected 'case' or 'default'"):
+        tokens_bad = Lexer("int main() { switch (1) { int x = 0; } }").tokenize()
+        Parser(tokens_bad).parse()
+
+    # Test SwitchStmt __post_init__ variations
+    case_c = CaseClause(Literal(1), [])
+    default_c = DefaultClause([])
+
+    # 1. Passed cases and default without clauses -> creates clauses
+    sw1 = SwitchStmt(Literal(1), cases=[case_c], default=default_c)
+    assert sw1.clauses == [case_c, default_c]
+
+    # 2. Passed clauses without cases and default (with default) -> creates cases and default
+    sw2 = SwitchStmt(Literal(1), cases=[], default=None, clauses=[case_c, default_c])
+    assert sw2.cases == [case_c]
+    assert sw2.default == default_c
+
+    # 3. Passed clauses without default -> default is None
+    sw3 = SwitchStmt(Literal(1), cases=[], default=None, clauses=[case_c])
+    assert sw3.cases == [case_c]
+    assert sw3.default is None

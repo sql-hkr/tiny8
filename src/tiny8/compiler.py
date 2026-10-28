@@ -5,7 +5,7 @@ Features:
 - Compound assignment operators (+=, -=, *=, /=, %=, &=, |=, ^=)
 - Increment and decrement operators (++, --)
 - Arithmetic (+, -, *, /, %), bitwise (&, |, ^, ~), logical (!), and relational (<, <=, >, >=, ==, !=)
-- Control structures: if / else, while, do-while, for, break, continue, return
+- Control structures: if / else, while, do-while, for, switch, break, continue, return
 - Functions with register-based parameter passing (R16..R19) and return value in R16
 - Hardware builtins: peek(addr), poke(addr, val), in(port), out(port, val)
 """
@@ -13,7 +13,7 @@ Features:
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -37,11 +37,11 @@ class Lexer:
         ("STRING", r'"([^"\\]|\\.)*"'),
         (
             "KEYWORD",
-            r"\b(int|char|void|if|else|while|for|do|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
+            r"\b(int|char|void|if|else|while|for|do|switch|case|default|break|continue|return|peek|poke|in|out|vram_set|vram_get|vram_clear|vram_puts)\b",
         ),
         ("ID", r"[a-zA-Z_]\w*"),
         ("OP", r"\+\+|--|<<|>>|==|!=|<=|>=|&&|\|\||[+\-*/%&|^]=|[+\-*/%&|^=!<~>]"),
-        ("PUNCT", r"[;,\(\)\{\}\[\]]"),
+        ("PUNCT", r"[;,\(\)\{\}\[\]:]"),
         ("WS", r"\s+"),
     ]
 
@@ -199,6 +199,42 @@ class ForStmt(ASTNode):
     condition: ASTNode
     post: ASTNode | None
     body: Block
+
+
+@dataclass
+class CaseClause(ASTNode):
+    """Case clause in switch statement."""
+
+    value: ASTNode
+    statements: list[ASTNode]
+
+
+@dataclass
+class DefaultClause(ASTNode):
+    """Default clause in switch statement."""
+
+    statements: list[ASTNode]
+
+
+@dataclass
+class SwitchStmt(ASTNode):
+    """Switch statement."""
+
+    expr: ASTNode
+    cases: list[CaseClause]
+    default: DefaultClause | None = None
+    clauses: list[CaseClause | DefaultClause] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.clauses:
+            cl: list[CaseClause | DefaultClause] = list(self.cases)
+            if self.default:
+                cl.append(self.default)
+            self.clauses = cl
+        elif not self.cases and not self.default:
+            self.cases = [c for c in self.clauses if isinstance(c, CaseClause)]
+            defaults = [c for c in self.clauses if isinstance(c, DefaultClause)]
+            self.default = defaults[0] if defaults else None
 
 
 @dataclass
@@ -603,6 +639,49 @@ class Parser:
             self.consume(")")
             self.consume(";")
             return DoWhileStmt(body, cond)
+
+        if tok.value == "switch":
+            self.consume("switch")
+            self.consume("(")
+            expr = self.parse_expr()
+            self.consume(")")
+            self.consume("{")
+            cases: list[CaseClause] = []
+            default: DefaultClause | None = None
+            clauses: list[CaseClause | DefaultClause] = []
+            while self.peek() and self.peek().value != "}":
+                if self.match("case"):
+                    case_val = self.parse_expr()
+                    self.consume(":")
+                    case_stmts: list[ASTNode] = []
+                    while self.peek() and self.peek().value not in (
+                        "case",
+                        "default",
+                        "}",
+                    ):
+                        case_stmts.append(self.parse_stmt())
+                    case_clause = CaseClause(case_val, case_stmts)
+                    cases.append(case_clause)
+                    clauses.append(case_clause)
+                elif self.match("default"):
+                    self.consume(":")
+                    default_stmts: list[ASTNode] = []
+                    while self.peek() and self.peek().value not in (
+                        "case",
+                        "default",
+                        "}",
+                    ):
+                        default_stmts.append(self.parse_stmt())
+                    default_clause = DefaultClause(default_stmts)
+                    default = default_clause
+                    clauses.append(default_clause)
+                else:
+                    bad_tok = self.peek()
+                    raise SyntaxError(
+                        f"Line {bad_tok.line}: Expected 'case' or 'default', got '{bad_tok.value}'"
+                    )
+            self.consume("}")
+            return SwitchStmt(expr, cases, default, clauses)
 
         if tok.value == "return":
             self.consume("return")
@@ -1190,6 +1269,49 @@ class CodeGenerator:
 
             self.emit_label(lbl_end)
             self.loop_continue_stack.pop()
+            self.loop_end_stack.pop()
+
+        elif isinstance(stmt, SwitchStmt):
+            lbl_end = self.new_label("switch_end")
+            self.loop_end_stack.append(lbl_end)
+
+            clause_labels: list[str] = []
+            default_lbl: str | None = None
+            for c in stmt.clauses:
+                if isinstance(c, CaseClause):
+                    lbl = self.new_label("case")
+                    clause_labels.append(lbl)
+                else:
+                    lbl = self.new_label("default")
+                    clause_labels.append(lbl)
+                    default_lbl = lbl
+
+            self.gen_expr(stmt.expr)
+
+            for c, lbl in zip(stmt.clauses, clause_labels):
+                if isinstance(c, CaseClause):
+                    if isinstance(c.value, Literal):
+                        self.emit(f"CPI R16, {c.value.value & 0xFF}")
+                        self.emit(f"BREQ {lbl}")
+                    else:
+                        self.emit("PUSH R16")
+                        self.gen_expr(c.value)
+                        self.emit("MOV R17, R16")
+                        self.emit("POP R16")
+                        self.emit("CP R16, R17")
+                        self.emit(f"BREQ {lbl}")
+
+            if default_lbl:
+                self.emit(f"JMP {default_lbl}")
+            else:
+                self.emit(f"JMP {lbl_end}")
+
+            for c, lbl in zip(stmt.clauses, clause_labels):
+                self.emit_label(lbl)
+                for s in c.statements:
+                    self.gen_stmt(s)
+
+            self.emit_label(lbl_end)
             self.loop_end_stack.pop()
 
         elif isinstance(stmt, ReturnStmt):
