@@ -520,6 +520,18 @@ INSTRUCTION_DOCS: dict[str, dict[str, str]] = {
         "desc": "Stores one byte indirect from register Rr to data space using pointer register.",
         "flags": "None",
     },
+    "LDD": {
+        "name": "Load Indirect with Displacement",
+        "syntax": "LDD Rd, Y+q / Z+q",
+        "desc": "Loads one byte from data space to register Rd using pointer register with displacement.",
+        "flags": "None",
+    },
+    "STD": {
+        "name": "Store Indirect with Displacement",
+        "syntax": "STD Y+q / Z+q, Rr",
+        "desc": "Stores one byte from register Rr to data space using pointer register with displacement.",
+        "flags": "None",
+    },
     "LDS": {
         "name": "Load Direct from Data Space",
         "syntax": "LDS Rd, k",

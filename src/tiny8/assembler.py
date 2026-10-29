@@ -1,5 +1,6 @@
 """Assembler for tiny8 converting assembly text into program listings."""
 
+import re
 from dataclasses import dataclass, field
 
 
@@ -75,6 +76,7 @@ def parse_asm(text: str) -> AsmResult:
             if not line:
                 continue
 
+        line = re.sub(r"([XYZxyz]|r\d+|R\d+)\s*\+\s*(\w+)", r"\1+\2", line)
         parts = line.replace(",", " ").split()
         instr = parts[0].upper()
         ops = []
@@ -84,6 +86,18 @@ def parse_asm(text: str) -> AsmResult:
             elif p.upper() in ("X", "Y", "Z"):
                 reg_map = {"X": 26, "Y": 28, "Z": 30}
                 ops.append(("reg", reg_map[p.upper()]))
+            elif "+" in p:
+                base, disp = p.split("+", 1)
+                base_u = base.upper()
+                reg_map = {"X": 26, "Y": 28, "Z": 30}
+                if base_u in reg_map:
+                    base_reg = reg_map[base_u]
+                elif base_u.startswith("R") and base_u[1:].isdigit():
+                    base_reg = int(base_u[1:])
+                else:
+                    base_reg = int(base)
+                disp_val = _parse_number(disp)
+                ops.append(("disp", base_reg, disp_val))
             else:
                 try:
                     ops.append(_parse_number(p))

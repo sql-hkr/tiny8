@@ -100,3 +100,27 @@ class TestAssemblerWithFiles:
             _parse_number("")
         with pytest.raises(ValueError, match="Unable to parse numeric token"):
             _parse_number("#")
+
+    def test_parse_displacement_operands(self):
+        """Test parsing instructions with displacement addressing."""
+        from tiny8.assembler import assemble
+
+        asm_text = """
+            ldd r16, Y+2
+            std Y+3, r17
+            ldd r18, Y + 4
+            std Z + 5, r19
+            ldd r20, r28+6
+            ldd r23, 28+7
+            ld r21, X
+            st Y, r22
+        """
+        res = assemble(asm_text)
+        assert res.program[0] == ("LDD", (("reg", 16), ("disp", 28, 2)))
+        assert res.program[1] == ("STD", (("disp", 28, 3), ("reg", 17)))
+        assert res.program[2] == ("LDD", (("reg", 18), ("disp", 28, 4)))
+        assert res.program[3] == ("STD", (("disp", 30, 5), ("reg", 19)))
+        assert res.program[4] == ("LDD", (("reg", 20), ("disp", 28, 6)))
+        assert res.program[5] == ("LDD", (("reg", 23), ("disp", 28, 7)))
+        assert res.program[6] == ("LD", (("reg", 21), ("reg", 26)))
+        assert res.program[7] == ("ST", (("reg", 28), ("reg", 22)))

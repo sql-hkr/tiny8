@@ -4,19 +4,29 @@ import pytest
 
 from tiny8 import CPU, assemble
 from tiny8.compiler import (
+    Assign,
     BinaryOp,
+    Block,
     Call,
     CaseClause,
     CodeGenerator,
     ContinueStmt,
     DefaultClause,
     DoWhileStmt,
+    ForStmt,
+    FunctionDef,
+    IfStmt,
+    IncDec,
     Lexer,
     Literal,
     Parser,
     SwitchStmt,
     Token,
     UnaryOp,
+    Var,
+    VarDecl,
+    WhileStmt,
+    _collect_locals,
     _fold_binary,
     _fold_unary,
     compile_c,
@@ -1583,3 +1593,210 @@ def test_compiler_switch_ast_and_lexer():
     sw3 = SwitchStmt(Literal(1), cases=[], default=None, clauses=[case_c])
     assert sw3.cases == [case_c]
     assert sw3.default is None
+
+
+def test_compiler_recursive_fibonacci():
+    """Verify recursive Fibonacci correctly preserves local variables and parameters."""
+    c_code = """
+    int fib(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        int a = fib(n - 1);
+        int b = fib(n - 2);
+        return a + b;
+    }
+    int main() {
+        poke(0x80, fib(7)); // fib(7) = 13
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=50000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 13
+
+
+def test_compiler_recursive_factorial_with_locals():
+    """Verify recursive factorial with local variable stores."""
+    c_code = """
+    int factorial(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        int next_n = n - 1;
+        int sub = factorial(next_n);
+        return n * sub;
+    }
+    int main() {
+        poke(0x80, factorial(5)); // 5! = 120
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=10000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 120
+
+
+def test_compiler_nested_functions_stack_frames():
+    """Verify nested calls preserve separate stack frames and caller variables."""
+    c_code = """
+    int add_three(int a, int b, int c) {
+        int temp = a + b;
+        return temp + c;
+    }
+    int compute(int x) {
+        int y = x * 2;
+        int z = add_three(x, y, 5);
+        return y + z;
+    }
+    int main() {
+        poke(0x80, compute(3)); // y = 6, z = 3+6+5=14, return 6+14=20
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=5000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 20
+
+
+def test_compiler_global_variable_read_and_write_inside_function():
+    """Verify functions can read, write, and inc/dec global variables."""
+    c_code = """
+    int g_counter = 10;
+    void modify_globals() {
+        g_counter = 20;
+        g_counter++;
+        ++g_counter;
+    }
+    int main() {
+        modify_globals();
+        poke(0x80, g_counter);
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=2000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 22
+
+
+def test_compiler_function_without_locals():
+    """Verify function with no params or locals has no stack frame overhead."""
+    c_code = """
+    int answer() {
+        return 42;
+    }
+    int main() {
+        poke(0x80, answer());
+        return 0;
+    }
+    """
+    asm = compile_c(c_code)
+    # answer function should not have SBIW R28
+    assert "SBIW R28" not in asm.split("main:")[0]
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=1000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 42
+
+
+def test_compiler_large_locals_chunking():
+    """Verify functions with > 63 locals generate chunked SBIW / ADIW."""
+    # Declare 65 local variables
+    var_decls = "\n".join(f"int v{i} = {i};" for i in range(65))
+    c_code = f"""
+    int big_func() {{
+        {var_decls}
+        return v0 + v64;
+    }}
+    int main() {{
+        poke(0x80, big_func());
+        return 0;
+    }}
+    """
+    asm = compile_c(c_code)
+    # Should contain SBIW with 63 and remaining chunk
+    assert "SBIW R28, 63" in asm
+    assert "ADIW R28, 63" in asm
+    asm_res = assemble(asm)
+    cpu = CPU()
+    cpu.load_program(asm_res)
+    cpu.run(max_steps=5000, show_progress=False)
+
+    assert cpu.read_ram(0x80) == 64
+
+
+def test_compiler_collect_locals_edge_cases():
+    """Verify _collect_locals handles AST nodes, blocks, and duplicate declarations."""
+    func = FunctionDef(
+        name="test_func",
+        return_type="int",
+        params=[("int", "a"), ("int", "a")],  # duplicate param
+        body=Block(
+            [
+                None,  # test node is None
+                VarDecl("int", "x", None),
+                VarDecl("int", "x", None),  # duplicate local
+                IfStmt(
+                    Literal(1),
+                    Block([VarDecl("int", "y", None)]),
+                    Block([VarDecl("int", "z", None)]),
+                ),
+                WhileStmt(Literal(1), Block([VarDecl("int", "w", None)])),
+                DoWhileStmt(Block([VarDecl("int", "d", None)]), Literal(1)),
+                ForStmt(
+                    VarDecl("int", "i", None),
+                    Literal(1),
+                    None,
+                    Block([VarDecl("int", "fb", None)]),
+                ),
+                SwitchStmt(
+                    Literal(1),
+                    cases=[CaseClause(Literal(1), [VarDecl("int", "sc", None)])],
+                ),
+            ]
+        ),
+    )
+    locals_collected = _collect_locals(func)
+    names = [name for name, _ in locals_collected]
+    assert names == ["a", "x", "y", "z", "w", "d", "i", "fb", "sc"]
+
+
+def test_compiler_peephole_std_ldd_optimization():
+    """Verify peephole optimizer removes redundant LDD after STD."""
+    lines = [
+        "    STD Y+1, R16",
+        "    LDD R16, Y+1",
+    ]
+    opt = optimize_assembly(lines)
+    assert opt == ["    STD Y+1, R16"]
+
+
+def test_compiler_standalone_vardecl_and_assign_without_frame():
+    """Verify CodeGenerator handles standalone VarDecl, Assign, and IncDec when frame_offsets is empty."""
+    gen = CodeGenerator()
+    gen.frame_offsets = {}
+    gen.next_ram = 0x0600
+    gen.gen_stmt(VarDecl("int", "big_v", Literal(123)))
+    gen.gen_stmt(Assign("big_v", Literal(456)))
+    gen.gen_expr(IncDec(Var("big_v"), is_inc=True, is_prefix=True))
+    asm_text = "\n".join(gen.asm)
+    assert "ST R30, R16" in asm_text
+    assert "LDI R31, 6" in asm_text
