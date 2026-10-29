@@ -965,6 +965,24 @@ def optimize_assembly(lines: list[str]) -> list[str]:
                     i += 3
                     continue
 
+                # Rule 4b: STD Y+q, R16 followed by LDD R16, Y+q
+                if s_curr.upper().startswith("STD ") and s_nxt.upper().startswith(
+                    "LDD "
+                ):
+                    parts_st = s_curr.replace(",", " ").split()
+                    parts_ld = s_nxt.replace(",", " ").split()
+                    if (
+                        len(parts_st) == 3
+                        and len(parts_ld) == 3
+                        and parts_st[1].upper() == parts_ld[2].upper()
+                        and parts_st[2].upper() == parts_ld[1].upper()
+                        and parts_st[2].upper() == "R16"
+                    ):
+                        new_lines.append(curr)
+                        changed = True
+                        i += 2
+                        continue
+
                 # Rule 5: Consecutive duplicate LDI
                 if s_curr.upper().startswith("LDI ") and s_nxt.upper().startswith(
                     "LDI "
@@ -993,6 +1011,47 @@ def optimize_assembly(lines: list[str]) -> list[str]:
     return current_lines
 
 
+def _collect_locals(func: FunctionDef) -> list[tuple[str, str]]:
+    """Collect all function parameters and local variable declarations."""
+    locals_list: list[tuple[str, str]] = []
+    seen: set[str] = set()
+
+    for ptype, pname in func.params:
+        if pname not in seen:
+            locals_list.append((pname, ptype))
+            seen.add(pname)
+
+    def visit(node: ASTNode | None) -> None:
+        if node is None:
+            return
+        if isinstance(node, VarDecl):
+            if node.name not in seen:
+                locals_list.append((node.name, node.var_type))
+                seen.add(node.name)
+        elif isinstance(node, Block):
+            for s in node.statements:
+                visit(s)
+        elif isinstance(node, IfStmt):
+            visit(node.then_branch)
+            if node.else_branch:
+                visit(node.else_branch)
+        elif isinstance(node, WhileStmt):
+            visit(node.body)
+        elif isinstance(node, DoWhileStmt):
+            visit(node.body)
+        elif isinstance(node, ForStmt):
+            if node.init:
+                visit(node.init)
+            visit(node.body)
+        elif isinstance(node, SwitchStmt):
+            for c in node.clauses:
+                for s in c.statements:
+                    visit(s)
+
+    visit(func.body)
+    return locals_list
+
+
 class CodeGenerator:
     """Generate Tiny8 assembly from AST using register & stack model."""
 
@@ -1007,6 +1066,8 @@ class CodeGenerator:
         self.current_func = ""
         self.loop_end_stack: list[str] = []
         self.loop_continue_stack: list[str] = []
+        self.frame_offsets: dict[str, int] = {}
+        self.func_epilogue_lbl: str | None = None
 
     def new_label(self, prefix: str = "L") -> str:
         self.label_counter += 1
@@ -1092,15 +1153,38 @@ class CodeGenerator:
         self.current_func = func.name
         self.emit_label(func.name)
 
+        locals_info = _collect_locals(func)
+        self.frame_offsets = {}
+        for idx, (vname, vtype) in enumerate(locals_info, start=1):
+            self.frame_offsets[vname] = idx
+            self.symbols[vname] = {
+                "offset": idx,
+                "addr": 0,
+                "type": vtype,
+                "func": func.name,
+            }
+        locals_size = len(locals_info)
+
+        if locals_size > 0:
+            self.emit("PUSH R28")
+            self.emit("PUSH R29")
+            self.emit("IN R28, 0x3D")
+            self.emit("IN R29, 0x3E")
+            rem = locals_size
+            while rem > 0:
+                chunk = min(rem, 63)
+                self.emit(f"SBIW R28, {chunk}")
+                rem -= chunk
+            self.emit("OUT 0x3D, R28")
+            self.emit("OUT 0x3E, R29")
+
         for i, (ptype, pname) in enumerate(func.params):
-            addr = self.allocate_var(pname, ptype)
-            reg = self.PARAM_REGS[i]
-            self.emit(f"LDI R30, {addr & 0xFF}")
-            if addr >= 256:
-                self.emit(f"LDI R31, {addr >> 8}")
-            self.emit(f"ST R30, R{reg}")
-            if addr >= 256:
-                self.emit("LDI R31, 0")
+            if i < len(self.PARAM_REGS):
+                reg = self.PARAM_REGS[i]
+                offset = self.frame_offsets[pname]
+                self.emit(f"STD Y+{offset}, R{reg}")
+
+        self.func_epilogue_lbl = self.new_label(f"{func.name}_epilogue")
 
         for stmt in func.body.statements:
             self.gen_stmt(stmt)
@@ -1108,7 +1192,19 @@ class CodeGenerator:
         if func.name == "main":
             self.emit("halt: JMP halt")
         else:
+            self.emit_label(self.func_epilogue_lbl)
+            if locals_size > 0:
+                rem = locals_size
+                while rem > 0:
+                    chunk = min(rem, 63)
+                    self.emit(f"ADIW R28, {chunk}")
+                    rem -= chunk
+                self.emit("OUT 0x3D, R28")
+                self.emit("OUT 0x3E, R29")
+                self.emit("POP R29")
+                self.emit("POP R28")
             self.emit("RET")
+        self.frame_offsets = {}
 
     def gen_stmt(self, stmt: ASTNode) -> None:
         if isinstance(stmt, ArrayDecl):
@@ -1125,15 +1221,21 @@ class CodeGenerator:
                         self.emit("LDI R31, 0")
 
         elif isinstance(stmt, VarDecl):
-            addr = self.allocate_var(stmt.name, stmt.var_type)
-            if stmt.init_expr:
-                self.gen_expr(stmt.init_expr)
-                self.emit(f"LDI R30, {addr & 0xFF}")
-                if addr >= 256:
-                    self.emit(f"LDI R31, {addr >> 8}")
-                self.emit("ST R30, R16")
-                if addr >= 256:
-                    self.emit("LDI R31, 0")
+            if self.frame_offsets and stmt.name in self.frame_offsets:
+                offset = self.frame_offsets[stmt.name]
+                if stmt.init_expr:
+                    self.gen_expr(stmt.init_expr)
+                    self.emit(f"STD Y+{offset}, R16")
+            else:
+                addr = self.allocate_var(stmt.name, stmt.var_type)
+                if stmt.init_expr:
+                    self.gen_expr(stmt.init_expr)
+                    self.emit(f"LDI R30, {addr & 0xFF}")
+                    if addr >= 256:
+                        self.emit(f"LDI R31, {addr >> 8}")
+                    self.emit("ST R30, R16")
+                    if addr >= 256:
+                        self.emit("LDI R31, 0")
 
         elif isinstance(stmt, ArrayAssign):
             base_addr = self.allocate_var(stmt.name)
@@ -1154,12 +1256,17 @@ class CodeGenerator:
                 self.emit("LDI R31, 0")
 
         elif isinstance(stmt, Assign):
-            addr = self.allocate_var(stmt.name)
-            self.gen_expr(stmt.expr)
-            self.emit(f"LDI R30, {addr & 0xFF}")
-            if addr >= 256:
-                self.emit(f"LDI R31, {addr >> 8}")
-            self.emit("ST R30, R16")
+            if self.frame_offsets and stmt.name in self.frame_offsets:
+                offset = self.frame_offsets[stmt.name]
+                self.gen_expr(stmt.expr)
+                self.emit(f"STD Y+{offset}, R16")
+            else:
+                addr = self.allocate_var(stmt.name)
+                self.gen_expr(stmt.expr)
+                self.emit(f"LDI R30, {addr & 0xFF}")
+                if addr >= 256:
+                    self.emit(f"LDI R31, {addr >> 8}")
+                self.emit("ST R30, R16")
 
         elif isinstance(stmt, CompoundAssign):
             self.gen_stmt(
@@ -1320,7 +1427,7 @@ class CodeGenerator:
             if self.current_func == "main":
                 self.emit("halt_ret: JMP halt_ret")
             else:
-                self.emit("RET")
+                self.emit(f"JMP {self.func_epilogue_lbl}")
 
         elif isinstance(stmt, ExprStmt):
             self.gen_expr(stmt.expr)
@@ -1350,13 +1457,17 @@ class CodeGenerator:
                 self.emit("LDI R31, 0")
 
         elif isinstance(expr, Var):
-            addr = self.allocate_var(expr.name)
-            self.emit(f"LDI R30, {addr & 0xFF}")
-            if addr >= 256:
-                self.emit(f"LDI R31, {addr >> 8}")
-            self.emit("LD R16, R30")
-            if addr >= 256:
-                self.emit("LDI R31, 0")
+            if self.frame_offsets and expr.name in self.frame_offsets:
+                offset = self.frame_offsets[expr.name]
+                self.emit(f"LDD R16, Y+{offset}")
+            else:
+                addr = self.allocate_var(expr.name)
+                self.emit(f"LDI R30, {addr & 0xFF}")
+                if addr >= 256:
+                    self.emit(f"LDI R31, {addr >> 8}")
+                self.emit("LD R16, R30")
+                if addr >= 256:
+                    self.emit("LDI R31, 0")
 
         elif isinstance(expr, UnaryOp):
             self.gen_expr(expr.operand)
@@ -1378,20 +1489,31 @@ class CodeGenerator:
         elif isinstance(expr, IncDec):
             instr = "INC" if expr.is_inc else "DEC"
             if isinstance(expr.expr, Var):
-                addr = self.allocate_var(expr.expr.name)
-                self.emit(f"LDI R30, {addr & 0xFF}")
-                if addr >= 256:
-                    self.emit(f"LDI R31, {addr >> 8}")
-                self.emit("LD R16, R30")
-                if expr.is_prefix:
-                    self.emit(f"{instr} R16")
-                    self.emit("ST R30, R16")
+                if self.frame_offsets and expr.expr.name in self.frame_offsets:
+                    offset = self.frame_offsets[expr.expr.name]
+                    self.emit(f"LDD R16, Y+{offset}")
+                    if expr.is_prefix:
+                        self.emit(f"{instr} R16")
+                        self.emit(f"STD Y+{offset}, R16")
+                    else:
+                        self.emit("MOV R17, R16")
+                        self.emit(f"{instr} R17")
+                        self.emit(f"STD Y+{offset}, R17")
                 else:
-                    self.emit("MOV R17, R16")
-                    self.emit(f"{instr} R17")
-                    self.emit("ST R30, R17")
-                if addr >= 256:
-                    self.emit("LDI R31, 0")
+                    addr = self.allocate_var(expr.expr.name)
+                    self.emit(f"LDI R30, {addr & 0xFF}")
+                    if addr >= 256:
+                        self.emit(f"LDI R31, {addr >> 8}")
+                    self.emit("LD R16, R30")
+                    if expr.is_prefix:
+                        self.emit(f"{instr} R16")
+                        self.emit("ST R30, R16")
+                    else:
+                        self.emit("MOV R17, R16")
+                        self.emit(f"{instr} R17")
+                        self.emit("ST R30, R17")
+                    if addr >= 256:
+                        self.emit("LDI R31, 0")
 
             elif isinstance(expr.expr, ArrayAccess):
                 base_addr = self.allocate_var(expr.expr.name)

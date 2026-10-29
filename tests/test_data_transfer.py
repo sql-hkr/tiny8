@@ -326,3 +326,47 @@ class TestSER:
         cpu = CPU()
         cpu.op_ser(17)
         assert cpu.read_reg(17) == 0xFF
+
+
+class TestLDDSTD:
+    """Test LDD and STD (Load/Store with displacement) and SP (0x3D/0x3E) handling."""
+
+    def test_ldd_std_basic(self, cpu_with_program, helper):
+        """Test basic displacement addressing with Y register pair."""
+        cpu = cpu_with_program("""
+            ldi r28, 0x50
+            ldi r29, 0x01
+            ldi r16, 42
+            std Y+1, r16
+            std Y+2, r16
+            ldd r17, Y+1
+            ldd r18, Y+2
+        """)
+        helper.assert_registers(cpu, {17: 42, 18: 42})
+        helper.assert_memory(cpu, 0x0151, 42)
+        helper.assert_memory(cpu, 0x0152, 42)
+
+    def test_ldd_std_with_z_pair(self, cpu_with_program, helper):
+        """Test displacement addressing with Z register pair."""
+        cpu = cpu_with_program("""
+            ldi r30, 0x10
+            ldi r31, 0x02
+            ldi r16, 77
+            std Z+5, r16
+            ldd r19, Z+5
+        """)
+        helper.assert_register(cpu, 19, 77)
+        helper.assert_memory(cpu, 0x0215, 77)
+
+    def test_in_out_spl_sph(self, cpu_with_program, helper):
+        """Test reading and writing Stack Pointer via I/O ports 0x3D (SPL) and 0x3E (SPH)."""
+        cpu = cpu_with_program("""
+            ldi r16, 0x34
+            out 0x3D, r16
+            ldi r17, 0x12
+            out 0x3E, r17
+            in r18, 0x3D
+            in r19, 0x3E
+        """)
+        helper.assert_registers(cpu, {18: 0x34, 19: 0x12})
+        assert cpu.sp == 0x1234

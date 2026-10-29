@@ -387,12 +387,17 @@ class CPU:
             for o in operands:
                 if isinstance(o, tuple) and len(o) == 2 and o[0] == "reg":
                     decoded_ops.append(int(o[1]))
+                elif isinstance(o, tuple) and len(o) == 3 and o[0] == "disp":
+                    decoded_ops.extend([int(o[1]), int(o[2])])
                 else:
                     decoded_ops.append(o)
 
             def fmt_op(o) -> str:
                 if isinstance(o, tuple) and len(o) == 2 and o[0] == "reg":
                     return f"R{o[1]}"
+                if isinstance(o, tuple) and len(o) == 3 and o[0] == "disp":
+                    reg_name = {26: "X", 28: "Y", 30: "Z"}.get(o[1], f"R{o[1]}")
+                    return f"{reg_name}+{o[2]}"
                 return str(o)
 
             try:
@@ -766,7 +771,12 @@ class CPU:
             rd: Destination register index.
             port: Port/memory address to read from.
         """
-        self.write_reg(rd, self.read_ram(port))
+        if port == 0x3D:
+            self.write_reg(rd, self.sp & 0xFF)
+        elif port == 0x3E:
+            self.write_reg(rd, (self.sp >> 8) & 0xFF)
+        else:
+            self.write_reg(rd, self.read_ram(port))
 
     def op_out(self, port: int, rr: int) -> None:
         """Store Register to an I/O Location (OUT).
@@ -779,7 +789,15 @@ class CPU:
             port: Port/memory address to write to.
             rr: Source register index.
         """
-        self.write_ram(port, self.read_reg(rr))
+        val = self.read_reg(rr)
+        if port == 0x3D:
+            self.sp = (self.sp & 0xFF00) | val
+            self.write_ram(port, val)
+        elif port == 0x3E:
+            self.sp = (self.sp & 0x00FF) | (val << 8)
+            self.write_ram(port, val)
+        else:
+            self.write_ram(port, val)
 
     def op_jmp(self, label: str | int) -> None:
         """Jump (JMP).
@@ -1291,6 +1309,40 @@ class CPU:
         high = self.read_reg(addr_reg + 1) if addr_reg in (26, 28, 30) else 0
         low = self.read_reg(addr_reg)
         addr = (high << 8) | low if high > 0 else low
+        self.write_ram(addr, self.read_reg(rr))
+
+    def op_ldd(self, rd: int, addr_reg: int, q: int) -> None:
+        """Load Indirect with Displacement (LDD).
+
+        Per AVR Instruction Set Manual DS40002198A:
+            Operation: Rd <- (Y + q) or (Z + q)
+            Status Register (SREG): None.
+
+        Args:
+            rd: Destination register index.
+            addr_reg: Pointer register index (e.g. 28 for Y, 30 for Z).
+            q: Displacement offset (0..63).
+        """
+        high = self.read_reg(addr_reg + 1) if addr_reg in (26, 28, 30) else 0
+        low = self.read_reg(addr_reg)
+        addr = ((high << 8) | low) + q
+        self.write_reg(rd, self.read_ram(addr))
+
+    def op_std(self, addr_reg: int, q: int, rr: int) -> None:
+        """Store Indirect with Displacement (STD).
+
+        Per AVR Instruction Set Manual DS40002198A:
+            Operation: (Y + q) <- Rr or (Z + q) <- Rr
+            Status Register (SREG): None.
+
+        Args:
+            addr_reg: Pointer register index (e.g. 28 for Y, 30 for Z).
+            q: Displacement offset (0..63).
+            rr: Source register index.
+        """
+        high = self.read_reg(addr_reg + 1) if addr_reg in (26, 28, 30) else 0
+        low = self.read_reg(addr_reg)
+        addr = ((high << 8) | low) + q
         self.write_ram(addr, self.read_reg(rr))
 
     def op_lds(self, rd: int, addr: int) -> None:
