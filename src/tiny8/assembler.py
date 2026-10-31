@@ -64,6 +64,8 @@ def parse_asm(text: str) -> AsmResult:
     pc = 0
     lines = text.splitlines()
     result.source_lines = lines.copy()
+    reg_map = {"X": 26, "Y": 28, "Z": 30}
+    disp_sub = re.compile(r"([XYZxyz]|r\d+|R\d+)\s*\+\s*(\w+)").sub
 
     for line_num, raw_line in enumerate(lines):
         line = raw_line.split(";", 1)[0].strip()
@@ -76,20 +78,19 @@ def parse_asm(text: str) -> AsmResult:
             if not line:
                 continue
 
-        line = re.sub(r"([XYZxyz]|r\d+|R\d+)\s*\+\s*(\w+)", r"\1+\2", line)
+        if "+" in line:
+            line = disp_sub(r"\1+\2", line)
         parts = line.replace(",", " ").split()
         instr = parts[0].upper()
         ops = []
         for p in parts[1:]:
             if (p[0] == "r" or p[0] == "R") and len(p) > 1 and p[1:].isdigit():
                 ops.append(("reg", int(p[1:])))
-            elif p.upper() in ("X", "Y", "Z"):
-                reg_map = {"X": 26, "Y": 28, "Z": 30}
+            elif p.upper() in reg_map:
                 ops.append(("reg", reg_map[p.upper()]))
             elif "+" in p:
                 base, disp = p.split("+", 1)
                 base_u = base.upper()
-                reg_map = {"X": 26, "Y": 28, "Z": 30}
                 if base_u in reg_map:
                     base_reg = reg_map[base_u]
                 elif base_u.startswith("R") and base_u[1:].isdigit():
