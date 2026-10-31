@@ -903,112 +903,128 @@ def optimize_assembly(lines: list[str]) -> list[str]:
     - Removing redundant LD R16, R30 immediately after ST R30, R16
     - Removing JMP <label> when the next line is <label>:
     """
-    current_lines = list(lines)
+    # Per-line data lives in parallel lists; passes only shuffle line ids.
+    # Rules compare operands case-insensitively, so the uppercase form serves
+    # every rule; only Rule 6 needs the original text.
+    texts = list(lines)
+    upper = [line.strip().upper() for line in texts]
+    # Opcode is the text before the first space ("" when there is no space),
+    # so `opcode == "MOV"` matches exactly `upper.startswith("MOV ")`.
+    opcodes = [u.partition(" ")[0] if " " in u else "" for u in upper]
+    rule_opcodes = {"MOV", "PUSH", "ST", "STD", "LDI", "JMP"}
+
+    if rule_opcodes.isdisjoint(opcodes):
+        return texts
+
+    def add_line(line: str) -> int:
+        texts.append(line)
+        upper.append(line.strip().upper())
+        opcodes.append(upper[-1].partition(" ")[0])
+        return len(texts) - 1
+
+    order = list(range(len(texts)))
     for _ in range(5):
-        new_lines: list[str] = []
+        new_order: list[int] = []
         changed = False
         i = 0
-        n = len(current_lines)
+        n = len(order)
         while i < n:
-            curr = current_lines[i]
-            s_curr = curr.strip()
+            k = order[i]
+            op = opcodes[k]
+            if op not in rule_opcodes:
+                new_order.append(k)
+                i += 1
+                continue
 
             # Rule 1: MOV Rx, Rx
-            if s_curr.upper().startswith("MOV "):
-                parts = s_curr.replace(",", " ").split()
-                if len(parts) == 3 and parts[1].upper() == parts[2].upper():
+            if op == "MOV":
+                parts = upper[k].replace(",", " ").split()
+                if len(parts) == 3 and parts[1] == parts[2]:
                     changed = True
                     i += 1
                     continue
 
-            # Check 2-instruction peepholes
-            if i + 1 < n:
-                nxt = current_lines[i + 1]
-                s_nxt = nxt.strip()
+            # 2-instruction peepholes
+            elif i + 1 < n:
+                k_nxt = order[i + 1]
+                u_curr = upper[k]
+                u_nxt = upper[k_nxt]
 
                 # Rule 2: PUSH Rx followed by POP Ry
-                if s_curr.upper().startswith("PUSH ") and s_nxt.upper().startswith(
-                    "POP "
-                ):
-                    p_curr = s_curr.split()
-                    p_nxt = s_nxt.split()
-                    if len(p_curr) == 2 and len(p_nxt) == 2:
-                        rx = p_curr[1].upper()
-                        ry = p_nxt[1].upper()
-                        if rx == ry:
+                if op == "PUSH":
+                    if opcodes[k_nxt] == "POP":
+                        p_curr = u_curr.split()
+                        p_nxt = u_nxt.split()
+                        if len(p_curr) == 2 and len(p_nxt) == 2:
+                            rx = p_curr[1]
+                            ry = p_nxt[1]
+                            if rx != ry:
+                                new_order.append(add_line(f"    MOV {ry}, {rx}"))
                             changed = True
                             i += 2
                             continue
-                        new_lines.append(f"    MOV {ry}, {rx}")
+
+                elif u_curr == "ST R30, R16":
+                    # Rule 3: ST R30, R16 followed by LD R16, R30
+                    if u_nxt == "LD R16, R30":
+                        new_order.append(k)
                         changed = True
                         i += 2
                         continue
 
-                # Rule 3: ST R30, R16 followed by LD R16, R30
-                if s_curr.upper() == "ST R30, R16" and s_nxt.upper() == "LD R16, R30":
-                    new_lines.append(curr)
-                    changed = True
-                    i += 2
-                    continue
-
-                # Rule 4: ST R30, R16 followed by redundant LDI R30, X; LD R16, R30
-                if (
-                    s_curr.upper() == "ST R30, R16"
-                    and i + 2 < n
-                    and current_lines[i + 2].strip().upper() == "LD R16, R30"
-                    and i > 0
-                    and current_lines[i - 1].strip().upper()
-                    == current_lines[i + 1].strip().upper()
-                ):
-                    new_lines.append(curr)
-                    changed = True
-                    i += 3
-                    continue
+                    # Rule 4: ST R30, R16 followed by redundant LDI R30, X; LD R16, R30
+                    if (
+                        i + 2 < n
+                        and upper[order[i + 2]] == "LD R16, R30"
+                        and i > 0
+                        and upper[order[i - 1]] == u_nxt
+                    ):
+                        new_order.append(k)
+                        changed = True
+                        i += 3
+                        continue
 
                 # Rule 4b: STD Y+q, R16 followed by LDD R16, Y+q
-                if s_curr.upper().startswith("STD ") and s_nxt.upper().startswith(
-                    "LDD "
-                ):
-                    parts_st = s_curr.replace(",", " ").split()
-                    parts_ld = s_nxt.replace(",", " ").split()
-                    if (
-                        len(parts_st) == 3
-                        and len(parts_ld) == 3
-                        and parts_st[1].upper() == parts_ld[2].upper()
-                        and parts_st[2].upper() == parts_ld[1].upper()
-                        and parts_st[2].upper() == "R16"
-                    ):
-                        new_lines.append(curr)
-                        changed = True
-                        i += 2
-                        continue
+                elif op == "STD":
+                    if opcodes[k_nxt] == "LDD":
+                        parts_st = u_curr.replace(",", " ").split()
+                        parts_ld = u_nxt.replace(",", " ").split()
+                        if (
+                            len(parts_st) == 3
+                            and len(parts_ld) == 3
+                            and parts_st[1] == parts_ld[2]
+                            and parts_st[2] == parts_ld[1]
+                            and parts_st[2] == "R16"
+                        ):
+                            new_order.append(k)
+                            changed = True
+                            i += 2
+                            continue
 
                 # Rule 5: Consecutive duplicate LDI
-                if s_curr.upper().startswith("LDI ") and s_nxt.upper().startswith(
-                    "LDI "
-                ):
-                    if s_curr.upper() == s_nxt.upper():
+                elif op == "LDI":
+                    if u_curr == u_nxt:
                         changed = True
                         i += 1
                         continue
 
                 # Rule 6: JMP <label> followed by <label>:
-                if s_curr.upper().startswith("JMP "):
-                    parts = s_curr.split()
-                    if len(parts) == 2 and s_nxt == f"{parts[1]}:":
-                        new_lines.append(nxt)
+                elif op == "JMP":
+                    parts = texts[k].strip().split()
+                    if len(parts) == 2 and texts[k_nxt].strip() == f"{parts[1]}:":
+                        new_order.append(k_nxt)
                         changed = True
                         i += 2
                         continue
 
-            new_lines.append(curr)
+            new_order.append(k)
             i += 1
 
-        current_lines = new_lines
+        order = new_order
         if not changed:
             break
 
-    return current_lines
+    return [texts[k] for k in order]
 
 
 def _collect_locals(func: FunctionDef) -> list[tuple[str, str]]:
